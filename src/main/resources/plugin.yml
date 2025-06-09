@@ -1,0 +1,17 @@
+name: GamblingPlugin
+version: '1.1'
+main: de.winniepat.gamblingPlugin.GamblingPlugin
+api-version: '1.21'
+load: STARTUP
+authors: [ WinniePat ]
+description: KekClient
+website: https://winniepat.de
+commands:
+  slots:
+    description: Open slot machine
+  double:
+    description: Start double or nothing game
+  case:
+    description: Open a case
+  roulette:
+    description: Opens Roulette
