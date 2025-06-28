@@ -49,7 +49,7 @@ public class RouletteListener implements Listener {
             GamblingPlugin.getInstance().getEconomy().withdrawPlayer(player, betCost);
             player.sendMessage("§7Bet placed: §6$" + betCost);
 
-            player.openInventory(RouletteGUI.createGameGUI(chosen));
+            player.openInventory(RouletteGUI.createGameGUI(chosen, player));
             spinRoulette(player, chosen);
         }
     }
@@ -62,7 +62,7 @@ public class RouletteListener implements Listener {
             originalItems[i] = inv.getItem(RouletteGUI.EDGE_SLOTS[i]);
         }
 
-        final int totalSpins = 40 + random.nextInt(30); // random spin length between 40–69
+        final int totalSpins = 40 + random.nextInt(30);
 
         new BukkitRunnable() {
             int index = 0;
@@ -111,7 +111,6 @@ public class RouletteListener implements Listener {
 
                 index++;
 
-                // Play tick sound
                 player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_HAT, 1f, 2f);
             }
         }.runTaskTimer(plugin, 0L, 2L);

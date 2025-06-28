@@ -19,7 +19,7 @@ public class CaseAnimation {
     private final List<ItemStack> possibleRewards;
     private final Random random = new Random();
 
-    private final int[] slots = {0, 1, 2, 3, 4, 5, 6, 7, 8}; // scrolling row (1st row)
+    private final int[] slots = {0, 1, 2, 3, 4, 5, 6, 7, 8};
     private final List<ItemStack> currentScroll = new ArrayList<>();
     private int shiftCount = 0;
     private boolean rewardGiven = false;
@@ -33,36 +33,47 @@ public class CaseAnimation {
     public void start() {
         player.openInventory(inv);
 
-        // preload scroll with random items
         for (int i = 0; i < slots.length + 10; i++) {
             currentScroll.add(getRandomReward());
         }
 
+        runAnimation(0);
+    }
+
+    private void runAnimation(int shift) {
+        if (shift >= currentScroll.size() - slots.length) {
+            if (!rewardGiven) {
+                ItemStack reward = inv.getItem(4);
+                player.getInventory().addItem(reward);
+                player.sendMessage("§aYou won: §e" + reward.getItemMeta().getDisplayName());
+                player.playSound(player.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 1.2f, 1.0f);
+                rewardGiven = true;
+            }
+            return;
+        }
+
+        updateScroll(shift);
+
+        long delay = Math.min(10 + shift * 2, 60);
+
         new BukkitRunnable() {
             @Override
             public void run() {
-                if (shiftCount >= currentScroll.size() - slots.length) {
-                    if (!rewardGiven) {
-                        ItemStack reward = inv.getItem(4); // center
-                        player.getInventory().addItem(reward);
-                        player.sendMessage("§aYou won: §e" + reward.getItemMeta().getDisplayName());
-                        player.playSound(player.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 1.2f, 1.0f);
-                        rewardGiven = true;
-                    }
-                    cancel();
-                    return;
-                }
-
-                updateScroll();
-                shiftCount++;
-
-                // Gradual slowdown effect
-                long delay = Math.min(10 + shiftCount * 2, 60);
-                this.cancel();
-                Bukkit.getScheduler().runTaskLater(GamblingPlugin.getInstance(), this, delay / 2);
+                runAnimation(shift + 1);
             }
-        }.runTask(GamblingPlugin.getInstance());
+        }.runTaskLater(GamblingPlugin.getInstance(), delay / 2);
     }
+
+    private void updateScroll(int shift) {
+        for (int i = 0; i < slots.length; i++) {
+            int scrollIndex = shift + i;
+            if (scrollIndex < currentScroll.size()) {
+                inv.setItem(slots[i], currentScroll.get(scrollIndex));
+            }
+        }
+        player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 0.6f, 1.5f);
+    }
+
 
     private void updateScroll() {
         for (int i = 0; i < slots.length; i++) {

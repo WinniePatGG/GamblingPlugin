@@ -5,6 +5,7 @@ import de.winniepat.gamblingPlugin.gui.*;
 import de.winniepat.gamblingPlugin.listeners.*;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
+import org.bukkit.event.Listener;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -19,39 +20,20 @@ public final class GamblingPlugin extends JavaPlugin {
     public void onEnable() {
         instance = this;
 
-        if (!setupEconomy()) {
-            getLogger().info("Vault not found or no economy plugin hooked! Disabling plugin.");
-            getServer().getPluginManager().disablePlugin(this);
-            return;
-        }
+        setupEconomy();
 
-        Objects.requireNonNull(getCommand("slots")).setExecutor(new SlotCommand());
-        Objects.requireNonNull(getCommand("double")).setExecutor(new DoubleCommand());
-        Objects.requireNonNull(getCommand("roulette")).setExecutor(new RouletteCommand());
-        Objects.requireNonNull(getCommand("case")).setExecutor(new CaseCommand(this));
-
-        getServer().getPluginManager().registerEvents(new SlotGUI(), this);
-        getServer().getPluginManager().registerEvents(new DoubleGUI(), this);
-
-        getServer().getPluginManager().registerEvents(new SlotListener(), this);
-        getServer().getPluginManager().registerEvents(new DoubleInteractListener(), this);
-        getServer().getPluginManager().registerEvents(new CaseListener(this), this);
-        Bukkit.getPluginManager().registerEvents(new RouletteListener(this), this);
-
+        registerCommands();
+        registerListeners();
+        registerEvents();
 
         getLogger().info("GamblingPlugin enabled.");
-        setupEconomy();
     }
 
-    private boolean setupEconomy() {
-        if (getServer().getPluginManager().getPlugin("Vault") == null) {
-            return false;
-        }
-
+    private void setupEconomy() {
         RegisteredServiceProvider<Economy> rsp = getServer().getServicesManager().getRegistration(Economy.class);
-        if (rsp == null) return false;
-        economy = rsp.getProvider();
-        return economy != null;
+        if (rsp != null) {
+            economy = rsp.getProvider();
+        }
     }
 
     public static GamblingPlugin getInstance() {
@@ -60,5 +42,25 @@ public final class GamblingPlugin extends JavaPlugin {
 
     public Economy getEconomy() {
         return economy;
+    }
+
+    private void registerEvents() {
+        getServer().getPluginManager().registerEvents(new SlotGUI(), this);
+        getServer().getPluginManager().registerEvents(new DoubleGUI(), this);
+        getServer().getPluginManager().registerEvents(new RouletteGUI(), this);
+    }
+
+    private void registerListeners() {
+        getServer().getPluginManager().registerEvents(new SlotListener(), this);
+        getServer().getPluginManager().registerEvents(new DoubleInteractListener(), this);
+        getServer().getPluginManager().registerEvents(new CaseListener(this), this);
+        Bukkit.getPluginManager().registerEvents(new RouletteListener(this), this);
+    }
+
+    private void registerCommands() {
+        Objects.requireNonNull(getCommand("slots")).setExecutor(new SlotCommand());
+        Objects.requireNonNull(getCommand("double")).setExecutor(new DoubleCommand());
+        Objects.requireNonNull(getCommand("roulette")).setExecutor(new RouletteCommand());
+        Objects.requireNonNull(getCommand("case")).setExecutor(new CaseCommand(this));
     }
 }

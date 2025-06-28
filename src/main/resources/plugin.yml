@@ -6,6 +6,7 @@ load: STARTUP
 authors: [ WinniePat ]
 description: KekClient
 website: https://winniepat.de
+depend: [Vault]
 commands:
   slots:
     description: Open slot machine

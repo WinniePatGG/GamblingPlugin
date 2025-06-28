@@ -36,13 +36,13 @@ public class SlotGUI implements Listener {
     private static final Random random = new Random();
 
     private static final int[][] SLOT_INDEXES = {
-            {3, 12, 21}, // Left column
-            {4, 13, 22}, // Center column
-            {5, 14, 23}  // Right column
+            {3, 12, 21},
+            {4, 13, 22},
+            {5, 14, 23}
     };
 
     private static final Map<UUID, Long> cooldowns = new HashMap<>();
-    private static final Set<UUID> spinningPlayers = new HashSet<>();
+    private static final Set<UUID> roulettePlayers = new HashSet<>();
     private static final long COOLDOWN_MS = 5000;
 
     public static void openSlotGUI(Player player) {
@@ -54,12 +54,12 @@ public class SlotGUI implements Listener {
         }
 
         cooldowns.put(uuid, now);
-        spinningPlayers.add(uuid);
+        roulettePlayers.add(uuid);
 
         double cost = 100.0;
         if (GamblingPlugin.getInstance().getEconomy().getBalance(player) < cost) {
-            player.sendMessage("§cYou need $100 to play.");
-            spinningPlayers.remove(uuid);
+            player.sendMessage("§cYou don't have enough money to bet! §7(Required: $100)");
+            roulettePlayers.remove(uuid);
             return;
         }
 
@@ -125,7 +125,7 @@ public class SlotGUI implements Listener {
         ItemStack mid3 = inv.getItem(14);
 
         UUID uuid = player.getUniqueId();
-        spinningPlayers.remove(uuid);
+        roulettePlayers.remove(uuid);
 
         if (mid1 == null || mid2 == null || mid3 == null) {
             player.sendMessage("§cError: missing items in GUI.");
@@ -151,17 +151,20 @@ public class SlotGUI implements Listener {
 
     @EventHandler
     public void onInventoryClick(InventoryClickEvent e) {
-        if (e.getView().getTitle().equals("§6Slot Machine")) {
+        String title = e.getView().getTitle();
+
+        if (title.equals("Choose a Color to Bet") || title.startsWith("Roulette: ")) {
             e.setCancelled(true);
         }
     }
+
 
     @EventHandler
     public void onInventoryClose(InventoryCloseEvent e) {
         if (!e.getView().getTitle().equals("§6Slot Machine")) return;
 
         Player player = (Player) e.getPlayer();
-        if (spinningPlayers.contains(player.getUniqueId())) {
+        if (roulettePlayers.contains(player.getUniqueId())) {
             Bukkit.getScheduler().runTaskLater(GamblingPlugin.getInstance(), () -> {
                 player.openInventory(e.getInventory());
                 player.sendMessage("§cYou can't close the slot machine while it's spinning!");

@@ -23,10 +23,9 @@ public class DoubleGUI implements Listener {
     public static void open(Player player) {
         UUID uuid = player.getUniqueId();
 
-        // prevent rapid double-open
         if (openingNow.contains(uuid)) return;
         openingNow.add(uuid);
-        Bukkit.getScheduler().runTaskLater(GamblingPlugin.getInstance(), () -> openingNow.remove(uuid), 10L); // 0.5s
+        Bukkit.getScheduler().runTaskLater(GamblingPlugin.getInstance(), () -> openingNow.remove(uuid), 10L);
 
         if (GamblingPlugin.getInstance().getEconomy().getBalance(player) < 1) {
             player.sendMessage("§cYou need at least $1 to play Double or Nothing.");
@@ -47,21 +46,18 @@ public class DoubleGUI implements Listener {
 
         Inventory gui = Bukkit.createInventory(null, 9, "§aDouble or Nothing");
 
-        // Green wool - Double
         ItemStack green = new ItemStack(Material.LIME_WOOL);
         ItemMeta greenMeta = green.getItemMeta();
         greenMeta.setDisplayName("§aDouble to $" + (stage < amounts.size() - 1 ? amounts.get(stage + 1) : "MAX"));
         green.setItemMeta(greenMeta);
         gui.setItem(2, green);
 
-        // Center paper - current amount
         ItemStack center = new ItemStack(Material.PAPER);
         ItemMeta centerMeta = center.getItemMeta();
         centerMeta.setDisplayName("§fCurrent: $" + amount);
         center.setItemMeta(centerMeta);
         gui.setItem(4, center);
 
-        // Red wool - Take money
         ItemStack red = new ItemStack(Material.RED_WOOL);
         ItemMeta redMeta = red.getItemMeta();
         redMeta.setDisplayName("§cTake $" + amount);

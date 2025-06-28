@@ -82,11 +82,10 @@ public class CaseGUI implements Listener {
 
         double balance = economy.getBalance(player);
         if (balance < caseCost) {
-            player.sendMessage("§cYou don't have enough money! §7(Need §e" + caseCost + "§7)");
+            player.sendMessage("§cYou don't have enough money to bet! §7(Required: "+ caseCost + ")");
             return;
         }
 
-        // Charge the player
         economy.withdrawPlayer(player, caseCost);
         player.sendMessage("§aYou paid §e" + caseCost + "§a to open a case.");
         player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0f, 1.5f);
@@ -94,7 +93,6 @@ public class CaseGUI implements Listener {
         cooldown.add(player.getUniqueId());
         Bukkit.getScheduler().runTaskLater(GamblingPlugin.getInstance(), () -> cooldown.remove(player.getUniqueId()), 40L);
 
-        // Run your open animation (💥 this is the new part)
         new CaseAnimation(player).start();
     }
 }
