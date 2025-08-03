@@ -57,6 +57,7 @@ public class SlotGUI implements Listener {
         roulettePlayers.add(uuid);
 
         double cost = 100.0;
+
         if (GamblingPlugin.getInstance().getEconomy().getBalance(player) < cost) {
             player.sendMessage("§cYou don't have enough money to bet! §7(Required: $100)");
             roulettePlayers.remove(uuid);

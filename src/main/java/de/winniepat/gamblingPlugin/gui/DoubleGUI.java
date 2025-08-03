@@ -27,13 +27,13 @@ public class DoubleGUI implements Listener {
         openingNow.add(uuid);
         Bukkit.getScheduler().runTaskLater(GamblingPlugin.getInstance(), () -> openingNow.remove(uuid), 10L);
 
-        if (GamblingPlugin.getInstance().getEconomy().getBalance(player) < 1) {
-            player.sendMessage("§cYou need at least $1 to play Double or Nothing.");
+        if (GamblingPlugin.getInstance().getEconomy().getBalance(player) < 20) {
+            player.sendMessage("§cYou need at least $20 to play Double or Nothing.");
             return;
         }
 
-        GamblingPlugin.getInstance().getEconomy().withdrawPlayer(player, 1);
-        player.sendMessage("§7You paid §c$1 §7to play.");
+        GamblingPlugin.getInstance().getEconomy().withdrawPlayer(player, 20);
+        player.sendMessage("§7You paid §c$20 §7to play.");
 
         playerStage.put(uuid, 0);
         openGui(player);

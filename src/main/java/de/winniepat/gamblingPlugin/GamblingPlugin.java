@@ -23,18 +23,28 @@ public final class GamblingPlugin extends JavaPlugin {
         setupEconomy();
 
         registerCommands();
-        registerListeners();
         registerEvents();
 
         getLogger().info("GamblingPlugin enabled.");
     }
 
     private void setupEconomy() {
-        RegisteredServiceProvider<Economy> rsp = getServer().getServicesManager().getRegistration(Economy.class);
-        if (rsp != null) {
-            economy = rsp.getProvider();
+        if (getServer().getPluginManager().getPlugin("Vault") == null) {
+            getLogger().severe("Vault not found! Disabling plugin.");
+            getServer().getPluginManager().disablePlugin(this);
+            return;
         }
+
+        RegisteredServiceProvider<Economy> rsp = getServer().getServicesManager().getRegistration(Economy.class);
+        if (rsp == null) {
+            getLogger().severe("No Economy provider found! Disabling plugin.");
+            getServer().getPluginManager().disablePlugin(this);
+            return;
+        }
+        economy = rsp.getProvider();
+        getLogger().info("Economy setup successful with provider: " + economy.getName());
     }
+
 
     public static GamblingPlugin getInstance() {
         return instance;
@@ -53,7 +63,6 @@ public final class GamblingPlugin extends JavaPlugin {
     private void registerListeners() {
         getServer().getPluginManager().registerEvents(new SlotListener(), this);
         getServer().getPluginManager().registerEvents(new DoubleInteractListener(), this);
-        getServer().getPluginManager().registerEvents(new CaseListener(this), this);
         Bukkit.getPluginManager().registerEvents(new RouletteListener(this), this);
     }
 
@@ -61,6 +70,5 @@ public final class GamblingPlugin extends JavaPlugin {
         Objects.requireNonNull(getCommand("slots")).setExecutor(new SlotCommand());
         Objects.requireNonNull(getCommand("double")).setExecutor(new DoubleCommand());
         Objects.requireNonNull(getCommand("roulette")).setExecutor(new RouletteCommand());
-        Objects.requireNonNull(getCommand("case")).setExecutor(new CaseCommand(this));
     }
 }

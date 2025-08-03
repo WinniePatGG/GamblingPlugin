@@ -56,6 +56,6 @@ processResources {
 build.doLast {
     copy {
         from("$buildDir/libs/GamblingPlugin-1.2.jar")
-        into("F:/NAS_Backup/KekZeugs/Coding/GamblingPlugin/server/plugins")
+        into("C:/Users/winnie/Documents/lunaris/server/plugins")
     }
 }
