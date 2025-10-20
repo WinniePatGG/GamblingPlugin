@@ -25,7 +25,7 @@ public class DoubleInteractListener implements Listener {
                     block.breakNaturally(player.getInventory().getItemInMainHand());
                 } else {
                     event.setCancelled(true);
-                    player.sendMessage("§cOnly Staff can break Doube Or Nothing Machines!");
+                    player.sendMessage("§cOnly Staff can break Double Or Nothing Machines!");
                 }
             } else {
                 event.setCancelled(true);

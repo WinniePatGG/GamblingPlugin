@@ -60,6 +60,8 @@ public final class GamblingPlugin extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new RouletteGUI(), this);
     }
 
+    //TODO Somehow Block Right Click for opening GUI
+    //TODO Also some Custom Models
     private void registerListeners() {
         getServer().getPluginManager().registerEvents(new SlotListener(), this);
         getServer().getPluginManager().registerEvents(new DoubleInteractListener(), this);
