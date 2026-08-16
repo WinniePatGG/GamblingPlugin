@@ -3,6 +3,7 @@ package de.winniepat.gamblingPlugin;
 import de.winniepat.gamblingPlugin.commands.*;
 import de.winniepat.gamblingPlugin.gui.*;
 import de.winniepat.gamblingPlugin.listeners.*;
+import de.winniepat.gamblingPlugin.util.ServerVersion;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Listener;
@@ -20,29 +21,40 @@ public final class GamblingPlugin extends JavaPlugin {
     public void onEnable() {
         instance = this;
 
-        setupEconomy();
+        String serverVersion = ServerVersion.current();
+        if (ServerVersion.isSupported(serverVersion)) {
+            getLogger().info("GamblingPlugin enabled on Minecraft " + serverVersion
+                    + " (supported: " + ServerVersion.MIN_SUPPORTED + " - " + ServerVersion.MAX_SUPPORTED + ").");
+        } else {
+            getLogger().warning("Running on unsupported Minecraft version " + serverVersion
+                    + "! Supported range: " + ServerVersion.MIN_SUPPORTED + " - " + ServerVersion.MAX_SUPPORTED
+                    + ". The plugin may not work correctly.");
+        }
+
+        if (!setupEconomy()) {
+            getServer().getPluginManager().disablePlugin(this);
+            return;
+        }
 
         registerCommands();
         registerEvents();
-
-        getLogger().info("GamblingPlugin enabled.");
+        registerListeners();
     }
 
-    private void setupEconomy() {
+    private boolean setupEconomy() {
         if (getServer().getPluginManager().getPlugin("Vault") == null) {
             getLogger().severe("Vault not found! Disabling plugin.");
-            getServer().getPluginManager().disablePlugin(this);
-            return;
+            return false;
         }
 
         RegisteredServiceProvider<Economy> rsp = getServer().getServicesManager().getRegistration(Economy.class);
         if (rsp == null) {
             getLogger().severe("No Economy provider found! Disabling plugin.");
-            getServer().getPluginManager().disablePlugin(this);
-            return;
+            return false;
         }
         economy = rsp.getProvider();
         getLogger().info("Economy setup successful with provider: " + economy.getName());
+        return true;
     }
 
 
@@ -63,6 +75,7 @@ public final class GamblingPlugin extends JavaPlugin {
     private void registerListeners() {
         getServer().getPluginManager().registerEvents(new SlotListener(), this);
         getServer().getPluginManager().registerEvents(new DoubleInteractListener(), this);
+        getServer().getPluginManager().registerEvents(new CaseListener(), this);
         Bukkit.getPluginManager().registerEvents(new RouletteListener(this), this);
     }
 
@@ -70,5 +83,6 @@ public final class GamblingPlugin extends JavaPlugin {
         Objects.requireNonNull(getCommand("slots")).setExecutor(new SlotCommand());
         Objects.requireNonNull(getCommand("double")).setExecutor(new DoubleCommand());
         Objects.requireNonNull(getCommand("roulette")).setExecutor(new RouletteCommand());
+        Objects.requireNonNull(getCommand("case")).setExecutor(new CaseCommand());
     }
 }

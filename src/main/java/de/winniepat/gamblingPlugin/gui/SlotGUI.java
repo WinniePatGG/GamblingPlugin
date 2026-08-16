@@ -7,6 +7,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -153,8 +154,19 @@ public class SlotGUI implements Listener {
     @EventHandler
     public void onInventoryClick(InventoryClickEvent e) {
         String title = e.getView().getTitle();
+        Player player = (Player) e.getWhoClicked();
 
-        if (title.equals("Choose a Color to Bet") || title.startsWith("Roulette: ")) {
+        if (title.equals("§6Slot Machine")
+                || title.equals("Choose a Color to Bet")
+                || title.startsWith("Roulette: ")
+                || roulettePlayers.contains(player.getUniqueId())) {
+            e.setCancelled(true);
+        }
+    }
+
+    @EventHandler
+    public void onInventoryDrag(InventoryDragEvent e) {
+        if (e.getView().getTitle().equals("§6Slot Machine")) {
             e.setCancelled(true);
         }
     }

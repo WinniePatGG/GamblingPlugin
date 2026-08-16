@@ -78,11 +78,14 @@ public class RouletteListener implements Listener {
                     Material result = originalItems[finalIndex].getType();
 
                     if (result == betColor) {
-                        int multiplier = switch (result) {
-                            case GREEN_WOOL -> 14;
-                            case RED_WOOL, BLACK_WOOL -> 2;
-                            default -> 0;
-                        };
+                        int multiplier;
+                        if (result == Material.GREEN_WOOL) {
+                            multiplier = 14;
+                        } else if (result == Material.RED_WOOL || result == Material.BLACK_WOOL) {
+                            multiplier = 2;
+                        } else {
+                            multiplier = 0;
+                        }
                         double winnings = betCost * multiplier;
                         GamblingPlugin.getInstance().getEconomy().depositPlayer(player, winnings);
 

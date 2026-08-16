@@ -14,12 +14,41 @@ import java.util.*;
 
 public class CaseAnimation {
 
+    private static final Set<Inventory> OPEN_INVENTORIES = new HashSet<>();
+    private static final Set<UUID> OPEN_PLAYERS = new HashSet<>();
+
+    public static boolean isCaseInventory(Inventory inventory) {
+        return inventory != null && OPEN_INVENTORIES.contains(inventory);
+    }
+
+    public static boolean isCasePlayer(Player player) {
+        return player != null && OPEN_PLAYERS.contains(player.getUniqueId());
+    }
+
+    public static void onCaseOpened(Player player, Inventory inventory) {
+        if (player != null) {
+            OPEN_PLAYERS.add(player.getUniqueId());
+        }
+        if (inventory != null) {
+            OPEN_INVENTORIES.add(inventory);
+        }
+    }
+
+    public static void onCaseClosed(Player player, Inventory inventory) {
+        if (player != null) {
+            OPEN_PLAYERS.remove(player.getUniqueId());
+        }
+        if (inventory != null) {
+            OPEN_INVENTORIES.remove(inventory);
+        }
+    }
+
     private final Player player;
     private final Inventory inv;
     private final List<ItemStack> possibleRewards;
     private final Random random = new Random();
 
-    private final int[] slots = {0, 1, 2, 3, 4, 5, 6, 7, 8};
+    private final int[] slots = {9, 10, 11, 12, 13, 14, 15, 16, 17};
     private final List<ItemStack> currentScroll = new ArrayList<>();
     private int shiftCount = 0;
     private boolean rewardGiven = false;
@@ -28,10 +57,14 @@ public class CaseAnimation {
         this.player = player;
         this.inv = Bukkit.createInventory(null, 3 * 9, "§bOpening Case...");
         this.possibleRewards = getPossibleRewards();
+        onCaseOpened(player, inv);
     }
 
     public void start() {
         player.openInventory(inv);
+
+        inv.setItem(4, createReward(Material.GRAY_STAINED_GLASS_PANE, "§a▼"));
+        inv.setItem(22, createReward(Material.GRAY_STAINED_GLASS_PANE, "§a▲"));
 
         for (int i = 0; i < slots.length + 10; i++) {
             currentScroll.add(getRandomReward());
@@ -43,11 +76,30 @@ public class CaseAnimation {
     private void runAnimation(int shift) {
         if (shift >= currentScroll.size() - slots.length) {
             if (!rewardGiven) {
-                ItemStack reward = inv.getItem(4);
-                player.getInventory().addItem(reward);
-                player.sendMessage("§aYou won: §e" + reward.getItemMeta().getDisplayName());
-                player.playSound(player.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 1.2f, 1.0f);
+                ItemStack reward = inv.getItem(13);
+                if (reward == null) {
+                    player.sendMessage("§cError: could not retrieve the case reward.");
+                } else {
+                    inv.clear(13);
+                    Map<Integer, ItemStack> leftover = player.getInventory().addItem(reward);
+                    if (!leftover.isEmpty()) {
+                        player.getWorld().dropItemNaturally(player.getLocation(), leftover.get(0));
+                        player.sendMessage("§cYour inventory was full! The reward was dropped on the ground.");
+                    }
+                    player.sendMessage("§aYou won: §e" + reward.getItemMeta().getDisplayName());
+                    player.playSound(player.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 1.2f, 1.0f);
+                }
+                for (int slot : slots) {
+                    inv.clear(slot);
+                }
+                inv.clear(4);
+                inv.clear(22);
                 rewardGiven = true;
+                Bukkit.getScheduler().runTaskLater(GamblingPlugin.getInstance(), () -> {
+                    if (player.getOpenInventory().getTopInventory() == inv) {
+                        player.closeInventory();
+                    }
+                }, 30L);
             }
             return;
         }
