@@ -1,6 +1,7 @@
 package de.winniepat.gamblingPlugin.gui;
 
 import de.winniepat.gamblingPlugin.GamblingPlugin;
+import de.winniepat.gamblingPlugin.util.Particles;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -143,11 +144,17 @@ public class SlotGUI implements Listener {
             GamblingPlugin.getInstance().getEconomy().depositPlayer(player, reward);
             player.sendMessage("§aYou won $" + reward + "! (x" + multiplier + ")");
             player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1f, 1f);
-            player.getWorld().spawnParticle(Particle.ELECTRIC_SPARK, player.getLocation().add(0, 1.5, 0), 30, 0.3, 0.5, 0.3);
+            Particle spark = Particles.byName("ELECTRIC_SPARK", "CRIT");
+            if (spark != null) {
+                player.getWorld().spawnParticle(spark, player.getLocation().add(0, 1.5, 0), 30, 0.3, 0.5, 0.3);
+            }
         } else {
             player.sendMessage("§cYou lost! Better luck next time.");
             player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BASS, 1f, 0.5f);
-            player.getWorld().spawnParticle(Particle.SMOKE, player.getLocation().add(0, 1.0, 0), 10, 0.2, 0.2, 0.2);
+            Particle smoke = Particles.byName("SMOKE", "SMOKE_NORMAL");
+            if (smoke != null) {
+                player.getWorld().spawnParticle(smoke, player.getLocation().add(0, 1.0, 0), 10, 0.2, 0.2, 0.2);
+            }
         }
     }
 

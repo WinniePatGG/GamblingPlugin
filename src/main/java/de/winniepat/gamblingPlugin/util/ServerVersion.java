@@ -4,14 +4,18 @@ import org.bukkit.Bukkit;
 
 public final class ServerVersion {
 
-    public static final String MIN_SUPPORTED = "1.21.4";
-    public static final String MAX_SUPPORTED = "26.1.2";
+    public static final String MIN_SUPPORTED = "1.16.3";
+    public static final String MAX_SUPPORTED = "26.2";
 
     private ServerVersion() {
     }
 
     public static String current() {
-        return Bukkit.getMinecraftVersion();
+        try {
+            return Bukkit.getMinecraftVersion();
+        } catch (Throwable ignored) {
+            return Bukkit.getBukkitVersion().split("-")[0];
+        }
     }
 
     public static boolean isSupported() {

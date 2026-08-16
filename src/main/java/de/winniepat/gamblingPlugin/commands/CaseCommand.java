@@ -13,10 +13,11 @@ public class CaseCommand implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (!(sender instanceof Player player)) {
+        if (!(sender instanceof Player)) {
             sender.sendMessage("Only players can use this command.");
             return true;
         }
+        Player player = (Player) sender;
 
         if (GamblingPlugin.getInstance().getEconomy().getBalance(player) < COST) {
             player.sendMessage("§cYou don't have enough money to open a case! §7(Required: $" + (int) COST + ")");

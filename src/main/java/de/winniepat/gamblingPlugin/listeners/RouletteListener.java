@@ -29,7 +29,8 @@ public class RouletteListener implements Listener {
 
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
-        if (!(event.getWhoClicked() instanceof Player player)) return;
+        if (!(event.getWhoClicked() instanceof Player)) return;
+        Player player = (Player) event.getWhoClicked();
         if (event.getClickedInventory() == null || event.getCurrentItem() == null) return;
 
         String title = event.getView().getTitle();

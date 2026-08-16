@@ -23,8 +23,7 @@ public final class GamblingPlugin extends JavaPlugin {
 
         String serverVersion = ServerVersion.current();
         if (ServerVersion.isSupported(serverVersion)) {
-            getLogger().info("GamblingPlugin enabled on Minecraft " + serverVersion
-                    + " (supported: " + ServerVersion.MIN_SUPPORTED + " - " + ServerVersion.MAX_SUPPORTED + ").");
+            getLogger().info("GamblingPlugin enabled on Minecraft " + serverVersion + ".");
         } else {
             getLogger().warning("Running on unsupported Minecraft version " + serverVersion
                     + "! Supported range: " + ServerVersion.MIN_SUPPORTED + " - " + ServerVersion.MAX_SUPPORTED

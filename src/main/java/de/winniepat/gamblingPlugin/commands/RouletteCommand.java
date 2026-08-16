@@ -10,11 +10,12 @@ public class RouletteCommand implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (!(sender instanceof Player player)) {
+        if (!(sender instanceof Player)) {
             sender.sendMessage("Only players can use this command.");
             return true;
         }
 
+        Player player = (Player) sender;
         player.openInventory(RouletteGUI.createBettingGUI());
         return true;
     }

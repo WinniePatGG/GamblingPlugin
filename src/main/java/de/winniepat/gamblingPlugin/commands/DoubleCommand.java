@@ -10,12 +10,12 @@ public class DoubleCommand implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if (!(sender instanceof Player player)) {
+        if (!(sender instanceof Player)) {
             sender.sendMessage("Only players can use this.");
             return true;
         }
 
-        DoubleGUI.open(player);
+        DoubleGUI.open((Player) sender);
         return true;
     }
 
