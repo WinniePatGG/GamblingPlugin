@@ -91,6 +91,7 @@ public class RouletteGUI implements Listener {
 
     @EventHandler
     public void onInventoryClose(InventoryCloseEvent e) {
+        if (!(e.getPlayer() instanceof Player)) return;
         Player player = (Player) e.getPlayer();
         String title = e.getView().getTitle();
 

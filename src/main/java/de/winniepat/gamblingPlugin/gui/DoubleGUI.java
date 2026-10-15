@@ -79,6 +79,7 @@ public class DoubleGUI implements Listener {
     public void onClick(InventoryClickEvent e) {
         if (!e.getView().getTitle().equals("§aDouble or Nothing")) return;
         e.setCancelled(true);
+        if (!(e.getWhoClicked() instanceof Player)) return;
 
         Player player = (Player) e.getWhoClicked();
         UUID uuid = player.getUniqueId();

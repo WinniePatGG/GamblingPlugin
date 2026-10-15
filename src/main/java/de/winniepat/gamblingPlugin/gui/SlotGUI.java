@@ -201,6 +201,7 @@ public class SlotGUI implements Listener {
 
     @EventHandler
     public void onInventoryClick(InventoryClickEvent e) {
+        if (!(e.getWhoClicked() instanceof Player)) return;
         String title = e.getView().getTitle();
         Player player = (Player) e.getWhoClicked();
 
@@ -229,6 +230,7 @@ public class SlotGUI implements Listener {
     @EventHandler
     public void onInventoryClose(InventoryCloseEvent e) {
         if (!e.getView().getTitle().equals("§6Slot Machine")) return;
+        if (!(e.getPlayer() instanceof Player)) return;
 
         Player player = (Player) e.getPlayer();
         if (roulettePlayers.contains(player.getUniqueId())) {
