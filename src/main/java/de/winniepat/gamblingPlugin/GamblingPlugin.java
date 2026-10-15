@@ -85,5 +85,6 @@ public final class GamblingPlugin extends JavaPlugin {
         Objects.requireNonNull(getCommand("double")).setExecutor(new DoubleCommand());
         Objects.requireNonNull(getCommand("roulette")).setExecutor(new RouletteCommand());
         Objects.requireNonNull(getCommand("case")).setExecutor(new CaseCommand());
+        Objects.requireNonNull(getCommand("daily")).setExecutor(new DailyCommand());
     }
 }

@@ -47,6 +47,7 @@ public class SlotGUI implements Listener {
     private static final Set<UUID> roulettePlayers = new HashSet<>();
     private static final Map<UUID, String> freeSpinDates = new HashMap<>();
     private static final Map<UUID, Double> slotBaseRewards = new HashMap<>();
+    private static final Map<UUID, Integer> slotWinStreaks = new HashMap<>();
     private static final long COOLDOWN_MS = 5000;
 
     public static void openSlotGUI(Player player) {
@@ -155,16 +156,22 @@ public class SlotGUI implements Listener {
             if (baseReward <= 0) baseReward = GamblingPlugin.getInstance().getConfig().getDouble("slots.bet-cost", 100.0);
             double multiplier = GamblingPlugin.getInstance().getConfig().getDouble("slots.multipliers." + matched.name(),
                     multipliers.getOrDefault(matched, 1.0));
-            double reward = baseReward * multiplier;
+            int streak = slotWinStreaks.getOrDefault(uuid, 0) + 1;
+            slotWinStreaks.put(uuid, streak);
+            double bonus = GamblingPlugin.getInstance().getConfig().getDouble("slots.win-streak-bonus", 0.25);
+            double cap = GamblingPlugin.getInstance().getConfig().getDouble("slots.win-streak-cap", 2.0);
+            double streakMultiplier = Math.min(1.0 + (streak - 1) * bonus, cap);
+            double reward = baseReward * multiplier * streakMultiplier;
 
             GamblingPlugin.getInstance().getEconomy().depositPlayer(player, reward);
-            player.sendMessage("§aYou won $" + reward + "! (x" + multiplier + ")");
+            player.sendMessage("§aYou won $" + reward + "! (x" + multiplier + ") Streak: " + streak + "x");
             player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1f, 1f);
             Particle spark = Particles.byName("ELECTRIC_SPARK", "CRIT");
             if (spark != null) {
                 player.getWorld().spawnParticle(spark, player.getLocation().add(0, 1.5, 0), 30, 0.3, 0.5, 0.3);
             }
         } else {
+            slotWinStreaks.remove(uuid);
             player.sendMessage("§cYou lost! Better luck next time.");
             player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BASS, 1f, 0.5f);
             Particle smoke = Particles.byName("SMOKE", "SMOKE_NORMAL");

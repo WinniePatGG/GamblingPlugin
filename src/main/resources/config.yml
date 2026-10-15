@@ -2,6 +2,8 @@
 slots:
   bet-cost: 100.0
   free-spin-once-per-day: true
+  win-streak-bonus: 0.25
+  win-streak-cap: 2.0
   multipliers:
     DIAMOND: 5.0
     GOLD_INGOT: 3.0
@@ -17,3 +19,6 @@ cases:
 
 double:
   entry-cost: 20.0
+
+daily-reward:
+  amount: 200.0

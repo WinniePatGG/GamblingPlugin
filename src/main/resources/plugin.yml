@@ -16,3 +16,5 @@ commands:
     description: Open a case
   roulette:
     description: Opens Roulette
+  daily:
+    description: Claim your daily reward
