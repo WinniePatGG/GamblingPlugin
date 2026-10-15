@@ -15,6 +15,11 @@ import java.util.*;
 public class CaseAnimation {
 
     private static final Set<Inventory> OPEN_INVENTORIES = new HashSet<>();
+
+    public static void clearState() {
+        OPEN_INVENTORIES.clear();
+        OPEN_PLAYERS.clear();
+    }
     private static final Set<UUID> OPEN_PLAYERS = new HashSet<>();
 
     public static boolean isCaseInventory(Inventory inventory) {

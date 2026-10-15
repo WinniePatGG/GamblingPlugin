@@ -220,6 +220,12 @@ public class SlotGUI implements Listener {
     }
 
 
+    public static void clearState() {
+        cooldowns.clear();
+        roulettePlayers.clear();
+        slotBaseRewards.clear();
+    }
+
     @EventHandler
     public void onInventoryClose(InventoryCloseEvent e) {
         if (!e.getView().getTitle().equals("§6Slot Machine")) return;

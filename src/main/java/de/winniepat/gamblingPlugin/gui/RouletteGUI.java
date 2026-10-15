@@ -71,6 +71,10 @@ public class RouletteGUI implements Listener {
         return item;
     }
 
+    public static void clearState() {
+        spinningPlayers.clear();
+    }
+
     @EventHandler
     public void onInventoryClick(InventoryClickEvent e) {
         if (e.getView().getTitle().startsWith("Roulette: ")) {

@@ -1,5 +1,6 @@
 package de.winniepat.gamblingPlugin;
 
+import de.winniepat.gamblingPlugin.animations.CaseAnimation;
 import de.winniepat.gamblingPlugin.commands.*;
 import de.winniepat.gamblingPlugin.gui.*;
 import de.winniepat.gamblingPlugin.listeners.*;
@@ -81,6 +82,10 @@ public final class GamblingPlugin extends JavaPlugin {
         if (playerData != null) {
             playerData.save();
         }
+        SlotGUI.clearState();
+        DoubleGUI.clearState();
+        RouletteGUI.clearState();
+        CaseAnimation.clearState();
     }
 
     private void registerEvents() {

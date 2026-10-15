@@ -70,6 +70,11 @@ public class DoubleGUI implements Listener {
         player.openInventory(gui);
     }
 
+    public static void clearState() {
+        playerStage.clear();
+        openingNow.clear();
+    }
+
     @EventHandler
     public void onClick(InventoryClickEvent e) {
         if (!e.getView().getTitle().equals("§aDouble or Nothing")) return;
