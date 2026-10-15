@@ -77,6 +77,13 @@ public final class GamblingPlugin extends JavaPlugin {
         return playerData;
     }
 
+    public void reloadPluginConfig() {
+        reloadConfig();
+        if (playerData != null) {
+            playerData.load();
+        }
+    }
+
     @Override
     public void onDisable() {
         if (playerData != null) {

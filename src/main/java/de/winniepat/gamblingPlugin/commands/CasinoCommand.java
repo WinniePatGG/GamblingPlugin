@@ -61,6 +61,15 @@ public class CasinoCommand implements CommandExecutor {
             case "update":
             case "casinoupdate":
                 return new UpdateCommand().onCommand(sender, command, label, java.util.Arrays.copyOfRange(args, (args.length > 0 ? 1 : 0), args.length));
+            case "reload": {
+                if (sender instanceof Player && !sender.isOp()) {
+                    sender.sendMessage("§cYou need operator permission to use this command.");
+                    return true;
+                }
+                GamblingPlugin.getInstance().reloadPluginConfig();
+                sender.sendMessage("§aGamblingPlugin configuration reloaded.");
+                return true;
+            }
             case "leaderboard":
             case "top":
             case "lb": {
@@ -99,7 +108,7 @@ public class CasinoCommand implements CommandExecutor {
                 return true;
             }
             default:
-                sender.sendMessage("§eUsage: /casino <slots|double|roulette|case|daily|update|leaderboard|hologram>");
+                sender.sendMessage("§eUsage: /casino <slots|double|roulette|case|daily|update|leaderboard|hologram|reload>");
                 return true;
         }
     }
