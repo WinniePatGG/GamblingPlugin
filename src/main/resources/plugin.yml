@@ -18,3 +18,5 @@ commands:
     description: Opens Roulette
   daily:
     description: Claim your daily reward
+  casinoupdate:
+    description: Check for and download plugin updates

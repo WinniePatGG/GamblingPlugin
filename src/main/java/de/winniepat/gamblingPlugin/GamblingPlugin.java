@@ -4,6 +4,7 @@ import de.winniepat.gamblingPlugin.commands.*;
 import de.winniepat.gamblingPlugin.gui.*;
 import de.winniepat.gamblingPlugin.listeners.*;
 import de.winniepat.gamblingPlugin.util.ServerVersion;
+import de.winniepat.gamblingPlugin.util.UpdateChecker;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Listener;
@@ -40,6 +41,7 @@ public final class GamblingPlugin extends JavaPlugin {
         registerCommands();
         registerEvents();
         registerListeners();
+        UpdateChecker.check(this);
     }
 
     private boolean setupEconomy() {
@@ -86,5 +88,6 @@ public final class GamblingPlugin extends JavaPlugin {
         Objects.requireNonNull(getCommand("roulette")).setExecutor(new RouletteCommand());
         Objects.requireNonNull(getCommand("case")).setExecutor(new CaseCommand());
         Objects.requireNonNull(getCommand("daily")).setExecutor(new DailyCommand());
+        Objects.requireNonNull(getCommand("casinoupdate")).setExecutor(new UpdateCommand());
     }
 }
