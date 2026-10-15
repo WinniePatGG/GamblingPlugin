@@ -3,6 +3,7 @@ package de.winniepat.gamblingPlugin;
 import de.winniepat.gamblingPlugin.commands.*;
 import de.winniepat.gamblingPlugin.gui.*;
 import de.winniepat.gamblingPlugin.listeners.*;
+import de.winniepat.gamblingPlugin.util.PlayerData;
 import de.winniepat.gamblingPlugin.util.ServerVersion;
 import de.winniepat.gamblingPlugin.util.UpdateChecker;
 import net.milkbowl.vault.economy.Economy;
@@ -16,12 +17,15 @@ public final class GamblingPlugin extends JavaPlugin {
 
     private static GamblingPlugin instance;
     private Economy economy;
+    private PlayerData playerData;
 
     @Override
     public void onEnable() {
         instance = this;
 
         saveDefaultConfig();
+
+        playerData = new PlayerData(this);
 
         String serverVersion = ServerVersion.current();
         if (ServerVersion.isSupported(serverVersion)) {
@@ -66,6 +70,17 @@ public final class GamblingPlugin extends JavaPlugin {
 
     public Economy getEconomy() {
         return economy;
+    }
+
+    public PlayerData getPlayerData() {
+        return playerData;
+    }
+
+    @Override
+    public void onDisable() {
+        if (playerData != null) {
+            playerData.save();
+        }
     }
 
     private void registerEvents() {

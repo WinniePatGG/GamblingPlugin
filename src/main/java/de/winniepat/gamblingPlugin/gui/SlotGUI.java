@@ -45,9 +45,7 @@ public class SlotGUI implements Listener {
 
     private static final Map<UUID, Long> cooldowns = new HashMap<>();
     private static final Set<UUID> roulettePlayers = new HashSet<>();
-    private static final Map<UUID, String> freeSpinDates = new HashMap<>();
     private static final Map<UUID, Double> slotBaseRewards = new HashMap<>();
-    private static final Map<UUID, Integer> slotWinStreaks = new HashMap<>();
     private static final long COOLDOWN_MS = 5000;
 
     public static void openSlotGUI(Player player) {
@@ -60,7 +58,7 @@ public class SlotGUI implements Listener {
 
         boolean freeSpinEnabled = GamblingPlugin.getInstance().getConfig().getBoolean("slots.free-spin-once-per-day", true);
         String today = java.time.LocalDate.now().toString();
-        boolean useFreeSpin = freeSpinEnabled && !today.equals(freeSpinDates.get(uuid));
+        boolean useFreeSpin = freeSpinEnabled && !today.equals(GamblingPlugin.getInstance().getPlayerData().getLastFreeSpin(uuid));
 
         double cost = useFreeSpin ? 0.0 : GamblingPlugin.getInstance().getConfig().getDouble("slots.bet-cost", 100.0);
 
@@ -70,7 +68,8 @@ public class SlotGUI implements Listener {
         }
 
         if (useFreeSpin) {
-            freeSpinDates.put(uuid, today);
+            GamblingPlugin.getInstance().getPlayerData().setLastFreeSpin(uuid, today);
+            GamblingPlugin.getInstance().getPlayerData().save();
             player.sendMessage("§aFree daily spin used!");
         }
 
@@ -156,8 +155,9 @@ public class SlotGUI implements Listener {
             if (baseReward <= 0) baseReward = GamblingPlugin.getInstance().getConfig().getDouble("slots.bet-cost", 100.0);
             double multiplier = GamblingPlugin.getInstance().getConfig().getDouble("slots.multipliers." + matched.name(),
                     multipliers.getOrDefault(matched, 1.0));
-            int streak = slotWinStreaks.getOrDefault(uuid, 0) + 1;
-            slotWinStreaks.put(uuid, streak);
+            int streak = GamblingPlugin.getInstance().getPlayerData().getSlotStreak(uuid) + 1;
+            GamblingPlugin.getInstance().getPlayerData().setSlotStreak(uuid, streak);
+            GamblingPlugin.getInstance().getPlayerData().save();
             double bonus = GamblingPlugin.getInstance().getConfig().getDouble("slots.win-streak-bonus", 0.25);
             double cap = GamblingPlugin.getInstance().getConfig().getDouble("slots.win-streak-cap", 2.0);
             double streakMultiplier = Math.min(1.0 + (streak - 1) * bonus, cap);
@@ -171,7 +171,8 @@ public class SlotGUI implements Listener {
                 player.getWorld().spawnParticle(spark, player.getLocation().add(0, 1.5, 0), 30, 0.3, 0.5, 0.3);
             }
         } else {
-            slotWinStreaks.remove(uuid);
+            GamblingPlugin.getInstance().getPlayerData().setSlotStreak(uuid, 0);
+            GamblingPlugin.getInstance().getPlayerData().save();
             player.sendMessage("§cYou lost! Better luck next time.");
             player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BASS, 1f, 0.5f);
             Particle smoke = Particles.byName("SMOKE", "SMOKE_NORMAL");

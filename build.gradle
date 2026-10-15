@@ -14,7 +14,6 @@ repositories {
 
 def mcApiGroup = project.findProperty('mcApiGroup') ?: 'com.destroystokyo.paper'
 def mcVersion = project.findProperty('mcVersion') ?: '1.16.5-R0.1-SNAPSHOT'
-def deployDir = project.findProperty('deployDir') ?: 'C:/Users/winnie/Documents/lunaris/server/plugins'
 def minJavaVersion = 11
 
 dependencies {
@@ -54,12 +53,5 @@ processResources {
     filteringCharset 'UTF-8'
     filesMatching('plugin.yml') {
         expand props
-    }
-}
-
-build.doLast {
-    copy {
-        from("$buildDir/libs/${rootProject.name}-${version}.jar")
-        into(deployDir)
     }
 }
