@@ -89,6 +89,8 @@ public class DoubleGUI implements Listener {
                 if (stage >= amounts.size() - 1) {
                     int finalAmount = amounts.get(stage);
                     GamblingPlugin.getInstance().getEconomy().depositPlayer(player, finalAmount);
+                    GamblingPlugin.getInstance().getPlayerData().addWin(uuid, player.getName(), finalAmount);
+                    GamblingPlugin.getInstance().getPlayerData().save();
                     player.sendMessage("§aYou reached max and won $" + finalAmount + "!");
                     player.playSound(player.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 1f, 1f);
                     player.closeInventory();
@@ -109,6 +111,8 @@ public class DoubleGUI implements Listener {
         if (name.contains("Take")) {
             int winnings = amounts.get(stage);
             GamblingPlugin.getInstance().getEconomy().depositPlayer(player, winnings);
+            GamblingPlugin.getInstance().getPlayerData().addWin(uuid, player.getName(), winnings);
+            GamblingPlugin.getInstance().getPlayerData().save();
             player.sendMessage("§aYou took $" + winnings + " and walked away!");
             player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_YES, 1f, 1f);
             player.closeInventory();

@@ -37,6 +37,19 @@ public class SlotGUI implements Listener {
 
     private static final Random random = new Random();
 
+    private static Sound soundFromConfig(String path, String fallback) {
+        String name = GamblingPlugin.getInstance().getConfig().getString(path, fallback);
+        try {
+            return Sound.valueOf(name.toUpperCase());
+        } catch (Exception ignored) {
+            try {
+                return Sound.valueOf(fallback.toUpperCase());
+            } catch (Exception ignored2) {
+                return Sound.ENTITY_PLAYER_LEVELUP;
+            }
+        }
+    }
+
     private static final int[][] SLOT_INDEXES = {
             {3, 12, 21},
             {4, 13, 22},
@@ -164,9 +177,12 @@ public class SlotGUI implements Listener {
             double reward = baseReward * multiplier * streakMultiplier;
 
             GamblingPlugin.getInstance().getEconomy().depositPlayer(player, reward);
+            GamblingPlugin.getInstance().getPlayerData().addWin(uuid, player.getName(), reward);
+            GamblingPlugin.getInstance().getPlayerData().save();
             player.sendMessage("§aYou won $" + reward + "! (x" + multiplier + ") Streak: " + streak + "x");
-            player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1f, 1f);
-            Particle spark = Particles.byName("ELECTRIC_SPARK", "CRIT");
+            Sound winSound = soundFromConfig("audio.slot-win", "ENTITY_PLAYER_LEVELUP");
+            player.playSound(player.getLocation(), winSound, 1f, 1f);
+            Particle spark = Particles.byName(GamblingPlugin.getInstance().getConfig().getString("particles.slot-win", "ELECTRIC_SPARK"), "CRIT");
             if (spark != null) {
                 player.getWorld().spawnParticle(spark, player.getLocation().add(0, 1.5, 0), 30, 0.3, 0.5, 0.3);
             }
@@ -174,8 +190,9 @@ public class SlotGUI implements Listener {
             GamblingPlugin.getInstance().getPlayerData().setSlotStreak(uuid, 0);
             GamblingPlugin.getInstance().getPlayerData().save();
             player.sendMessage("§cYou lost! Better luck next time.");
-            player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BASS, 1f, 0.5f);
-            Particle smoke = Particles.byName("SMOKE", "SMOKE_NORMAL");
+            Sound lossSound = soundFromConfig("audio.slot-loss", "BLOCK_NOTE_BLOCK_BASS");
+            player.playSound(player.getLocation(), lossSound, 1f, 0.5f);
+            Particle smoke = Particles.byName(GamblingPlugin.getInstance().getConfig().getString("particles.slot-loss", "SMOKE"), "SMOKE_NORMAL");
             if (smoke != null) {
                 player.getWorld().spawnParticle(smoke, player.getLocation().add(0, 1.0, 0), 10, 0.2, 0.2, 0.2);
             }

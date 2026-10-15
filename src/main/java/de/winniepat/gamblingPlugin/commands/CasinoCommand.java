@@ -5,7 +5,10 @@ import de.winniepat.gamblingPlugin.animations.CaseAnimation;
 import de.winniepat.gamblingPlugin.gui.DoubleGUI;
 import de.winniepat.gamblingPlugin.gui.RouletteGUI;
 import de.winniepat.gamblingPlugin.gui.SlotGUI;
+import org.bukkit.Location;
 import org.bukkit.command.Command;
+import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.Player;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -58,9 +61,56 @@ public class CasinoCommand implements CommandExecutor {
             case "update":
             case "casinoupdate":
                 return new UpdateCommand().onCommand(sender, command, label, java.util.Arrays.copyOfRange(args, (args.length > 0 ? 1 : 0), args.length));
+            case "leaderboard":
+            case "top":
+            case "lb": {
+                sender.sendMessage("§6=== Casino Leaderboard ===");
+                java.util.List<java.util.Map.Entry<java.util.UUID, Double>> entries = new java.util.ArrayList<>(GamblingPlugin.getInstance().getPlayerData().getWins().entrySet());
+                entries.sort((a, b) -> Double.compare(b.getValue(), a.getValue()));
+                int rank = 1;
+                for (java.util.Map.Entry<java.util.UUID, Double> e : entries) {
+                    if (rank > 10) break;
+                    sender.sendMessage("§e" + rank + ". §f" + GamblingPlugin.getInstance().getPlayerData().getName(e.getKey()) + " §7- §a$" + (int) e.getValue().doubleValue());
+                    rank++;
+                }
+                if (entries.isEmpty()) sender.sendMessage("§7No wins recorded yet.");
+                return true;
+            }
+            case "hologram": {
+                if (!(sender instanceof Player)) {
+                    sender.sendMessage("Only players can use this command.");
+                    return true;
+                }
+                Player p = (Player) sender;
+                Location base = p.getLocation();
+                java.util.List<java.util.Map.Entry<java.util.UUID, Double>> topEntries = new java.util.ArrayList<>(GamblingPlugin.getInstance().getPlayerData().getWins().entrySet());
+                topEntries.sort((a, b) -> Double.compare(b.getValue(), a.getValue()));
+
+                double y = 0;
+                spawnHolo(p, base.clone().add(0, y, 0), "§6§lCasino Top Winners");
+                int r = 1;
+                for (java.util.Map.Entry<java.util.UUID, Double> e : topEntries) {
+                    if (r > 5) break;
+                    spawnHolo(p, base.clone().add(0, y - (r * 0.3), 0),
+                            "§e" + r + ". §f" + GamblingPlugin.getInstance().getPlayerData().getName(e.getKey()) + " §a$" + (int) e.getValue().doubleValue());
+                    r++;
+                }
+                p.sendMessage("§aHologram spawned.");
+                return true;
+            }
             default:
-                sender.sendMessage("§eUsage: /casino <slots|double|roulette|case|daily|update>");
+                sender.sendMessage("§eUsage: /casino <slots|double|roulette|case|daily|update|leaderboard|hologram>");
                 return true;
         }
+    }
+
+    private static void spawnHolo(Player player, Location location, String text) {
+        player.getWorld().spawn(location, ArmorStand.class, stand -> {
+            stand.setVisible(false);
+            stand.setGravity(false);
+            stand.setMarker(true);
+            stand.setCustomNameVisible(true);
+            stand.setCustomName(text);
+        });
     }
 }

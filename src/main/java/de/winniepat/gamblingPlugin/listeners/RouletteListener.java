@@ -100,6 +100,8 @@ public class RouletteListener implements Listener {
                         }
                         double winnings = betCost() * multiplier;
                         GamblingPlugin.getInstance().getEconomy().depositPlayer(player, winnings);
+                        GamblingPlugin.getInstance().getPlayerData().addWin(player.getUniqueId(), player.getName(), winnings);
+                        GamblingPlugin.getInstance().getPlayerData().save();
 
                         player.sendMessage("§aYou won! Multiplier: " + multiplier + "x | §a$" + winnings);
                     } else {

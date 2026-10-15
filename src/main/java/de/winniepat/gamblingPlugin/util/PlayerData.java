@@ -66,4 +66,27 @@ public class PlayerData {
     public void setLastFreeSpin(UUID uuid, String day) {
         data.set("free-spins." + uuid, day);
     }
+
+    public void addWin(UUID uuid, String name, double amount) {
+        String base = "stats.won." + uuid;
+        data.set(base, data.getDouble(base, 0.0) + amount);
+        data.set("stats.names." + uuid, name);
+    }
+
+    public java.util.Map<UUID, Double> getWins() {
+        java.util.Map<UUID, Double> result = new java.util.HashMap<>();
+        org.bukkit.configuration.ConfigurationSection section = data.getConfigurationSection("stats.won");
+        if (section == null) return result;
+        for (String key : section.getKeys(false)) {
+            try {
+                result.put(UUID.fromString(key), section.getDouble(key));
+            } catch (IllegalArgumentException ignored) {
+            }
+        }
+        return result;
+    }
+
+    public String getName(UUID uuid) {
+        return data.getString("stats.names." + uuid, uuid.toString().substring(0, 8));
+    }
 }

@@ -23,5 +23,12 @@ double:
 daily-reward:
   amount: 200.0
 
+audio:
+  slot-win: ENTITY_PLAYER_LEVELUP
+  slot-loss: BLOCK_NOTE_BLOCK_BASS
+particles:
+  slot-win: ELECTRIC_SPARK
+  slot-loss: SMOKE
+
 updates:
   check-on-startup: true
