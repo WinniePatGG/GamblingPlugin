@@ -7,7 +7,6 @@ import de.winniepat.gamblingPlugin.util.ServerVersion;
 import de.winniepat.gamblingPlugin.util.UpdateChecker;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
-import org.bukkit.event.Listener;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -83,11 +82,7 @@ public final class GamblingPlugin extends JavaPlugin {
     }
 
     private void registerCommands() {
-        Objects.requireNonNull(getCommand("slots")).setExecutor(new SlotCommand());
-        Objects.requireNonNull(getCommand("double")).setExecutor(new DoubleCommand());
-        Objects.requireNonNull(getCommand("roulette")).setExecutor(new RouletteCommand());
-        Objects.requireNonNull(getCommand("case")).setExecutor(new CaseCommand());
-        Objects.requireNonNull(getCommand("daily")).setExecutor(new DailyCommand());
-        Objects.requireNonNull(getCommand("casinoupdate")).setExecutor(new UpdateCommand());
+        CasinoCommand casinoCommand = new CasinoCommand();
+        Objects.requireNonNull(getCommand("casino")).setExecutor(casinoCommand);
     }
 }

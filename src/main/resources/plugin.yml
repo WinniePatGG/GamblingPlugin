@@ -8,15 +8,6 @@ description: KekClient
 website: https://winniepat.de
 depend: [Vault]
 commands:
-  slots:
-    description: Open slot machine
-  double:
-    description: Start double or nothing game
-  case:
-    description: Open a case
-  roulette:
-    description: Opens Roulette
-  daily:
-    description: Claim your daily reward
-  casinoupdate:
-    description: Check for and download plugin updates
+  casino:
+    description: Main casino command
+    usage: /casino <slots|double|roulette|case|daily|update>

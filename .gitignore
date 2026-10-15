@@ -1,8 +1,5 @@
-.idea/
-*.iml
-out/
-build/
-*.log
-.gradle/
-.DS_Store
-server/
+.gradle
+.idea
+build
+run
+run/libraries
