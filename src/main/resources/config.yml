@@ -1,0 +1,19 @@
+# GamblingPlugin configuration
+slots:
+  bet-cost: 100.0
+  free-spin-once-per-day: true
+  multipliers:
+    DIAMOND: 5.0
+    GOLD_INGOT: 3.0
+    EMERALD: 2.0
+    IRON_INGOT: 1.5
+    REDSTONE: 1.0
+
+roulette:
+  bet-cost: 50.0
+
+cases:
+  cost: 50.0
+
+double:
+  entry-cost: 20.0

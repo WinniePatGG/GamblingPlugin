@@ -45,6 +45,8 @@ public class SlotGUI implements Listener {
 
     private static final Map<UUID, Long> cooldowns = new HashMap<>();
     private static final Set<UUID> roulettePlayers = new HashSet<>();
+    private static final Map<UUID, String> freeSpinDates = new HashMap<>();
+    private static final Map<UUID, Double> slotBaseRewards = new HashMap<>();
     private static final long COOLDOWN_MS = 5000;
 
     public static void openSlotGUI(Player player) {
@@ -55,18 +57,30 @@ public class SlotGUI implements Listener {
             return;
         }
 
-        cooldowns.put(uuid, now);
-        roulettePlayers.add(uuid);
+        boolean freeSpinEnabled = GamblingPlugin.getInstance().getConfig().getBoolean("slots.free-spin-once-per-day", true);
+        String today = java.time.LocalDate.now().toString();
+        boolean useFreeSpin = freeSpinEnabled && !today.equals(freeSpinDates.get(uuid));
 
-        double cost = 100.0;
+        double cost = useFreeSpin ? 0.0 : GamblingPlugin.getInstance().getConfig().getDouble("slots.bet-cost", 100.0);
 
-        if (GamblingPlugin.getInstance().getEconomy().getBalance(player) < cost) {
-            player.sendMessage("§cYou don't have enough money to bet! §7(Required: $100)");
-            roulettePlayers.remove(uuid);
+        if (!useFreeSpin && GamblingPlugin.getInstance().getEconomy().getBalance(player) < cost) {
+            player.sendMessage("§cYou don't have enough money to bet! §7(Required: $" + (int) cost + ")");
             return;
         }
 
-        GamblingPlugin.getInstance().getEconomy().withdrawPlayer(player, cost);
+        if (useFreeSpin) {
+            freeSpinDates.put(uuid, today);
+            player.sendMessage("§aFree daily spin used!");
+        }
+
+        slotBaseRewards.put(uuid, (cost > 0) ? cost : GamblingPlugin.getInstance().getConfig().getDouble("slots.bet-cost", 100.0));
+
+        cooldowns.put(uuid, now);
+        roulettePlayers.add(uuid);
+
+        if (cost > 0) {
+            GamblingPlugin.getInstance().getEconomy().withdrawPlayer(player, cost);
+        }
         player.sendMessage("§eSpinning...");
 
         Inventory inv = Bukkit.createInventory(null, 27, "§6Slot Machine");
@@ -137,8 +151,10 @@ public class SlotGUI implements Listener {
 
         if (mid1.getType() == mid2.getType() && mid2.getType() == mid3.getType()) {
             Material matched = mid1.getType();
-            double baseReward = 100.0;
-            double multiplier = multipliers.getOrDefault(matched, 1.0);
+            double baseReward = slotBaseRewards.remove(uuid);
+            if (baseReward <= 0) baseReward = GamblingPlugin.getInstance().getConfig().getDouble("slots.bet-cost", 100.0);
+            double multiplier = GamblingPlugin.getInstance().getConfig().getDouble("slots.multipliers." + matched.name(),
+                    multipliers.getOrDefault(matched, 1.0));
             double reward = baseReward * multiplier;
 
             GamblingPlugin.getInstance().getEconomy().depositPlayer(player, reward);

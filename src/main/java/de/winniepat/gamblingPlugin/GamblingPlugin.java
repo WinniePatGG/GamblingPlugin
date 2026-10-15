@@ -21,6 +21,8 @@ public final class GamblingPlugin extends JavaPlugin {
     public void onEnable() {
         instance = this;
 
+        saveDefaultConfig();
+
         String serverVersion = ServerVersion.current();
         if (ServerVersion.isSupported(serverVersion)) {
             getLogger().info("GamblingPlugin enabled on Minecraft " + serverVersion + ".");

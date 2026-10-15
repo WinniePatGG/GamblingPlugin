@@ -21,7 +21,7 @@ public class RouletteListener implements Listener {
 
     private final GamblingPlugin plugin;
     private final Random random = new Random();
-    private final double betCost = 50.0;
+    private double betCost() { return GamblingPlugin.getInstance().getConfig().getDouble("roulette.bet-cost", 50.0); }
 
     public RouletteListener(GamblingPlugin plugin) {
         this.plugin = plugin;
@@ -40,8 +40,18 @@ public class RouletteListener implements Listener {
         }
 
         if (title.equals("Choose a Color to Bet")) {
+            if (event.getClickedInventory() != event.getView().getTopInventory()) return;
+            if (clicked == null) return;
             Material chosen = clicked.getType();
+            if (chosen != Material.RED_WOOL && chosen != Material.GREEN_WOOL && chosen != Material.BLACK_WOOL) return;
 
+            if (RouletteGUI.spinningPlayers.contains(player.getUniqueId())) {
+                return;
+            }
+
+            event.setCancelled(true);
+
+            double betCost = betCost();
             if (GamblingPlugin.getInstance().getEconomy().getBalance(player) < betCost) {
                 player.sendMessage("§cYou don't have enough money to bet! §7(Required: $" + betCost + ")");
                 return;
@@ -72,6 +82,7 @@ public class RouletteListener implements Listener {
             public void run() {
                 if (index >= totalSpins) {
                     cancel();
+                    RouletteGUI.spinningPlayers.remove(player.getUniqueId());
                     int finalIndex = (index - 1) % RouletteGUI.EDGE_SLOTS.length;
                     int finalSlot = RouletteGUI.EDGE_SLOTS[finalIndex];
 
@@ -87,7 +98,7 @@ public class RouletteListener implements Listener {
                         } else {
                             multiplier = 0;
                         }
-                        double winnings = betCost * multiplier;
+                        double winnings = betCost() * multiplier;
                         GamblingPlugin.getInstance().getEconomy().depositPlayer(player, winnings);
 
                         player.sendMessage("§aYou won! Multiplier: " + multiplier + "x | §a$" + winnings);
