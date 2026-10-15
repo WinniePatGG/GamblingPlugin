@@ -1,32 +1,69 @@
-# Gambling Plugin by WinniePatGG
+# WinniePat's Casino Plugin
 
-A custom Java plugin developed for Paper 1.21.4.
+A Minecraft casino/gambling plugin for Paper 1.16.3 - 26.2 with Vault economy support.
 
-## 💡 Features
+## Features
+- Slot machine with configurable bets, multipliers, daily free spin, and win streak bonus.
+- Double or Nothing (configurable entry cost).
+- Roulette (configurable bet cost).
+- CS:GO-style case opening (configurable cost).
+- Daily reward claims.
+- Modrinth update checker and downloader.
+- Persistent player stats and win leaderboard.
+- Particle/sound configuration.
+- Unified `/casino` command.
 
-- Slot Machine
-- Double Or Nothing
-- Roulette
-- Cases (Like CS:GO)
+## Commands
+All commands are available through the unified command:
 
-## 🚀 Getting Started
+```text
+/casino slots
+/casino double
+/casino roulette
+/casino case
+/casino daily
+/casino update
+/casino leaderboard
+/casino hologram
+/casino reload
+```
 
-### Prerequisites
+Permission: most commands require players to be operators for admin actions such as `reload`, `update`, and `hologram`.
 
-- Java 21
-- Gradle (Included in repo)
-- Paper 1.21.4 Server
+## Configuration
+Edit `config.yml` to customize:
 
-### Build & Run
+- Bet costs and multipliers
+- Entry costs
+- Daily reward amount
+- Win streak bonus/cap
+- Audio/particle names
+- Update checking
+
+Changes can be applied with:
+
+```text
+/casino reload
+```
+
+## Requirements
+- Paper/Spigot 1.16.3 - 26.2
+- Vault
+- An economy plugin (EssentialsX, etc.)
+- Java 11+ recommended (README build target uses Java 21)
+
+## Build
 
 ```bash
-# Clone the repository
-git clone https://github.com/WinniePatGG/GamblingPlugin.git
-
-# Navigate into the project folder
-cd GamblingPlugin
-
-# Build the plugin
 ./gradlew build
 ```
-Made with ❤️ by WinniePatGG.
+
+Run tests:
+
+```bash
+./gradlew test
+```
+
+## Notes
+- Holograms are spawned as invisible ArmorStands near the player.
+- Update downloads are placed in `plugins/update/` and applied on the next server restart.
