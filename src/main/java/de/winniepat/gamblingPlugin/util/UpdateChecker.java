@@ -37,7 +37,7 @@ public final class UpdateChecker {
             if (after != null) Bukkit.getScheduler().runTask(plugin, after);
         };
 
-        String project = plugin.getConfig().getString("updates.modrinth-project", "VPVNKnOS");
+        String project = "VPVNKnOS";
         Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
             try {
                 URL url = new URL("https://api.modrinth.com/v2/project/" + project + "/version?limit=1");
