@@ -77,7 +77,7 @@ public class DoubleGUI implements Listener {
 
     @EventHandler
     public void onClick(InventoryClickEvent e) {
-        if (!e.getView().getTitle().equals("§aDouble or Nothing")) return;
+        if (!de.winniepat.gamblingPlugin.util.ViewTitles.title(e.getView()).equals("§aDouble or Nothing")) return;
         e.setCancelled(true);
         if (!(e.getWhoClicked() instanceof Player)) return;
 
@@ -128,14 +128,14 @@ public class DoubleGUI implements Listener {
 
     @EventHandler
     public void onInventoryClick(InventoryClickEvent e) {
-        if (e.getView().getTitle().equals("§aDouble or Nothing")) {
+        if (de.winniepat.gamblingPlugin.util.ViewTitles.title(e.getView()).equals("§aDouble or Nothing")) {
             e.setCancelled(true);
         }
     }
 
     @EventHandler
     public void onInventoryDrag(InventoryDragEvent e) {
-        if (e.getView().getTitle().equals("§aDouble or Nothing")) {
+        if (de.winniepat.gamblingPlugin.util.ViewTitles.title(e.getView()).equals("§aDouble or Nothing")) {
             e.setCancelled(true);
         }
     }

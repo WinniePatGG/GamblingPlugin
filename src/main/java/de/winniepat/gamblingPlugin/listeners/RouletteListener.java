@@ -33,9 +33,9 @@ public class RouletteListener implements Listener {
         Player player = (Player) event.getWhoClicked();
         if (event.getClickedInventory() == null || event.getCurrentItem() == null) return;
 
-        String title = event.getView().getTitle();
+        String title = de.winniepat.gamblingPlugin.util.ViewTitles.title(event.getView());
         ItemStack clicked = event.getCurrentItem();
-        if (event.getView().getTitle().startsWith("Roulette") && event.getClickedInventory() == event.getView().getTopInventory()) {
+        if (title.startsWith("Roulette") && event.getClickedInventory() == event.getView().getTopInventory()) {
             event.setCancelled(true);
         }
 

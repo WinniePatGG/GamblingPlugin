@@ -202,7 +202,7 @@ public class SlotGUI implements Listener {
     @EventHandler
     public void onInventoryClick(InventoryClickEvent e) {
         if (!(e.getWhoClicked() instanceof Player)) return;
-        String title = e.getView().getTitle();
+        String title = de.winniepat.gamblingPlugin.util.ViewTitles.title(e.getView());
         Player player = (Player) e.getWhoClicked();
 
         if (title.equals("§6Slot Machine")
@@ -215,7 +215,7 @@ public class SlotGUI implements Listener {
 
     @EventHandler
     public void onInventoryDrag(InventoryDragEvent e) {
-        if (e.getView().getTitle().equals("§6Slot Machine")) {
+        if (de.winniepat.gamblingPlugin.util.ViewTitles.title(e.getView()).equals("§6Slot Machine")) {
             e.setCancelled(true);
         }
     }
@@ -229,7 +229,7 @@ public class SlotGUI implements Listener {
 
     @EventHandler
     public void onInventoryClose(InventoryCloseEvent e) {
-        if (!e.getView().getTitle().equals("§6Slot Machine")) return;
+        if (!de.winniepat.gamblingPlugin.util.ViewTitles.title(e.getView()).equals("§6Slot Machine")) return;
         if (!(e.getPlayer() instanceof Player)) return;
 
         Player player = (Player) e.getPlayer();

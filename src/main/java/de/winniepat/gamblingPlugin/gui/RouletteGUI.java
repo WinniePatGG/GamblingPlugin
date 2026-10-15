@@ -77,14 +77,14 @@ public class RouletteGUI implements Listener {
 
     @EventHandler
     public void onInventoryClick(InventoryClickEvent e) {
-        if (e.getView().getTitle().startsWith("Roulette: ")) {
+        if (de.winniepat.gamblingPlugin.util.ViewTitles.title(e.getView()).startsWith("Roulette: ")) {
             e.setCancelled(true);
         }
     }
 
     @EventHandler
     public void onInventoryDrag(InventoryDragEvent e) {
-        if (e.getView().getTitle().startsWith("Roulette: ")) {
+        if (de.winniepat.gamblingPlugin.util.ViewTitles.title(e.getView()).startsWith("Roulette: ")) {
             e.setCancelled(true);
         }
     }
@@ -93,7 +93,7 @@ public class RouletteGUI implements Listener {
     public void onInventoryClose(InventoryCloseEvent e) {
         if (!(e.getPlayer() instanceof Player)) return;
         Player player = (Player) e.getPlayer();
-        String title = e.getView().getTitle();
+        String title = de.winniepat.gamblingPlugin.util.ViewTitles.title(e.getView());
 
         if (title.startsWith("Roulette: ") && spinningPlayers.contains(player.getUniqueId())) {
             Bukkit.getScheduler().runTaskLater(GamblingPlugin.getInstance(), () -> {
