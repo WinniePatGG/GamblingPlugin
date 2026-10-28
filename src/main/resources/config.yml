@@ -1,4 +1,8 @@
-# GamblingPlugin configuration
+# ============================================================
+#  WinniePat's Casino Plugin configuration
+#  Apply changes with /casino reload
+# ============================================================
+
 slots:
   bet-cost: 100.0
   free-spin-once-per-day: true
@@ -20,12 +24,69 @@ cases:
 double:
   entry-cost: 20.0
 
+# Blackjack vs the dealer. Payouts are the TOTAL money returned per $1 bet:
+# win 2.0 = bet back + 1x profit, blackjack 2.5 = + 1.5x profit, push 1.0 = refund.
+blackjack:
+  bet-cost: 100.0
+  payouts:
+    win: 2.0
+    blackjack: 2.5
+    push: 1.0
+  dealer-stands-on-soft-17: true
+
+# Stake-style mines on a 5x5 grid. After k safe tiles the cashout pays
+# (1 - house-edge) times the fair odds, so higher risk = higher reward.
+mines:
+  bet-cost: 100.0
+  mines: 3            # mines hidden among the 25 tiles (1-24)
+  house-edge: 0.03
+
+# Ride the multiplier and cash out before it crashes!
+# The crash point is sampled so P(crash >= x) = (1 - house-edge) / x.
+crash:
+  bet-cost: 100.0
+  house-edge: 0.01
+  growth: 0.0075       # multiplier growth per tick-step (faster as it climbs)
+  max-multiplier: 250.0
+
+# Heads or tails. payout = TOTAL money returned on a winning flip (1.95 = house edge 2.5%).
+coinflip:
+  bet-cost: 100.0
+  payout: 1.95
+
+# Weighted wheel segments. multiplier = TOTAL money returned per $1 bet (0 = lose).
+# Weights are relative and get spread across the 28 wheel slots automatically.
+wheel:
+  bet-cost: 100.0
+  segments:
+    0x:      {multiplier: 0.0,  weight: 15, color: BLACK_WOOL}
+    low:     {multiplier: 1.25, weight: 6,  color: GREEN_WOOL}
+    double:  {multiplier: 2.0, weight: 4,  color: LIME_WOOL}
+    triple:  {multiplier: 3.0, weight: 2,  color: RED_WOOL}
+    jackpot: {multiplier: 5.0, weight: 1,  color: ORANGE_WOOL}
+
+# Right-click these block types in the world to open the matching game.
+# Set a value to "" to disable that station. Crouch to use the block normally.
+# Operators can break station blocks; players cannot.
+stations:
+  roulette: STRUCTURE_BLOCK
+  menu: ""
+  slots: ""
+  blackjack: ""
+  mines: ""
+  crash: ""
+  wheel: ""
+  coinflip: ""
+  double: ""
+  case: ""
+
 daily-reward:
   amount: 200.0
 
 audio:
   slot-win: ENTITY_PLAYER_LEVELUP
   slot-loss: BLOCK_NOTE_BLOCK_BASS
+
 particles:
   slot-win: ELECTRIC_SPARK
   slot-loss: SMOKE

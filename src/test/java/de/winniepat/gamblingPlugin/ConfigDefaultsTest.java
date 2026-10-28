@@ -21,6 +21,12 @@ class ConfigDefaultsTest {
                     "roulette:",
                     "cases:",
                     "double:",
+                    "blackjack:",
+                    "mines:",
+                    "crash:",
+                    "coinflip:",
+                    "wheel:",
+                    "stations:",
                     "daily-reward:",
                     "updates:",
                     "audio:",
@@ -30,6 +36,24 @@ class ConfigDefaultsTest {
             for (String key : required) {
                 assertTrue(config.contains(key), "config.yml is missing section: " + key);
             }
+        }
+    }
+
+    @Test
+    void configContainsNewGameDefaults() throws Exception {
+        try (InputStream in = getClass().getResourceAsStream("/config.yml")) {
+            String config = new String(in.readAllBytes(), StandardCharsets.UTF_8);
+
+            // blackjack payout tiers
+            assertTrue(config.contains("blackjack:"));
+            assertTrue(config.contains("2.5"));
+            // mines and crash house edges
+            assertTrue(config.contains("house-edge"));
+            // wheel segments with weights
+            assertTrue(config.contains("multiplier: 5.0"));
+            assertTrue(config.contains("weight:"));
+            // legacy roulette station must stay mapped to the structure block
+            assertTrue(config.contains("STRUCTURE_BLOCK"));
         }
     }
 

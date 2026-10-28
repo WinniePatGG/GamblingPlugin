@@ -4,10 +4,11 @@ main: de.winniepat.gamblingPlugin.GamblingPlugin
 api-version: '1.16'
 load: STARTUP
 authors: [ WinniePat ]
-description: KekClient
+description: Casino games (slots, roulette, blackjack, mines, crash, wheel and more) with Vault economy support
 website: https://winniepat.de
 depend: [Vault]
 commands:
   casino:
-    description: Main casino command
-    usage: /casino <slots|double|roulette|case|daily|update>
+    description: Casino command hub - no arguments opens the lobby menu
+    usage: /casino <menu|slots|blackjack|mines|crash|wheel|coinflip|roulette|double|case|daily|leaderboard|hologram|update|reload>
+    aliases: [games, gamble]

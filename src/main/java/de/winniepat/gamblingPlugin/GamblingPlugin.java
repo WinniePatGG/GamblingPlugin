@@ -4,11 +4,11 @@ import de.winniepat.gamblingPlugin.animations.CaseAnimation;
 import de.winniepat.gamblingPlugin.commands.*;
 import de.winniepat.gamblingPlugin.gui.*;
 import de.winniepat.gamblingPlugin.listeners.*;
+import de.winniepat.gamblingPlugin.util.ActiveGames;
 import de.winniepat.gamblingPlugin.util.PlayerData;
 import de.winniepat.gamblingPlugin.util.ServerVersion;
 import de.winniepat.gamblingPlugin.util.UpdateChecker;
 import net.milkbowl.vault.economy.Economy;
-import org.bukkit.Bukkit;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -93,23 +93,37 @@ public final class GamblingPlugin extends JavaPlugin {
         DoubleGUI.clearState();
         RouletteGUI.clearState();
         CaseAnimation.clearState();
+        BlackjackGUI.clearState();
+        MinesGUI.clearState();
+        CrashGUI.clearState();
+        CoinflipGUI.clearState();
+        WheelGUI.clearState();
+        ActiveGames.clear();
     }
 
     private void registerEvents() {
         getServer().getPluginManager().registerEvents(new SlotGUI(), this);
         getServer().getPluginManager().registerEvents(new DoubleGUI(), this);
         getServer().getPluginManager().registerEvents(new RouletteGUI(), this);
+        getServer().getPluginManager().registerEvents(new MenuGUI(), this);
+        getServer().getPluginManager().registerEvents(new BlackjackGUI(), this);
+        getServer().getPluginManager().registerEvents(new MinesGUI(), this);
+        getServer().getPluginManager().registerEvents(new CrashGUI(), this);
+        getServer().getPluginManager().registerEvents(new CoinflipGUI(), this);
+        getServer().getPluginManager().registerEvents(new WheelGUI(), this);
     }
 
     private void registerListeners() {
         getServer().getPluginManager().registerEvents(new SlotListener(), this);
         getServer().getPluginManager().registerEvents(new DoubleInteractListener(), this);
         getServer().getPluginManager().registerEvents(new CaseListener(), this);
-        Bukkit.getPluginManager().registerEvents(new RouletteListener(this), this);
+        getServer().getPluginManager().registerEvents(new RouletteListener(this), this);
+        getServer().getPluginManager().registerEvents(new StationListener(), this);
     }
 
     private void registerCommands() {
         CasinoCommand casinoCommand = new CasinoCommand();
         Objects.requireNonNull(getCommand("casino")).setExecutor(casinoCommand);
+        Objects.requireNonNull(getCommand("casino")).setTabCompleter(casinoCommand);
     }
 }

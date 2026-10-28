@@ -4,13 +4,10 @@ import de.winniepat.gamblingPlugin.GamblingPlugin;
 import de.winniepat.gamblingPlugin.gui.RouletteGUI;
 import org.bukkit.Material;
 import org.bukkit.Sound;
-import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.Action;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -132,26 +129,4 @@ public class RouletteListener implements Listener {
             }
         }.runTaskTimer(plugin, 0L, 2L);
     }
-    @EventHandler
-        public void onBlockInteract(PlayerInteractEvent event) {
-            if (event.getAction() != Action.LEFT_CLICK_BLOCK) return;
-            if (event.getClickedBlock() == null) return;
-
-            Block block = event.getClickedBlock();
-            Player player = event.getPlayer();
-
-            if (block.getType() == Material.STRUCTURE_BLOCK) {
-                if (player.isSneaking()) {
-                    if (player.isOp()) {
-                        block.breakNaturally(player.getInventory().getItemInMainHand());
-                    } else {
-                        event.setCancelled(true);
-                        player.sendMessage("§cOnly Staff can break Roulette Tables!");
-                    }
-                } else {
-                    event.setCancelled(true);
-                    player.openInventory(RouletteGUI.createBettingGUI());
-                }
-            }
-        }
 }

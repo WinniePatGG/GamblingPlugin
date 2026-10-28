@@ -57,10 +57,13 @@ public final class UpdateChecker {
                     if (um.find()) downloadUrl = um.group(1);
 
                     String current = plugin.getDescription().getVersion();
-                    if (latestVersion != null && !latestVersion.equalsIgnoreCase(current)) {
+                    if (latestVersion != null && isNewerVersion(latestVersion, current)) {
                         updateAvailable = true;
                         plugin.getLogger().warning("A new version of GamblingPlugin is available: " + latestVersion
                                 + " (current: " + current + "). Run /casinoupdate to download it.");
+                    } else if (latestVersion != null && !latestVersion.equalsIgnoreCase(current)) {
+                        plugin.getLogger().info("GamblingPlugin " + current
+                                + " is newer than the published " + latestVersion + ". Skipping update.");
                     } else {
                         plugin.getLogger().info("GamblingPlugin is up to date (" + current + ").");
                     }
@@ -71,6 +74,32 @@ public final class UpdateChecker {
                 runAfter.run();
             }
         });
+    }
+
+    /** True when the published version is strictly greater than the running one. */
+    static boolean isNewerVersion(String remote, String current) {
+        int[] remoteParts = parseVersion(remote);
+        int[] currentParts = parseVersion(current);
+        for (int i = 0; i < 3; i++) {
+            if (remoteParts[i] != currentParts[i]) {
+                return remoteParts[i] > currentParts[i];
+            }
+        }
+        return false;
+    }
+
+    private static int[] parseVersion(String version) {
+        int[] parts = new int[3];
+        if (version != null) {
+            String[] split = version.split("\\.");
+            for (int i = 0; i < split.length && i < 3; i++) {
+                try {
+                    parts[i] = Integer.parseInt(split[i].trim());
+                } catch (NumberFormatException ignored) {
+                }
+            }
+        }
+        return parts;
     }
 
     public static boolean isUpdateAvailable() {
