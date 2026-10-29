@@ -7,7 +7,7 @@ import de.winniepat.gamblingPlugin.listeners.*;
 import de.winniepat.gamblingPlugin.util.ActiveGames;
 import de.winniepat.gamblingPlugin.util.PlayerData;
 import de.winniepat.gamblingPlugin.util.ServerVersion;
-import de.winniepat.gamblingPlugin.util.UpdateChecker;
+import de.winniepat.modrinthupdatechecker.ModrinthUpdateChecker;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -19,6 +19,11 @@ public final class GamblingPlugin extends JavaPlugin {
     private static GamblingPlugin instance;
     private Economy economy;
     private PlayerData playerData;
+
+    ModrinthUpdateChecker checker = ModrinthUpdateChecker.builder()
+            .projectId("VPVNKnOS")
+            .currentVersion(getDescription().getVersion())
+            .build();
 
     @Override
     public void onEnable() {
@@ -45,7 +50,13 @@ public final class GamblingPlugin extends JavaPlugin {
         registerCommands();
         registerEvents();
         registerListeners();
-        UpdateChecker.check(this);
+
+        checker.checkForUpdates().thenAccept(result -> {
+            if (result.isUpdateAvailable()) {
+                getLogger().warning("A new version of GamblingPlugin is available: " + result.latestVersion());
+                result.downloadUrl().ifPresent(url -> getLogger().warning("Download it here: " + url));
+            }
+        });
     }
 
     private boolean setupEconomy() {

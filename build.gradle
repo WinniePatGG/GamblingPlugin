@@ -1,20 +1,22 @@
 plugins {
     id 'java'
     id("xyz.jpenilla.run-paper") version "2.3.1"
+    id 'com.gradleup.shadow' version '8.3.6'
 }
 
 group = 'de.winniepat'
-version = '2.0'
+version = '1.5'
 
 repositories {
     mavenCentral()
     maven { url = 'https://repo.papermc.io/repository/maven-public/' }
     maven { url = 'https://jitpack.io' }
+    maven { url = 'https://maven.winniepat.de/releases' }
 }
 
 def mcApiGroup = project.findProperty('mcApiGroup') ?: 'com.destroystokyo.paper'
 def mcVersion = project.findProperty('mcVersion') ?: '1.16.5-R0.1-SNAPSHOT'
-def minJavaVersion = 11
+def minJavaVersion = 21
 
 dependencies {
     compileOnly("${mcApiGroup}:paper-api:${mcVersion}")
@@ -25,6 +27,8 @@ dependencies {
 
     testImplementation 'org.junit.jupiter:junit-jupiter:5.10.2'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+    implementation "de.winniepat:modrinthupdatechecker:0.0.2"
 }
 
 tasks.named('test') {
@@ -41,8 +45,9 @@ java {
     def javaVersion = JavaVersion.toVersion(minJavaVersion)
     sourceCompatibility = javaVersion
     targetCompatibility = javaVersion
-    if (JavaVersion.current() < javaVersion) {
-        toolchain.languageVersion = JavaLanguageVersion.of(minJavaVersion)
+
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(minJavaVersion)
     }
 }
 
@@ -61,4 +66,22 @@ processResources {
     filesMatching('plugin.yml') {
         expand props
     }
+}
+
+tasks.named('shadowJar') {
+    archiveClassifier.set('all')
+}
+
+tasks.named('build') {
+    dependsOn tasks.named('shadowJar')
+}
+
+tasks.named('runServer') {
+    minecraftVersion('1.21.11')
+
+    dependsOn tasks.named('shadowJar')
+
+    pluginJars.from(tasks.named('shadowJar').flatMap {
+        it.archiveFile
+    })
 }

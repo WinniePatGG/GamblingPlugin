@@ -3,7 +3,7 @@ version: '${version}'
 main: de.winniepat.gamblingPlugin.GamblingPlugin
 api-version: '1.16'
 load: STARTUP
-authors: [ WinniePat ]
+authors: [ WinniePatGG ]
 description: Casino games (slots, roulette, blackjack, mines, crash, wheel and more) with Vault economy support
 website: https://winniepat.de
 depend: [Vault]
