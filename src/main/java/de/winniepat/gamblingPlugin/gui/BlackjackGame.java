@@ -17,11 +17,6 @@ import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 
-/**
- * One blackjack round against the dealer. The GUI shows the dealer's cards on
- * the top row and the player's cards in the middle, with HIT / DOUBLE / STAND
- * buttons underneath. Closing the GUI mid-hand forces the player to stand.
- */
 final class BlackjackGame {
 
     static final String TITLE = "§2Blackjack";
@@ -57,7 +52,6 @@ final class BlackjackGame {
         return GamblingPlugin.getInstance().getConfig().getDouble("blackjack.bet-cost", 100.0);
     }
 
-    /** Creates the round, withdraws nothing (caller already did) and deals. */
     void start() {
         playerCards.add(Cards.draw(random));
         dealerCards.add(Cards.draw(random));
@@ -270,7 +264,6 @@ final class BlackjackGame {
         }, ticks);
     }
 
-    /** Called when the player closes the GUI mid-hand: they are forced to stand. */
     void forceStandOnClose() {
         if (!resolved && !dealerTurn) {
             player.sendMessage("§cYou closed the table mid-hand! §7You are forced to stand.");

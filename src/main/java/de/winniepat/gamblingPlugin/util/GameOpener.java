@@ -13,17 +13,11 @@ import de.winniepat.gamblingPlugin.gui.WheelGUI;
 import de.winniepat.gamblingPlugin.gui.MenuGUI;
 import org.bukkit.entity.Player;
 
-/**
- * Single entry point for opening any casino game — used by the /casino command,
- * the lobby menu and the station blocks, so routing and session guards stay in
- * one place.
- */
 public final class GameOpener {
 
     private GameOpener() {
     }
 
-    /** Opens a game by config/command key. Unknown keys open the lobby. */
     public static void openGame(Player player, String key) {
         if (key == null) {
             key = "menu";
@@ -74,7 +68,6 @@ public final class GameOpener {
         }
     }
 
-    /** Blocks opening a new game while another interactive game is running. */
     private static boolean guard(Player player, String key) {
         if (ActiveGames.busyWithOther(player.getUniqueId(), key)) {
             player.sendMessage("§cYou're already playing a game! §7Finish that one first §8(/casino menu)");
@@ -83,7 +76,6 @@ public final class GameOpener {
         return true;
     }
 
-    /** Case opening cost check + withdrawal, shared by command and menu. */
     public static void openCase(Player player) {
         double cost = GamblingPlugin.getInstance().getConfig().getDouble("cases.cost", 50.0);
         if (GamblingPlugin.getInstance().getEconomy().getBalance(player) < cost) {

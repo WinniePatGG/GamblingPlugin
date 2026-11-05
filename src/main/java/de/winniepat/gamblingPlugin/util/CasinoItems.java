@@ -9,7 +9,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
-/** Small helpers for building consistent casino GUI items. */
 public final class CasinoItems {
 
     private CasinoItems() {
@@ -44,7 +43,6 @@ public final class CasinoItems {
         }
     }
 
-    /** Formats an amount like $1,234.50, $12.3k or $1.2M for GUI items. */
     public static String money(double amount) {
         if (Math.abs(amount) >= 1000000) {
             return "$" + String.format(Locale.US, "%.2fM", amount / 1000000.0);
@@ -55,7 +53,6 @@ public final class CasinoItems {
         return "$" + String.format(Locale.US, "%.2f", amount);
     }
 
-    /** Formats a multiplier like 1.25x. */
     public static String multiplier(double multiplier) {
         return String.format(Locale.US, "%.2f", multiplier) + "x";
     }

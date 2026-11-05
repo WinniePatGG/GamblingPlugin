@@ -18,8 +18,19 @@ slots:
 roulette:
   bet-cost: 50.0
 
+# CS:GO-style cases. Every reward pays money through the Vault economy —
+# the item icons in the animation are purely visual. `weight` is the relative
+# drop chance, `amount` is the money payout.
 cases:
   cost: 50.0
+  rewards:
+    iron:      {name: "&fIron Ingot",       material: IRON_INGOT,              amount: 40.0,   weight: 30}
+    gold:      {name: "&6Gold Ingot",       material: GOLD_INGOT,              amount: 80.0,   weight: 22}
+    emerald:   {name: "&aEmerald",          material: EMERALD,                 amount: 150.0,  weight: 14}
+    diamond:   {name: "&bDiamond",          material: DIAMOND,                 amount: 300.0,  weight: 9}
+    netherite: {name: "&8Netherite Scrap",  material: NETHERITE_SCRAP,         amount: 600.0,  weight: 5}
+    totem:     {name: "&eTotem of Undying", material: TOTEM_OF_UNDYING,        amount: 900.0,  weight: 3}
+    gapple:    {name: "&dEnchanted Apple",  material: ENCHANTED_GOLDEN_APPLE,  amount: 1750.0, weight: 1}
 
 double:
   entry-cost: 20.0

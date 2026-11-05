@@ -17,10 +17,6 @@ import java.util.Locale;
 import java.util.Random;
 import java.util.UUID;
 
-/**
- * Crash: pay a stake, watch the multiplier climb, cash out before it crashes.
- * The crash point is sampled so that P(crash >= x) = (1 - house-edge) / x.
- */
 final class CrashGame {
 
     static final String TITLE = "§6Crash";
@@ -155,7 +151,6 @@ final class CrashGame {
         closeSoon(40L);
     }
 
-    /** Called when the GUI is closed before the round finished: auto cash out. */
     void forceResolveOnClose() {
         CrashGUI.forget(uuid);
         if (settled) return;

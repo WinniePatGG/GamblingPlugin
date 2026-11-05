@@ -13,7 +13,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-/** Event wiring for {@link CoinflipGame}. */
 public class CoinflipGUI implements Listener {
 
     private static final Map<UUID, CoinflipGame> games = new HashMap<>();

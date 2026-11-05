@@ -13,7 +13,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-/** Event wiring for {@link CrashGame}. */
 public class CrashGUI implements Listener {
 
     private static final Map<UUID, CrashGame> games = new HashMap<>();

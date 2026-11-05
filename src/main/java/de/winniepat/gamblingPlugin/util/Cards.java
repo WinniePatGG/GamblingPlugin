@@ -6,7 +6,6 @@ import org.bukkit.inventory.ItemStack;
 import java.util.List;
 import java.util.Random;
 
-/** Card model and item rendering for Blackjack. */
 public final class Cards {
 
     private static final String[] RANKS = {"A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"};
@@ -15,12 +14,10 @@ public final class Cards {
     private Cards() {
     }
 
-    /** Draws a random card like "A♠" (rank followed by suit). */
     public static String draw(Random random) {
         return RANKS[random.nextInt(RANKS.length)] + SUITS[random.nextInt(SUITS.length)];
     }
 
-    /** Best blackjack value of a hand (aces count 11 and downgrade as needed). */
     public static int value(List<String> hand) {
         int total = 0;
         int aces = 0;
@@ -42,7 +39,6 @@ public final class Cards {
         return total;
     }
 
-    /** True if the hand still counts an ace as 11 (a "soft" hand). */
     public static boolean isSoft(List<String> hand) {
         int best = value(hand);
         int withAcesDown = 0;

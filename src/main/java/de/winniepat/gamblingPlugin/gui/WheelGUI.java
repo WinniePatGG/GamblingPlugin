@@ -23,13 +23,6 @@ import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
 
-/**
- * Wheel of Fortune: a weighted multi-tier wheel spread over the roulette-style
- * edge ring. The spin decelerates and lands on a segment; the payout is the
- * segment multiplier applied to the bet (multipliers are total money returned,
- * so 0x loses, 2x doubles). If the GUI is closed mid-spin the round still
- * resolves and pays out.
- */
 public class WheelGUI implements Listener {
 
     static final String TITLE = "§5Wheel of Fortune";
@@ -40,7 +33,6 @@ public class WheelGUI implements Listener {
     private static final Random random = new Random();
     private static final Set<UUID> spinning = new HashSet<>();
 
-    /** One configured wheel segment. */
     private static final class Segment {
         final double multiplier;
         final int weight;
@@ -194,7 +186,6 @@ public class WheelGUI implements Listener {
         return segments;
     }
 
-    /** Spreads segment weights across the ring slots (largest-remainder method). */
     private static Ring buildRing(List<Segment> segments) {
         Ring ring = new Ring();
         int slots = RouletteGUI.EDGE_SLOTS.length;
@@ -216,7 +207,6 @@ public class WheelGUI implements Listener {
             assigned += counts[i];
         }
 
-        // Hand the leftover slots to the largest fractional parts...
         Integer[] byRemainder = new Integer[segments.size()];
         for (int i = 0; i < segments.size(); i++) {
             byRemainder[i] = i;
@@ -227,7 +217,6 @@ public class WheelGUI implements Listener {
             assigned++;
         }
 
-        // ...and make sure every segment keeps at least one slot.
         for (int i = 0; i < segments.size(); i++) {
             if (counts[i] == 0) {
                 int donor = 0;
@@ -251,7 +240,7 @@ public class WheelGUI implements Listener {
                 slotPos++;
             }
         }
-        // Any rounding slack lands on the first segment.
+
         while (slotPos < slots) {
             Segment first = segments.get(0);
             ring.multipliers[slotPos] = first.multiplier;

@@ -15,10 +15,6 @@ import org.bukkit.scheduler.BukkitTask;
 import java.util.Random;
 import java.util.UUID;
 
-/**
- * Coinflip: pick heads or tails, watch the coin flip, double~-style payout on
- * the winning side. The flip animation keeps running even if the GUI closes.
- */
 final class CoinflipGame {
 
     static final String TITLE = "§eCoinflip";
@@ -138,7 +134,6 @@ final class CoinflipGame {
         closeSoon(40L);
     }
 
-    /** No bet was placed yet, so closing during PICK simply leaves the lobby. */
     void forceResolveOnClose() {
         CoinflipGUI.forget(uuid);
         if (phase == Phase.FLIPPING) return; // task keeps going and pays out

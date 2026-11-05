@@ -11,10 +11,6 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.inventory.Inventory;
 
-/**
- * The casino lobby: /casino (or /casino menu) opens this clickable hub with
- * every game, plus daily reward, leaderboard, balance and a close button.
- */
 public class MenuGUI implements Listener {
 
     public static final String TITLE = "§6§lCasino Lobby";
@@ -68,7 +64,7 @@ public class MenuGUI implements Listener {
         inv.setItem(SLOT_DOUBLE, CasinoItems.item(Material.REDSTONE_TORCH, "§a§lDouble or Nothing",
                 "§7Keep doubling or walk away.", "§7Entry: §e" + CasinoItems.money(doubleCost)));
         inv.setItem(SLOT_CASE, CasinoItems.item(Material.CHEST, "§b§lCase Opening",
-                "§7CS:GO-style item cases.", "§7Case: §e" + CasinoItems.money(caseCost)));
+                "§7CS:GO-style cases. Pays real money.", "§7Case: §e" + CasinoItems.money(caseCost)));
         inv.setItem(SLOT_DAILY, CasinoItems.item(Material.CLOCK, "§e§lDaily Reward",
                 "§7Claim your free coins once a day."));
 

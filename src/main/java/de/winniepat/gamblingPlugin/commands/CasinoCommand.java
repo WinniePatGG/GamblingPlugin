@@ -109,7 +109,6 @@ public class CasinoCommand implements CommandExecutor, TabCompleter {
         }
     }
 
-    /** Shared leaderboard output, also used by the lobby menu button. */
     public static void sendLeaderboard(CommandSender sender) {
         sender.sendMessage("§6=== Casino Leaderboard ===");
         List<Map.Entry<UUID, Double>> entries = new ArrayList<>(

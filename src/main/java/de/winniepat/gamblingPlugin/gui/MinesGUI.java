@@ -13,7 +13,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-/** Event wiring for {@link MinesGame}. */
 public class MinesGUI implements Listener {
 
     private static final Map<UUID, MinesGame> games = new HashMap<>();

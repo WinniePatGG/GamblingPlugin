@@ -187,6 +187,7 @@ public class SlotGUI implements Listener {
                 player.getWorld().spawnParticle(spark, player.getLocation().add(0, 1.5, 0), 30, 0.3, 0.5, 0.3);
             }
         } else {
+            slotBaseRewards.remove(uuid);
             GamblingPlugin.getInstance().getPlayerData().setSlotStreak(uuid, 0);
             GamblingPlugin.getInstance().getPlayerData().save();
             player.sendMessage("§cYou lost! Better luck next time.");

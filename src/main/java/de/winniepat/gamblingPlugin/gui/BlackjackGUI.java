@@ -14,7 +14,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-/** Event wiring for {@link BlackjackGame}. */
 public class BlackjackGUI implements Listener {
 
     private static final Map<UUID, BlackjackGame> games = new HashMap<>();
@@ -22,7 +21,6 @@ public class BlackjackGUI implements Listener {
     public static void open(Player player) {
         BlackjackGame existing = games.get(player.getUniqueId());
         if (existing != null) {
-            // Re-show the table instead of starting a duplicate round.
             player.openInventory(existing.inventory());
             return;
         }

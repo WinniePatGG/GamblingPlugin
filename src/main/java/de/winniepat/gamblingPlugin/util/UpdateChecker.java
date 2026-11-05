@@ -76,7 +76,6 @@ public final class UpdateChecker {
         });
     }
 
-    /** True when the published version is strictly greater than the running one. */
     static boolean isNewerVersion(String remote, String current) {
         int[] remoteParts = parseVersion(remote);
         int[] currentParts = parseVersion(current);

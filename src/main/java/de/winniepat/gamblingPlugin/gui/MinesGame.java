@@ -14,11 +14,6 @@ import org.bukkit.inventory.ItemStack;
 import java.util.Random;
 import java.util.UUID;
 
-/**
- * Stake-style Mines: a 5x5 grid hides a configurable number of mines. Each safe
- * tile raises the payout multiplier; hitting a mine loses everything. The
- * player can cash out any time after revealing at least one tile.
- */
 final class MinesGame {
 
     static final String TITLE = "§cMines";
@@ -80,7 +75,6 @@ final class MinesGame {
         return phase == Phase.PLAY;
     }
 
-    /** Starts a fresh round, withdrawing a new bet. */
     private void newRound() {
         phase = Phase.PLAY;
         reveals = 0;
@@ -109,7 +103,6 @@ final class MinesGame {
         return Math.max(1, Math.min(24, config));
     }
 
-    /** Total money returned per $1 bet after k revealed tiles (house-edge adjusted). */
     private double payoutMultiplier(int revealedTiles) {
         if (revealedTiles <= 0) return 0.0;
         double edge = GamblingPlugin.getInstance().getConfig().getDouble("mines.house-edge", 0.03);
@@ -200,7 +193,6 @@ final class MinesGame {
         }, ticks);
     }
 
-    /** Auto-resolves when the GUI is closed mid-round. */
     void forceResolveOnClose() {
         MinesGUI.forget(uuid);
         if (phase != Phase.PLAY) {
