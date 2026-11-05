@@ -1,7 +1,7 @@
 package de.winniepat.gamblingPlugin.util;
 
 import de.winniepat.gamblingPlugin.GamblingPlugin;
-import org.bukkit.Bukkit;
+import de.winniepat.gamblingPlugin.util.Scheduler;
 
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -34,11 +34,11 @@ public final class UpdateChecker {
         if (!force && !plugin.getConfig().getBoolean("updates.check-on-startup", true)) return;
 
         Runnable runAfter = () -> {
-            if (after != null) Bukkit.getScheduler().runTask(plugin, after);
+            if (after != null) Scheduler.runGlobal(plugin, 0, after);
         };
 
         String project = "VPVNKnOS";
-        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
+        Scheduler.runAsync(plugin, () -> {
             try {
                 URL url = new URL("https://api.modrinth.com/v2/project/" + project + "/version?limit=1");
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -115,11 +115,11 @@ public final class UpdateChecker {
 
     public static void download(GamblingPlugin plugin, Runnable onSuccess, Runnable onFailure) {
         if (!updateAvailable || downloadUrl == null) {
-            if (onFailure != null) Bukkit.getScheduler().runTask(plugin, onFailure);
+            if (onFailure != null) Scheduler.runGlobal(plugin, 0, onFailure);
             return;
         }
 
-        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
+        Scheduler.runAsync(plugin, () -> {
             try {
                 Path pluginsDir = plugin.getDataFolder().getParentFile().toPath();
                 Path updateDir = pluginsDir.resolve("update");
@@ -136,10 +136,10 @@ public final class UpdateChecker {
                     in.transferTo(out);
                 }
 
-                if (onSuccess != null) Bukkit.getScheduler().runTask(plugin, onSuccess);
+                if (onSuccess != null) Scheduler.runGlobal(plugin, 0, onSuccess);
             } catch (Exception e) {
                 plugin.getLogger().severe("Failed to download update: " + e.getMessage());
-                if (onFailure != null) Bukkit.getScheduler().runTask(plugin, onFailure);
+                if (onFailure != null) Scheduler.runGlobal(plugin, 0, onFailure);
             }
         });
     }

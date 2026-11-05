@@ -4,13 +4,13 @@ import de.winniepat.gamblingPlugin.GamblingPlugin;
 import de.winniepat.gamblingPlugin.util.ActiveGames;
 import de.winniepat.gamblingPlugin.util.Cards;
 import de.winniepat.gamblingPlugin.util.CasinoItems;
+import de.winniepat.gamblingPlugin.util.Scheduler;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.scheduler.BukkitTask;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,8 +38,6 @@ final class BlackjackGame {
     private boolean dealerTurn;
     private boolean resolved;
     private boolean playerHasBlackjack;
-    private boolean dealerTaskRunning;
-    private BukkitTask dealerTask;
 
     BlackjackGame(Player player, double bet) {
         this.player = player;
@@ -125,18 +123,11 @@ final class BlackjackGame {
         dealerTurn = true;
         render();
 
-        dealerTaskRunning = true;
-        dealerTask = new org.bukkit.scheduler.BukkitRunnable() {
-            @Override
-            public void run() {
-                dealerStep();
-            }
-        }.runTaskTimer(GamblingPlugin.getInstance(), 10L, 10L);
+        Scheduler.runForPlayer(GamblingPlugin.getInstance(), player, 10L, this::dealerStep);
     }
 
     private void dealerStep() {
         if (resolved) {
-            cancelDealerTask();
             return;
         }
         if (!holeRevealed) {
@@ -145,6 +136,7 @@ final class BlackjackGame {
             if (player.isOnline()) {
                 player.playSound(player.getLocation(), Sound.ENTITY_ITEM_BREAK, 0.8f, 0.7f);
             }
+            Scheduler.runForPlayer(GamblingPlugin.getInstance(), player, 10L, this::dealerStep);
             return;
         }
         if (!playerHasBlackjack && shouldDealerDraw()) {
@@ -153,18 +145,10 @@ final class BlackjackGame {
             if (player.isOnline()) {
                 player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_HAT, 0.8f, 1.2f);
             }
+            Scheduler.runForPlayer(GamblingPlugin.getInstance(), player, 10L, this::dealerStep);
             return;
         }
-        cancelDealerTask();
         resolveOutcome();
-    }
-
-    private void cancelDealerTask() {
-        dealerTaskRunning = false;
-        if (dealerTask != null) {
-            dealerTask.cancel();
-            dealerTask = null;
-        }
     }
 
     private boolean shouldDealerDraw() {
@@ -177,7 +161,7 @@ final class BlackjackGame {
     private void resolveBust() {
         if (resolved) return;
         resolved = true;
-        holeRevealed = false; // dealer never plays when the player busts
+        holeRevealed = false;
         ActiveGames.leave(uuid);
         BlackjackGUI.forget(uuid);
         render();
@@ -257,11 +241,11 @@ final class BlackjackGame {
     private void closeSoon(long ticks) {
         final Inventory snapshot = inv;
         final Player closer = player;
-        Bukkit.getScheduler().runTaskLater(GamblingPlugin.getInstance(), () -> {
+        Scheduler.runForPlayer(GamblingPlugin.getInstance(), closer, ticks, () -> {
             if (closer.isOnline() && closer.getOpenInventory().getTopInventory() == snapshot) {
                 closer.closeInventory();
             }
-        }, ticks);
+        });
     }
 
     void forceStandOnClose() {

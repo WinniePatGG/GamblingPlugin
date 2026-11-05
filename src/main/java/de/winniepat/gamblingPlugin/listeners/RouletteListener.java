@@ -2,6 +2,7 @@ package de.winniepat.gamblingPlugin.listeners;
 
 import de.winniepat.gamblingPlugin.GamblingPlugin;
 import de.winniepat.gamblingPlugin.gui.RouletteGUI;
+import de.winniepat.gamblingPlugin.util.Scheduler;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -10,7 +11,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.Random;
 
@@ -71,62 +71,59 @@ public class RouletteListener implements Listener {
         }
 
         final int totalSpins = 40 + random.nextInt(30);
+        spinStep(player, inv, betColor, originalItems, totalSpins, 0);
+    }
 
-        new BukkitRunnable() {
-            int index = 0;
+    private void spinStep(Player player, Inventory inv, Material betColor, ItemStack[] originalItems,
+                          int totalSpins, int index) {
+        if (index >= totalSpins) {
+            RouletteGUI.spinningPlayers.remove(player.getUniqueId());
+            int finalIndex = (index - 1) % RouletteGUI.EDGE_SLOTS.length;
+            int finalSlot = RouletteGUI.EDGE_SLOTS[finalIndex];
 
-            @Override
-            public void run() {
-                if (index >= totalSpins) {
-                    cancel();
-                    RouletteGUI.spinningPlayers.remove(player.getUniqueId());
-                    int finalIndex = (index - 1) % RouletteGUI.EDGE_SLOTS.length;
-                    int finalSlot = RouletteGUI.EDGE_SLOTS[finalIndex];
+            inv.setItem(finalSlot, originalItems[finalIndex]);
+            Material result = originalItems[finalIndex].getType();
 
-                    inv.setItem(finalSlot, originalItems[finalIndex]);
-                    Material result = originalItems[finalIndex].getType();
-
-                    if (result == betColor) {
-                        int multiplier;
-                        if (result == Material.GREEN_WOOL) {
-                            multiplier = 14;
-                        } else if (result == Material.RED_WOOL || result == Material.BLACK_WOOL) {
-                            multiplier = 2;
-                        } else {
-                            multiplier = 0;
-                        }
-                        double winnings = betCost() * multiplier;
-                        GamblingPlugin.getInstance().getEconomy().depositPlayer(player, winnings);
-                        GamblingPlugin.getInstance().getPlayerData().addWin(player.getUniqueId(), player.getName(), winnings);
-                        GamblingPlugin.getInstance().getPlayerData().save();
-
-                        player.sendMessage("§aYou won! Multiplier: " + multiplier + "x | §a$" + winnings);
-                    } else {
-                        player.sendMessage("§cYou lost. It landed on " + result.name());
-                    }
-
-                    Sound loseSound = (result == betColor)
-                            ? Sound.ENTITY_EXPERIENCE_ORB_PICKUP
-                            : Sound.BLOCK_NOTE_BLOCK_BASS;
-                    player.playSound(player.getLocation(), loseSound, 1f, result == betColor ? 1f : 0.5f);
-                    return;
+            if (result == betColor) {
+                int multiplier;
+                if (result == Material.GREEN_WOOL) {
+                    multiplier = 14;
+                } else if (result == Material.RED_WOOL || result == Material.BLACK_WOOL) {
+                    multiplier = 2;
+                } else {
+                    multiplier = 0;
                 }
+                double winnings = betCost() * multiplier;
+                GamblingPlugin.getInstance().getEconomy().depositPlayer(player, winnings);
+                GamblingPlugin.getInstance().getPlayerData().addWin(player.getUniqueId(), player.getName(), winnings);
+                GamblingPlugin.getInstance().getPlayerData().save();
 
-                int currentIndex = index % RouletteGUI.EDGE_SLOTS.length;
-                int currentSlot = RouletteGUI.EDGE_SLOTS[currentIndex];
-
-                inv.setItem(currentSlot, RouletteGUI.createItem(Material.YELLOW_STAINED_GLASS_PANE, "§eSpinning..."));
-
-                if (index > 0) {
-                    int prevIndex = (index - 1) % RouletteGUI.EDGE_SLOTS.length;
-                    int prevSlot = RouletteGUI.EDGE_SLOTS[prevIndex];
-                    inv.setItem(prevSlot, originalItems[prevIndex]);
-                }
-
-                index++;
-
-                player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_HAT, 1f, 2f);
+                player.sendMessage("§aYou won! Multiplier: " + multiplier + "x | §a$" + winnings);
+            } else {
+                player.sendMessage("§cYou lost. It landed on " + result.name());
             }
-        }.runTaskTimer(plugin, 0L, 2L);
+
+            Sound loseSound = (result == betColor)
+                    ? Sound.ENTITY_EXPERIENCE_ORB_PICKUP
+                    : Sound.BLOCK_NOTE_BLOCK_BASS;
+            player.playSound(player.getLocation(), loseSound, 1f, result == betColor ? 1f : 0.5f);
+            return;
+        }
+
+        int currentIndex = index % RouletteGUI.EDGE_SLOTS.length;
+        int currentSlot = RouletteGUI.EDGE_SLOTS[currentIndex];
+
+        inv.setItem(currentSlot, RouletteGUI.createItem(Material.YELLOW_STAINED_GLASS_PANE, "§eSpinning..."));
+
+        if (index > 0) {
+            int prevIndex = (index - 1) % RouletteGUI.EDGE_SLOTS.length;
+            int prevSlot = RouletteGUI.EDGE_SLOTS[prevIndex];
+            inv.setItem(prevSlot, originalItems[prevIndex]);
+        }
+
+        player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_HAT, 1f, 2f);
+
+        Scheduler.runForPlayer(GamblingPlugin.getInstance(), player, 2L,
+                () -> spinStep(player, inv, betColor, originalItems, totalSpins, index + 1));
     }
 }

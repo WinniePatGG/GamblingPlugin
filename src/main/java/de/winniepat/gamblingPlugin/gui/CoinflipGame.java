@@ -3,6 +3,7 @@ package de.winniepat.gamblingPlugin.gui;
 import de.winniepat.gamblingPlugin.GamblingPlugin;
 import de.winniepat.gamblingPlugin.util.ActiveGames;
 import de.winniepat.gamblingPlugin.util.CasinoItems;
+import de.winniepat.gamblingPlugin.util.Scheduler;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -10,7 +11,6 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.scheduler.BukkitTask;
 
 import java.util.Random;
 import java.util.UUID;
@@ -35,7 +35,6 @@ final class CoinflipGame {
     private Phase phase = Phase.PICK;
     private boolean pickedHeads;
     private double bet;
-    private BukkitTask task;
 
     CoinflipGame(Player player) {
         this.player = player;
@@ -78,24 +77,20 @@ final class CoinflipGame {
         inv.setItem(SLOT_COIN, CasinoItems.item(Material.GOLD_BLOCK, "§6§lFlipping..."));
 
         final boolean headsChoice = heads;
-        task = new org.bukkit.scheduler.BukkitRunnable() {
-            int ticks = 0;
+        Scheduler.runForPlayer(GamblingPlugin.getInstance(), player, 3L, () -> flipStep(headsChoice, 0));
+    }
 
-            @Override
-            public void run() {
-                if (ticks >= 8) {
-                    cancel();
-                    settle(headsChoice);
-                    return;
-                }
-                boolean face = (ticks % 2 == 0);
-                inv.setItem(SLOT_COIN, face
-                        ? CasinoItems.item(Material.GOLD_BLOCK, "§6§lHeads...")
-                        : CasinoItems.item(Material.IRON_BLOCK, "§f§lTails..."));
-                player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_HAT, 0.6f, 1.5f);
-                ticks++;
-            }
-        }.runTaskTimer(GamblingPlugin.getInstance(), 3L, 3L);
+    private void flipStep(boolean headsChoice, int ticks) {
+        if (ticks >= 8) {
+            settle(headsChoice);
+            return;
+        }
+        boolean face = (ticks % 2 == 0);
+        inv.setItem(SLOT_COIN, face
+                ? CasinoItems.item(Material.GOLD_BLOCK, "§6§lHeads...")
+                : CasinoItems.item(Material.IRON_BLOCK, "§f§lTails..."));
+        player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_HAT, 0.6f, 1.5f);
+        Scheduler.runForPlayer(GamblingPlugin.getInstance(), player, 3L, () -> flipStep(headsChoice, ticks + 1));
     }
 
     private void settle(boolean headsChoice) {
@@ -148,11 +143,11 @@ final class CoinflipGame {
     private void closeSoon(long ticks) {
         final Inventory snapshot = inv;
         final Player closer = player;
-        Bukkit.getScheduler().runTaskLater(GamblingPlugin.getInstance(), () -> {
+        Scheduler.runForPlayer(GamblingPlugin.getInstance(), closer, ticks, () -> {
             if (closer.isOnline() && closer.getOpenInventory().getTopInventory() == snapshot) {
                 closer.closeInventory();
             }
-        }, ticks);
+        });
     }
 
     private void renderPick() {

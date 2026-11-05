@@ -1,6 +1,7 @@
 package de.winniepat.gamblingPlugin.gui;
 
 import de.winniepat.gamblingPlugin.GamblingPlugin;
+import de.winniepat.gamblingPlugin.util.Scheduler;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -13,9 +14,9 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class RouletteGUI implements Listener {
 
@@ -26,7 +27,7 @@ public class RouletteGUI implements Listener {
             36, 27, 18, 9
     };
 
-    public static final Set<UUID> spinningPlayers = new HashSet<>();
+    public static final Set<UUID> spinningPlayers = ConcurrentHashMap.newKeySet();
 
     public static Inventory createBettingGUI() {
         Inventory gui = Bukkit.createInventory(null, 27, "Choose a Color to Bet");
@@ -96,10 +97,10 @@ public class RouletteGUI implements Listener {
         String title = de.winniepat.gamblingPlugin.util.ViewTitles.title(e.getView());
 
         if (title.startsWith("Roulette: ") && spinningPlayers.contains(player.getUniqueId())) {
-            Bukkit.getScheduler().runTaskLater(GamblingPlugin.getInstance(), () -> {
+            Scheduler.runForPlayer(GamblingPlugin.getInstance(), player, 2L, () -> {
                 player.openInventory(e.getInventory());
                 player.sendMessage("§cYou can't close the roulette while it's spinning!");
-            }, 2L);
+            });
         } else {
             spinningPlayers.remove(player.getUniqueId());
         }

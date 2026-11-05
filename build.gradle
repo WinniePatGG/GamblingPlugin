@@ -14,8 +14,10 @@ repositories {
     maven { url = 'https://maven.winniepat.de/releases' }
 }
 
-def mcApiGroup = project.findProperty('mcApiGroup') ?: 'com.destroystokyo.paper'
-def mcVersion = project.findProperty('mcVersion') ?: '1.16.5-R0.1-SNAPSHOT'
+// paper-api 1.20.4 exposes the Folia scheduler interfaces used by util/Scheduler.
+// The jar itself still runs on every Paper/Spigot version supported at runtime.
+def mcApiGroup = project.findProperty('mcApiGroup') ?: 'io.papermc.paper'
+def mcVersion = project.findProperty('mcVersion') ?: '1.20.4-R0.1-SNAPSHOT'
 def minJavaVersion = 21
 
 dependencies {

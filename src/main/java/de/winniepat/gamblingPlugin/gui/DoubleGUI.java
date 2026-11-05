@@ -1,6 +1,7 @@
 package de.winniepat.gamblingPlugin.gui;
 
 import de.winniepat.gamblingPlugin.GamblingPlugin;
+import de.winniepat.gamblingPlugin.util.Scheduler;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -14,19 +15,20 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class DoubleGUI implements Listener {
 
-    private static final Map<UUID, Integer> playerStage = new HashMap<>();
+    private static final Map<UUID, Integer> playerStage = new ConcurrentHashMap<>();
     private static final List<Integer> amounts = Arrays.asList(1, 2, 4, 8, 16, 32, 64, 128);
-    private static final Set<UUID> openingNow = new HashSet<>();
+    private static final Set<UUID> openingNow = ConcurrentHashMap.newKeySet();
 
     public static void open(Player player) {
         UUID uuid = player.getUniqueId();
 
         if (openingNow.contains(uuid)) return;
         openingNow.add(uuid);
-        Bukkit.getScheduler().runTaskLater(GamblingPlugin.getInstance(), () -> openingNow.remove(uuid), 10L);
+        Scheduler.runForPlayer(GamblingPlugin.getInstance(), player, 10L, () -> openingNow.remove(uuid));
 
         double entryCost = GamblingPlugin.getInstance().getConfig().getDouble("double.entry-cost", 20.0);
 

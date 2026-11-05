@@ -3,6 +3,7 @@ package de.winniepat.gamblingPlugin.gui;
 import de.winniepat.gamblingPlugin.GamblingPlugin;
 import de.winniepat.gamblingPlugin.util.ActiveGames;
 import de.winniepat.gamblingPlugin.util.CasinoItems;
+import de.winniepat.gamblingPlugin.util.Scheduler;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -10,8 +11,6 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.scheduler.BukkitTask;
 
 import java.util.Locale;
 import java.util.Random;
@@ -38,7 +37,6 @@ final class CrashGame {
     private int steps;
     private boolean running;
     private boolean settled;
-    private BukkitTask task;
 
     CrashGame(Player player, double bet) {
         this.player = player;
@@ -73,23 +71,30 @@ final class CrashGame {
         player.openInventory(inv);
         player.sendMessage("§7Crash bet: §c-" + CasinoItems.money(bet) + " §8| §7Cash out before it §c§lCRASHES§7!");
 
-        Bukkit.getScheduler().runTaskLater(GamblingPlugin.getInstance(), () -> {
+        Scheduler.runForPlayer(GamblingPlugin.getInstance(), player, 20L, () -> {
             if (settled) return;
             running = true;
             ItemStack star = CasinoItems.item(Material.NETHER_STAR, "§e§l1.00x");
             inv.setItem(SLOT_MULTIPLIER, star);
-            task = new BukkitRunnable() {
-                @Override
-                public void run() {
-                    step();
-                }
-            }.runTaskTimer(GamblingPlugin.getInstance(), 2L, 2L);
-        }, 20L);
+            // Matches the old timer's 2-tick initial delay before the first step.
+            Scheduler.runForPlayer(GamblingPlugin.getInstance(), player, 2L, this::tickLoop);
+        });
+    }
+
+    /**
+     * One multiplier step every 2 ticks; the next step is chained onto the
+     * player's scheduler, so the loop stops once the game settles (no
+     * cancellable task handle needed).
+     */
+    private void tickLoop() {
+        if (settled) return;
+        step();
+        if (settled) return;
+        Scheduler.runForPlayer(GamblingPlugin.getInstance(), player, 2L, this::tickLoop);
     }
 
     private void step() {
         if (settled) {
-            cancelTask();
             return;
         }
         double growth = GamblingPlugin.getInstance().getConfig().getDouble("crash.growth", 0.0075);
@@ -116,7 +121,6 @@ final class CrashGame {
         if (settled) return;
         settled = true;
         running = false;
-        cancelTask();
         ActiveGames.leave(uuid);
         CrashGUI.forget(uuid);
         renderCrashed();
@@ -131,7 +135,6 @@ final class CrashGame {
         if (settled) return;
         settled = true;
         running = false;
-        cancelTask();
         ActiveGames.leave(uuid);
         CrashGUI.forget(uuid);
 
@@ -165,13 +168,6 @@ final class CrashGame {
         }
     }
 
-    private void cancelTask() {
-        if (task != null) {
-            task.cancel();
-            task = null;
-        }
-    }
-
     private void deposit(double amount) {
         OfflinePlayer target = player.isOnline() ? player : Bukkit.getOfflinePlayer(uuid);
         GamblingPlugin.getInstance().getEconomy().depositPlayer(target, amount);
@@ -180,11 +176,11 @@ final class CrashGame {
     private void closeSoon(long ticks) {
         final Inventory snapshot = inv;
         final Player closer = player;
-        Bukkit.getScheduler().runTaskLater(GamblingPlugin.getInstance(), () -> {
+        Scheduler.runForPlayer(GamblingPlugin.getInstance(), closer, ticks, () -> {
             if (closer.isOnline() && closer.getOpenInventory().getTopInventory() == snapshot) {
                 closer.closeInventory();
             }
-        }, ticks);
+        });
     }
 
     private static String fmt(double value) {

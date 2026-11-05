@@ -5,10 +5,11 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.Set;
 import java.util.HashSet;
+import java.util.concurrent.ConcurrentHashMap;
 
 public final class ActiveGames {
 
-    private static final Map<UUID, String> ACTIVE = new HashMap<>();
+    private static final Map<UUID, String> ACTIVE = new ConcurrentHashMap<>();
 
     private ActiveGames() {
     }

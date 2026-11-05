@@ -2,6 +2,7 @@ name: GamblingPlugin
 version: '${version}'
 main: de.winniepat.gamblingPlugin.GamblingPlugin
 api-version: '1.16'
+folia-supported: true
 load: STARTUP
 authors: [ WinniePatGG ]
 description: Casino games (slots, roulette, blackjack, mines, crash, wheel and more) with Vault economy support

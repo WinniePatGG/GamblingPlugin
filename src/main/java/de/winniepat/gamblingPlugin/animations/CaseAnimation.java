@@ -2,6 +2,7 @@ package de.winniepat.gamblingPlugin.animations;
 
 import de.winniepat.gamblingPlugin.GamblingPlugin;
 import de.winniepat.gamblingPlugin.util.CasinoItems;
+import de.winniepat.gamblingPlugin.util.Scheduler;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -11,19 +12,19 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class CaseAnimation {
 
-    private static final Set<Inventory> OPEN_INVENTORIES = new HashSet<>();
+    private static final Set<Inventory> OPEN_INVENTORIES = ConcurrentHashMap.newKeySet();
 
     public static void clearState() {
         OPEN_INVENTORIES.clear();
         OPEN_PLAYERS.clear();
     }
-    private static final Set<UUID> OPEN_PLAYERS = new HashSet<>();
+    private static final Set<UUID> OPEN_PLAYERS = ConcurrentHashMap.newKeySet();
 
     public static boolean isCaseInventory(Inventory inventory) {
         return inventory != null && OPEN_INVENTORIES.contains(inventory);
@@ -123,11 +124,11 @@ public class CaseAnimation {
                 inv.clear(4);
                 inv.clear(22);
                 rewardGiven = true;
-                Bukkit.getScheduler().runTaskLater(GamblingPlugin.getInstance(), () -> {
+                Scheduler.runForPlayer(GamblingPlugin.getInstance(), player, 30L, () -> {
                     if (player.getOpenInventory().getTopInventory() == inv) {
                         player.closeInventory();
                     }
-                }, 30L);
+                });
             }
             return;
         }
@@ -136,12 +137,7 @@ public class CaseAnimation {
 
         long delay = Math.min(10 + shift * 2, 60);
 
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                runAnimation(shift + 1);
-            }
-        }.runTaskLater(GamblingPlugin.getInstance(), delay / 2);
+        Scheduler.runForPlayer(GamblingPlugin.getInstance(), player, delay / 2, () -> runAnimation(shift + 1));
     }
 
     private void updateScroll(int shift) {

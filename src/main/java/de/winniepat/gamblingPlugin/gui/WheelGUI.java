@@ -3,6 +3,7 @@ package de.winniepat.gamblingPlugin.gui;
 import de.winniepat.gamblingPlugin.GamblingPlugin;
 import de.winniepat.gamblingPlugin.util.ActiveGames;
 import de.winniepat.gamblingPlugin.util.CasinoItems;
+import de.winniepat.gamblingPlugin.util.Scheduler;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -17,11 +18,11 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
-import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.Set;
 
 public class WheelGUI implements Listener {
 
@@ -31,7 +32,7 @@ public class WheelGUI implements Listener {
     private static final int[] LEGEND = {10, 11, 12, 13, 14, 15, 16};
 
     private static final Random random = new Random();
-    private static final Set<UUID> spinning = new HashSet<>();
+    private static final Set<UUID> spinning = ConcurrentHashMap.newKeySet();
 
     private static final class Segment {
         final double multiplier;
@@ -85,8 +86,8 @@ public class WheelGUI implements Listener {
         final UUID uuid = player.getUniqueId();
         final ItemStack[] ringSnapshot = ring.items.clone();
         final double[] ringMultipliers = ring.multipliers.clone();
-        Bukkit.getScheduler().runTaskLater(GamblingPlugin.getInstance(),
-                () -> spinStep(player, uuid, bet, ringSnapshot, ringMultipliers, 0, 55 + random.nextInt(25)), 15L);
+        Scheduler.runForPlayer(GamblingPlugin.getInstance(), player, 15L,
+                () -> spinStep(player, uuid, bet, ringSnapshot, ringMultipliers, 0, 55 + random.nextInt(25)));
     }
 
     private static void spinStep(Player player, UUID uuid, double bet, ItemStack[] ringItems,
@@ -115,8 +116,8 @@ public class WheelGUI implements Listener {
         }
 
         final int delay = Math.min(14, 2 + (step * step) / 220);
-        Bukkit.getScheduler().runTaskLater(GamblingPlugin.getInstance(),
-                () -> spinStep(player, uuid, bet, ringItems, multipliers, step + 1, total), delay);
+        Scheduler.runForPlayer(GamblingPlugin.getInstance(), player, delay,
+                () -> spinStep(player, uuid, bet, ringItems, multipliers, step + 1, total));
     }
 
     private static void land(Player player, UUID uuid, double bet, double[] multipliers,

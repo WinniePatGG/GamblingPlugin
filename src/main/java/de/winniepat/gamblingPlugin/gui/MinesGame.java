@@ -3,6 +3,7 @@ package de.winniepat.gamblingPlugin.gui;
 import de.winniepat.gamblingPlugin.GamblingPlugin;
 import de.winniepat.gamblingPlugin.util.ActiveGames;
 import de.winniepat.gamblingPlugin.util.CasinoItems;
+import de.winniepat.gamblingPlugin.util.Scheduler;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -183,14 +184,14 @@ final class MinesGame {
     private void closeSoon(long ticks) {
         final Inventory snapshot = inv;
         final Player closer = player;
-        Bukkit.getScheduler().runTaskLater(GamblingPlugin.getInstance(), () -> {
+        Scheduler.runForPlayer(GamblingPlugin.getInstance(), closer, ticks, () -> {
             if (phase == Phase.PLAY) {
                 return; // a new round already started before the scheduled close
             }
             if (closer.isOnline() && closer.getOpenInventory().getTopInventory() == snapshot) {
                 closer.closeInventory();
             }
-        }, ticks);
+        });
     }
 
     void forceResolveOnClose() {

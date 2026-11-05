@@ -6,6 +6,7 @@ import de.winniepat.gamblingPlugin.gui.*;
 import de.winniepat.gamblingPlugin.listeners.*;
 import de.winniepat.gamblingPlugin.util.ActiveGames;
 import de.winniepat.gamblingPlugin.util.PlayerData;
+import de.winniepat.gamblingPlugin.util.Scheduler;
 import de.winniepat.gamblingPlugin.util.ServerVersion;
 import de.winniepat.modrinthupdatechecker.ModrinthUpdateChecker;
 import net.milkbowl.vault.economy.Economy;
@@ -35,7 +36,8 @@ public final class GamblingPlugin extends JavaPlugin {
 
         String serverVersion = ServerVersion.current();
         if (ServerVersion.isSupported(serverVersion)) {
-            getLogger().info("GamblingPlugin enabled on Minecraft " + serverVersion + ".");
+            getLogger().info("GamblingPlugin enabled on Minecraft " + serverVersion
+                    + " (" + (Scheduler.isFolia() ? "Folia" : "Paper/Spigot") + ").");
         } else {
             getLogger().warning("Running on unsupported Minecraft version " + serverVersion
                     + "! Supported range: " + ServerVersion.MIN_SUPPORTED + " - " + ServerVersion.MAX_SUPPORTED

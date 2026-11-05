@@ -9,13 +9,13 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class CrashGUI implements Listener {
 
-    private static final Map<UUID, CrashGame> games = new HashMap<>();
+    private static final Map<UUID, CrashGame> games = new ConcurrentHashMap<>();
 
     public static void open(Player player) {
         CrashGame existing = games.get(player.getUniqueId());

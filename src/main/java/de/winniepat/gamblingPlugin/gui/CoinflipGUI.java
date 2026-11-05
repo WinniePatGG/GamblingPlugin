@@ -9,13 +9,13 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class CoinflipGUI implements Listener {
 
-    private static final Map<UUID, CoinflipGame> games = new HashMap<>();
+    private static final Map<UUID, CoinflipGame> games = new ConcurrentHashMap<>();
 
     public static void open(Player player) {
         CoinflipGame existing = games.get(player.getUniqueId());

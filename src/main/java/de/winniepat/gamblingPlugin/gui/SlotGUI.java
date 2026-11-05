@@ -2,6 +2,7 @@ package de.winniepat.gamblingPlugin.gui;
 
 import de.winniepat.gamblingPlugin.GamblingPlugin;
 import de.winniepat.gamblingPlugin.util.Particles;
+import de.winniepat.gamblingPlugin.util.Scheduler;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -12,9 +13,9 @@ import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class SlotGUI implements Listener {
 
@@ -56,9 +57,9 @@ public class SlotGUI implements Listener {
             {5, 14, 23}
     };
 
-    private static final Map<UUID, Long> cooldowns = new HashMap<>();
-    private static final Set<UUID> roulettePlayers = new HashSet<>();
-    private static final Map<UUID, Double> slotBaseRewards = new HashMap<>();
+    private static final Map<UUID, Long> cooldowns = new ConcurrentHashMap<>();
+    private static final Set<UUID> roulettePlayers = ConcurrentHashMap.newKeySet();
+    private static final Map<UUID, Double> slotBaseRewards = new ConcurrentHashMap<>();
     private static final long COOLDOWN_MS = 5000;
 
     public static void openSlotGUI(Player player) {
@@ -108,45 +109,42 @@ public class SlotGUI implements Listener {
     }
 
     private static void spinColumn(Player player, Inventory inv, int col, int totalTicks, Sound stopSound) {
-        new BukkitRunnable() {
-            int ticks = 0;
+        spinStep(player, inv, col, totalTicks, stopSound, 0);
+    }
 
-            @Override
-            public void run() {
-                if (ticks >= totalTicks) {
-                    cancel();
-                    player.playSound(player.getLocation(), stopSound, 1f, 1f);
+    private static void spinStep(Player player, Inventory inv, int col, int totalTicks, Sound stopSound, int ticks) {
+        if (ticks >= totalTicks) {
+            player.playSound(player.getLocation(), stopSound, 1f, 1f);
 
-                    if (col == 2) {
-                        Bukkit.getScheduler().runTaskLater(GamblingPlugin.getInstance(), () -> checkWin(player, inv), 10L);
-                    }
-                    return;
-                }
-
-                inv.setItem(SLOT_INDEXES[col][2], inv.getItem(SLOT_INDEXES[col][1]));
-                inv.setItem(SLOT_INDEXES[col][1], inv.getItem(SLOT_INDEXES[col][0]));
-                inv.setItem(SLOT_INDEXES[col][0], new ItemStack(symbols.get(random.nextInt(symbols.size()))));
-
-                ItemStack yellowGlassLeft = new ItemStack(Material.YELLOW_STAINED_GLASS_PANE);
-                ItemMeta metaDown = yellowGlassLeft.getItemMeta();
-                if (metaDown != null) {
-                    metaDown.setDisplayName("§e←");
-                    yellowGlassLeft.setItemMeta(metaDown);
-                }
-                inv.setItem(15, yellowGlassLeft);
-
-                ItemStack yellowGlassRight = new ItemStack(Material.YELLOW_STAINED_GLASS_PANE);
-                ItemMeta metaUp = yellowGlassRight.getItemMeta();
-                if (metaUp != null) {
-                    metaUp.setDisplayName("§e→");
-                    yellowGlassRight.setItemMeta(metaUp);
-                }
-                inv.setItem(11, yellowGlassRight);
-
-                player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 0.8f, 1.4f);
-                ticks++;
+            if (col == 2) {
+                Scheduler.runForPlayer(GamblingPlugin.getInstance(), player, 10L, () -> checkWin(player, inv));
             }
-        }.runTaskTimer(GamblingPlugin.getInstance(), 0L, 6L);
+            return;
+        }
+
+        inv.setItem(SLOT_INDEXES[col][2], inv.getItem(SLOT_INDEXES[col][1]));
+        inv.setItem(SLOT_INDEXES[col][1], inv.getItem(SLOT_INDEXES[col][0]));
+        inv.setItem(SLOT_INDEXES[col][0], new ItemStack(symbols.get(random.nextInt(symbols.size()))));
+
+        ItemStack yellowGlassLeft = new ItemStack(Material.YELLOW_STAINED_GLASS_PANE);
+        ItemMeta metaDown = yellowGlassLeft.getItemMeta();
+        if (metaDown != null) {
+            metaDown.setDisplayName("§e←");
+            yellowGlassLeft.setItemMeta(metaDown);
+        }
+        inv.setItem(15, yellowGlassLeft);
+
+        ItemStack yellowGlassRight = new ItemStack(Material.YELLOW_STAINED_GLASS_PANE);
+        ItemMeta metaUp = yellowGlassRight.getItemMeta();
+        if (metaUp != null) {
+            metaUp.setDisplayName("§e→");
+            yellowGlassRight.setItemMeta(metaUp);
+        }
+        inv.setItem(11, yellowGlassRight);
+
+        player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 0.8f, 1.4f);
+        Scheduler.runForPlayer(GamblingPlugin.getInstance(), player, 6L,
+                () -> spinStep(player, inv, col, totalTicks, stopSound, ticks + 1));
     }
 
     private static void checkWin(Player player, Inventory inv) {
@@ -235,10 +233,10 @@ public class SlotGUI implements Listener {
 
         Player player = (Player) e.getPlayer();
         if (roulettePlayers.contains(player.getUniqueId())) {
-            Bukkit.getScheduler().runTaskLater(GamblingPlugin.getInstance(), () -> {
+            Scheduler.runForPlayer(GamblingPlugin.getInstance(), player, 2L, () -> {
                 player.openInventory(e.getInventory());
                 player.sendMessage("§cYou can't close the slot machine while it's spinning!");
-            }, 2L);
+            });
         }
     }
 }
