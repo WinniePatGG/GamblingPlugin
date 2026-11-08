@@ -29,7 +29,7 @@ public class SlotListener implements Listener {
                 }
             } else {
                 event.setCancelled(true);
-                SlotGUI.openSlotGUI(event.getPlayer());
+                de.winniepat.gamblingPlugin.gui.BetSelectionGUI.open(event.getPlayer(), "slots");
             }
         }
     }

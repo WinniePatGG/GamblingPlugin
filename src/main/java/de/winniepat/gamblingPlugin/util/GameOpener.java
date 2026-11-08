@@ -19,6 +19,18 @@ public final class GameOpener {
     }
 
     public static void openGame(Player player, String key) {
+        if (!"menu".equalsIgnoreCase(key)) {
+            if (ActiveGames.busyWithOther(player.getUniqueId(), key)) {
+                player.sendMessage("§cYou're already playing a game! §7Finish that one first §8(/casino menu)");
+                return;
+            }
+            de.winniepat.gamblingPlugin.gui.BetSelectionGUI.open(player, key);
+            return;
+        }
+        openGame(player, key, 0);
+    }
+
+    public static void openGame(Player player, String key, double bet) {
         if (key == null) {
             key = "menu";
         }
@@ -27,40 +39,31 @@ public final class GameOpener {
                 MenuGUI.open(player);
                 return;
             case "slots":
-                if (!guard(player, key)) return;
-                SlotGUI.openSlotGUI(player);
+                SlotGUI.openSlotGUI(player, bet);
                 return;
             case "double":
-                if (!guard(player, key)) return;
-                DoubleGUI.open(player);
+                DoubleGUI.open(player, bet);
                 return;
             case "roulette":
-                if (!guard(player, key)) return;
-                player.openInventory(RouletteGUI.createBettingGUI());
+                RouletteGUI.open(player, bet);
                 return;
             case "case":
-                if (!guard(player, key)) return;
-                openCase(player);
+                openCase(player, bet);
                 return;
             case "blackjack":
-                if (!guard(player, key)) return;
-                BlackjackGUI.open(player);
+                BlackjackGUI.open(player, bet);
                 return;
             case "mines":
-                if (!guard(player, key)) return;
-                MinesGUI.open(player);
+                MinesGUI.open(player, bet);
                 return;
             case "crash":
-                if (!guard(player, key)) return;
-                CrashGUI.open(player);
+                CrashGUI.open(player, bet);
                 return;
             case "coinflip":
-                if (!guard(player, key)) return;
-                CoinflipGUI.open(player);
+                CoinflipGUI.open(player, bet);
                 return;
             case "wheel":
-                if (!guard(player, key)) return;
-                WheelGUI.open(player);
+                WheelGUI.open(player, bet);
                 return;
             default:
                 MenuGUI.open(player);
@@ -77,13 +80,16 @@ public final class GameOpener {
     }
 
     public static void openCase(Player player) {
-        double cost = GamblingPlugin.getInstance().getConfig().getDouble("cases.cost", 50.0);
+        de.winniepat.gamblingPlugin.gui.BetSelectionGUI.open(player, "case");
+    }
+
+    public static void openCase(Player player, double cost) {
         if (GamblingPlugin.getInstance().getEconomy().getBalance(player) < cost) {
             player.sendMessage("§cYou don't have enough money to open a case! §7(Required: $" + (int) cost + ")");
             return;
         }
         GamblingPlugin.getInstance().getEconomy().withdrawPlayer(player, cost);
         player.sendMessage("§7Case opened: §6-$" + (int) cost);
-        new CaseAnimation(player).start();
+        new CaseAnimation(player, cost).start();
     }
 }

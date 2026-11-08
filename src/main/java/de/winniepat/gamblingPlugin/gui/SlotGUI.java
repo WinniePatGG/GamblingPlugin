@@ -62,7 +62,7 @@ public class SlotGUI implements Listener {
     private static final Map<UUID, Double> slotBaseRewards = new ConcurrentHashMap<>();
     private static final long COOLDOWN_MS = 5000;
 
-    public static void openSlotGUI(Player player) {
+    public static void openSlotGUI(Player player, double selectedBet) {
         long now = System.currentTimeMillis();
         UUID uuid = player.getUniqueId();
 
@@ -74,7 +74,7 @@ public class SlotGUI implements Listener {
         String today = java.time.LocalDate.now().toString();
         boolean useFreeSpin = freeSpinEnabled && !today.equals(GamblingPlugin.getInstance().getPlayerData().getLastFreeSpin(uuid));
 
-        double cost = useFreeSpin ? 0.0 : GamblingPlugin.getInstance().getConfig().getDouble("slots.bet-cost", 100.0);
+        double cost = useFreeSpin ? 0.0 : selectedBet;
 
         if (!useFreeSpin && GamblingPlugin.getInstance().getEconomy().getBalance(player) < cost) {
             player.sendMessage("§cYou don't have enough money to bet! §7(Required: $" + (int) cost + ")");
@@ -87,7 +87,7 @@ public class SlotGUI implements Listener {
             player.sendMessage("§aFree daily spin used!");
         }
 
-        slotBaseRewards.put(uuid, (cost > 0) ? cost : GamblingPlugin.getInstance().getConfig().getDouble("slots.bet-cost", 100.0));
+        slotBaseRewards.put(uuid, (cost > 0) ? cost : selectedBet);
 
         cooldowns.put(uuid, now);
         roulettePlayers.add(uuid);

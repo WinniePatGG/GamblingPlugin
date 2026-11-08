@@ -16,7 +16,7 @@ public class RouletteCommand implements CommandExecutor {
         }
 
         Player player = (Player) sender;
-        player.openInventory(RouletteGUI.createBettingGUI());
+        de.winniepat.gamblingPlugin.gui.BetSelectionGUI.open(player, "roulette");
         return true;
     }
 }

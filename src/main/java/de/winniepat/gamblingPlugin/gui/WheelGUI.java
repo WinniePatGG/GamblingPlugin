@@ -55,13 +55,12 @@ public class WheelGUI implements Listener {
         return GamblingPlugin.getInstance().getConfig().getDouble("wheel.bet-cost", 100.0);
     }
 
-    public static void open(Player player) {
+    public static void open(Player player, double bet) {
         if (spinning.contains(player.getUniqueId())) {
             player.sendMessage("§cThe wheel is still spinning!");
             return;
         }
 
-        double bet = betCost();
         if (GamblingPlugin.getInstance().getEconomy().getBalance(player) < bet) {
             player.sendMessage("§cYou need at least §e" + CasinoItems.money(bet) + " §cto spin the wheel.");
             return;

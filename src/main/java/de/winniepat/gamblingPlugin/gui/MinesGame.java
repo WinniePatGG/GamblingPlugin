@@ -93,7 +93,6 @@ final class MinesGame {
             }
         }
 
-        bet = betCost();
         GamblingPlugin.getInstance().getEconomy().withdrawPlayer(player, bet);
         player.sendMessage("§7Mines bet: §c-" + CasinoItems.money(bet)
                 + " §8| §7" + minesCount + " mines hidden. §7Reveal gems and §ecash out §7in time!");
@@ -168,7 +167,7 @@ final class MinesGame {
 
     void playAgain() {
         if (phase == Phase.PLAY) return;
-        double cost = betCost();
+        double cost = bet;
         if (GamblingPlugin.getInstance().getEconomy().getBalance(player) < cost) {
             player.sendMessage("§cYou don't have enough money for another round §7(§f" + CasinoItems.money(cost) + "§7)");
             return;

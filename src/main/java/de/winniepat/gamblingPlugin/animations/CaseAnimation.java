@@ -25,6 +25,7 @@ public class CaseAnimation {
         OPEN_PLAYERS.clear();
     }
     private static final Set<UUID> OPEN_PLAYERS = ConcurrentHashMap.newKeySet();
+    private final double bet;
 
     public static boolean isCaseInventory(Inventory inventory) {
         return inventory != null && OPEN_INVENTORIES.contains(inventory);
@@ -91,8 +92,9 @@ public class CaseAnimation {
     private CaseReward winner;
     private boolean rewardGiven = false;
 
-    public CaseAnimation(Player player) {
+    public CaseAnimation(Player player, double bet) {
         this.player = player;
+        this.bet = bet;
         this.inv = Bukkit.createInventory(null, 3 * 9, "§bOpening Case...");
         this.rewards = loadRewards();
         onCaseOpened(player, inv);
@@ -152,11 +154,13 @@ public class CaseAnimation {
 
     private void payout() {
         OfflinePlayer target = player.isOnline() ? player : Bukkit.getOfflinePlayer(player.getUniqueId());
-        GamblingPlugin.getInstance().getEconomy().depositPlayer(target, winner.amount);
-        GamblingPlugin.getInstance().getPlayerData().addWin(player.getUniqueId(), player.getName(), winner.amount);
+        double payout = winner.amount * bet
+                / GamblingPlugin.getInstance().getConfig().getDouble("cases.cost", 50.0);
+        GamblingPlugin.getInstance().getEconomy().depositPlayer(target, payout);
+        GamblingPlugin.getInstance().getPlayerData().addWin(player.getUniqueId(), player.getName(), payout);
         GamblingPlugin.getInstance().getPlayerData().save();
 
-        player.sendMessage("§aYou won: §e" + winner.name + " §7(§a+" + CasinoItems.money(winner.amount) + "§7)");
+        player.sendMessage("§aYou won: §e" + winner.name + " §7(§a+" + CasinoItems.money(payout) + "§7)");
         player.playSound(player.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 1.2f, 1.0f);
     }
 

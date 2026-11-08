@@ -22,15 +22,14 @@ public class DoubleGUI implements Listener {
     private static final Map<UUID, Integer> playerStage = new ConcurrentHashMap<>();
     private static final List<Integer> amounts = Arrays.asList(1, 2, 4, 8, 16, 32, 64, 128);
     private static final Set<UUID> openingNow = ConcurrentHashMap.newKeySet();
+    private static final Map<UUID, Double> bets = new ConcurrentHashMap<>();
 
-    public static void open(Player player) {
+    public static void open(Player player, double entryCost) {
         UUID uuid = player.getUniqueId();
 
         if (openingNow.contains(uuid)) return;
         openingNow.add(uuid);
         Scheduler.runForPlayer(GamblingPlugin.getInstance(), player, 10L, () -> openingNow.remove(uuid));
-
-        double entryCost = GamblingPlugin.getInstance().getConfig().getDouble("double.entry-cost", 20.0);
 
         if (GamblingPlugin.getInstance().getEconomy().getBalance(player) < entryCost) {
             player.sendMessage("§cYou need at least $" + (int) entryCost + " to play Double or Nothing.");
@@ -38,6 +37,7 @@ public class DoubleGUI implements Listener {
         }
 
         GamblingPlugin.getInstance().getEconomy().withdrawPlayer(player, entryCost);
+        bets.put(uuid, entryCost);
         player.sendMessage("§7You paid §c$" + (int) entryCost + " §7to play.");
 
         playerStage.put(uuid, 0);
@@ -47,13 +47,14 @@ public class DoubleGUI implements Listener {
     private static void openGui(Player player) {
         UUID uuid = player.getUniqueId();
         int stage = playerStage.getOrDefault(uuid, 0);
-        int amount = amounts.get(stage);
+        double amount = bets.getOrDefault(uuid, 1.0) * Math.pow(2, stage);
 
         Inventory gui = Bukkit.createInventory(null, 9, "§aDouble or Nothing");
 
         ItemStack green = new ItemStack(Material.LIME_WOOL);
         ItemMeta greenMeta = green.getItemMeta();
-        greenMeta.setDisplayName("§aDouble to $" + (stage < amounts.size() - 1 ? amounts.get(stage + 1) : "MAX"));
+        greenMeta.setDisplayName("§aDouble to $" + (stage < amounts.size() - 1
+                ? (int) (bets.getOrDefault(uuid, 1.0) * Math.pow(2, stage + 1)) : "MAX"));
         green.setItemMeta(greenMeta);
         gui.setItem(2, green);
 
@@ -95,7 +96,7 @@ public class DoubleGUI implements Listener {
         if (name.contains("Double")) {
             if (new Random().nextBoolean()) {
                 if (stage >= amounts.size() - 1) {
-                    int finalAmount = amounts.get(stage);
+                    double finalAmount = bets.getOrDefault(uuid, 1.0) * Math.pow(2, stage);
                     GamblingPlugin.getInstance().getEconomy().depositPlayer(player, finalAmount);
                     GamblingPlugin.getInstance().getPlayerData().addWin(uuid, player.getName(), finalAmount);
                     GamblingPlugin.getInstance().getPlayerData().save();
@@ -103,6 +104,7 @@ public class DoubleGUI implements Listener {
                     player.playSound(player.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 1f, 1f);
                     player.closeInventory();
                     playerStage.remove(uuid);
+                    bets.remove(uuid);
                 } else {
                     playerStage.put(uuid, stage + 1);
                     player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1f, 1.2f);
@@ -117,7 +119,7 @@ public class DoubleGUI implements Listener {
         }
 
         if (name.contains("Take")) {
-            int winnings = amounts.get(stage);
+            double winnings = bets.getOrDefault(uuid, 1.0) * Math.pow(2, stage);
             GamblingPlugin.getInstance().getEconomy().depositPlayer(player, winnings);
             GamblingPlugin.getInstance().getPlayerData().addWin(uuid, player.getName(), winnings);
             GamblingPlugin.getInstance().getPlayerData().save();
@@ -125,6 +127,7 @@ public class DoubleGUI implements Listener {
             player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_YES, 1f, 1f);
             player.closeInventory();
             playerStage.remove(uuid);
+            bets.remove(uuid);
         }
     }
 

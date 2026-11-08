@@ -36,10 +36,11 @@ final class CoinflipGame {
     private boolean pickedHeads;
     private double bet;
 
-    CoinflipGame(Player player) {
+    CoinflipGame(Player player, double bet) {
         this.player = player;
         this.uuid = player.getUniqueId();
         this.inv = Bukkit.createInventory(null, 27, TITLE);
+        this.bet = bet;
     }
 
     void start() {
@@ -61,7 +62,7 @@ final class CoinflipGame {
 
     void pick(boolean heads) {
         if (phase != Phase.PICK) return;
-        double cost = GamblingPlugin.getInstance().getConfig().getDouble("coinflip.bet-cost", 100.0);
+        double cost = bet;
         if (GamblingPlugin.getInstance().getEconomy().getBalance(player) < cost) {
             player.sendMessage("§cYou need at least §e" + CasinoItems.money(cost) + " §cto flip the coin.");
             return;
