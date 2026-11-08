@@ -164,6 +164,8 @@ final class BlackjackGame {
         holeRevealed = false;
         ActiveGames.leave(uuid);
         BlackjackGUI.forget(uuid);
+        GamblingPlugin.getInstance().getPlayerData().recordRound(uuid, player.getName(), bet, 0.0);
+        GamblingPlugin.getInstance().getPlayerData().save();
         render();
         inv.setItem(31, CasinoItems.item(Material.BARRIER, "§c§lBUST! You lost §e" + CasinoItems.money(bet)));
         player.sendMessage("§cBust with " + Cards.value(playerCards) + "! You lost " + CasinoItems.money(bet) + ".");
@@ -213,6 +215,7 @@ final class BlackjackGame {
             deposit(returned);
         }
         double profit = returned - bet;
+        GamblingPlugin.getInstance().getPlayerData().recordRound(uuid, player.getName(), bet, returned);
         if (profit > 0) {
             GamblingPlugin.getInstance().getPlayerData().addWin(uuid, player.getName(), profit);
             GamblingPlugin.getInstance().getPlayerData().save();

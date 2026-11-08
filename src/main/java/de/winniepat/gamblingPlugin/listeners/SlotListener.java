@@ -13,7 +13,7 @@ public class SlotListener implements Listener {
 
     @EventHandler
     public void onBlockInteract(PlayerInteractEvent event) {
-        if (event.getAction() != Action.LEFT_CLICK_BLOCK) return;
+        if (event.getAction() != Action.RIGHT_CLICK_BLOCK) return;
         if (event.getClickedBlock() == null) return;
 
         Block block = event.getClickedBlock();

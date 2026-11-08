@@ -3,6 +3,10 @@
 #  Apply changes with /casino reload
 # ============================================================
 
+# Wagers shown in the shared bet-selection GUI. Values must be positive finite numbers.
+betting:
+  amounts: [10.0, 25.0, 50.0, 100.0, 250.0, 500.0, 1000.0]
+
 slots:
   bet-cost: 100.0
   free-spin-once-per-day: true

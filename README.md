@@ -20,6 +20,7 @@ A Minecraft casino/gambling plugin for Paper 1.16.3 - 26.2 with Vault economy su
 - Daily reward claims.
 - Modrinth update checker and downloader.
 - Persistent player stats and win leaderboard.
+- Per-player casino history with games played, total wagered, total returned, net profit/loss and largest win.
 - Particle/sound configuration.
 
 ## Commands
@@ -36,6 +37,8 @@ A Minecraft casino/gambling plugin for Paper 1.16.3 - 26.2 with Vault economy su
 /casino double
 /casino case
 /casino daily
+/casino stats              show your casino history and net profit/loss
+/casino stats <player>     show another player's casino history
 /casino leaderboard        aliases: top, lb
 /casino hologram           spawn a top-winners hologram where you stand
 /casino reload             admin only
@@ -47,7 +50,8 @@ Aliases: `/games`, `/gamble`. Admin actions (`reload`, `update`, `hologram`) are
 ## Configuration
 Everything is configured in `config.yml` (apply changes with `/casino reload`):
 
-- Available bet amounts are selected when opening a game; configured bet costs remain the default payout scale for slots, cases and game-specific displays.
+- Shared bet-selection amounts are configured under `betting.amounts` (positive finite numbers); invalid or empty values log a warning and use the built-in defaults. Changes apply with `/casino reload`.
+- Game-specific `bet-cost`/`entry-cost` values remain the default payout scale for slots, cases and game-specific displays.
 - Blackjack payout tiers (`win`, `blackjack`, `push`) and soft-17 behavior.
 - Mines count (1-24) and house edge.
 - Crash house edge, growth speed and maximum multiplier.

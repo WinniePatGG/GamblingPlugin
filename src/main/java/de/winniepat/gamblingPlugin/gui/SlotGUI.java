@@ -60,6 +60,7 @@ public class SlotGUI implements Listener {
     private static final Map<UUID, Long> cooldowns = new ConcurrentHashMap<>();
     private static final Set<UUID> roulettePlayers = ConcurrentHashMap.newKeySet();
     private static final Map<UUID, Double> slotBaseRewards = new ConcurrentHashMap<>();
+    private static final Map<UUID, Double> slotWagers = new ConcurrentHashMap<>();
     private static final long COOLDOWN_MS = 5000;
 
     public static void openSlotGUI(Player player, double selectedBet) {
@@ -88,6 +89,7 @@ public class SlotGUI implements Listener {
         }
 
         slotBaseRewards.put(uuid, (cost > 0) ? cost : selectedBet);
+        slotWagers.put(uuid, cost);
 
         cooldowns.put(uuid, now);
         roulettePlayers.add(uuid);
@@ -176,6 +178,9 @@ public class SlotGUI implements Listener {
 
             GamblingPlugin.getInstance().getEconomy().depositPlayer(player, reward);
             GamblingPlugin.getInstance().getPlayerData().addWin(uuid, player.getName(), reward);
+            GamblingPlugin.getInstance().getPlayerData().recordRound(uuid, player.getName(),
+                    slotWagers.getOrDefault(uuid, 0.0), reward);
+            slotWagers.remove(uuid);
             GamblingPlugin.getInstance().getPlayerData().save();
             player.sendMessage("§aYou won $" + reward + "! (x" + multiplier + ") Streak: " + streak + "x");
             Sound winSound = soundFromConfig("audio.slot-win", "ENTITY_PLAYER_LEVELUP");
@@ -185,7 +190,11 @@ public class SlotGUI implements Listener {
                 player.getWorld().spawnParticle(spark, player.getLocation().add(0, 1.5, 0), 30, 0.3, 0.5, 0.3);
             }
         } else {
+            double wagered = slotBaseRewards.getOrDefault(uuid, 0.0);
             slotBaseRewards.remove(uuid);
+            GamblingPlugin.getInstance().getPlayerData().recordRound(uuid, player.getName(),
+                    slotWagers.getOrDefault(uuid, wagered), 0.0);
+            slotWagers.remove(uuid);
             GamblingPlugin.getInstance().getPlayerData().setSlotStreak(uuid, 0);
             GamblingPlugin.getInstance().getPlayerData().save();
             player.sendMessage("§cYou lost! Better luck next time.");
@@ -224,6 +233,7 @@ public class SlotGUI implements Listener {
         cooldowns.clear();
         roulettePlayers.clear();
         slotBaseRewards.clear();
+        slotWagers.clear();
     }
 
     @EventHandler

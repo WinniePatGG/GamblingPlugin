@@ -124,6 +124,8 @@ final class CrashGame {
         ActiveGames.leave(uuid);
         CrashGUI.forget(uuid);
         renderCrashed();
+        GamblingPlugin.getInstance().getPlayerData().recordRound(uuid, player.getName(), bet, 0.0);
+        GamblingPlugin.getInstance().getPlayerData().save();
         if (player.isOnline()) {
             player.sendMessage("§c§lCRASHED §7at §f" + fmt(crashPoint) + "§7! §cYou lost " + CasinoItems.money(bet));
             player.playSound(player.getLocation(), Sound.ENTITY_GENERIC_EXPLODE, 1f, 0.8f);
@@ -141,6 +143,7 @@ final class CrashGame {
         double payout = bet * at;
         double profit = payout - bet;
         deposit(payout);
+        GamblingPlugin.getInstance().getPlayerData().recordRound(uuid, player.getName(), bet, payout);
         if (profit > 0) {
             GamblingPlugin.getInstance().getPlayerData().addWin(uuid, player.getName(), profit);
             GamblingPlugin.getInstance().getPlayerData().save();
@@ -164,6 +167,8 @@ final class CrashGame {
             settled = true;
             ActiveGames.leave(uuid);
             deposit(bet);
+            GamblingPlugin.getInstance().getPlayerData().recordRound(uuid, player.getName(), bet, bet);
+            GamblingPlugin.getInstance().getPlayerData().save();
             player.sendMessage("§eCrash cancelled — your bet was refunded.");
         }
     }
