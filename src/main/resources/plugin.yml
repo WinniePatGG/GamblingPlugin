@@ -11,5 +11,5 @@ depend: [Vault]
 commands:
   casino:
     description: Casino command hub - no arguments opens the lobby menu
-    usage: /casino <menu|slots|blackjack|mines|crash|wheel|coinflip|roulette|double|case|daily|leaderboard|hologram|update|reload>
+    usage: /casino <menu|stats [player]|slots|blackjack|mines|crash|wheel|coinflip|roulette|double|case|daily|leaderboard|hologram|update|reload>
     aliases: [games, gamble]

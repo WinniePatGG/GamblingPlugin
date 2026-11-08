@@ -20,6 +20,7 @@ A Minecraft casino/gambling plugin for Paper 1.16.3 - 26.2 with Vault economy su
 - Daily reward claims.
 - Modrinth update checker and downloader.
 - Persistent player stats and win leaderboard.
+- Per-player casino history with games played, total wagered, total returned, net profit/loss and largest win.
 - Particle/sound configuration.
 
 ## Commands
@@ -36,6 +37,8 @@ A Minecraft casino/gambling plugin for Paper 1.16.3 - 26.2 with Vault economy su
 /casino double
 /casino case
 /casino daily
+/casino stats              show your casino history and net profit/loss
+/casino stats <player>     show another player's casino history
 /casino leaderboard        aliases: top, lb
 /casino hologram           spawn a top-winners hologram where you stand
 /casino reload             admin only

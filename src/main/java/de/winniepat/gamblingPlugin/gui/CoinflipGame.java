@@ -110,6 +110,7 @@ final class CoinflipGame {
             double payout = bet * GamblingPlugin.getInstance().getConfig().getDouble("coinflip.payout", 1.95);
             double profit = payout - bet;
             deposit(payout);
+            GamblingPlugin.getInstance().getPlayerData().recordRound(uuid, player.getName(), bet, payout);
             GamblingPlugin.getInstance().getPlayerData().addWin(uuid, player.getName(), profit);
             GamblingPlugin.getInstance().getPlayerData().save();
             if (player.isOnline()) {
@@ -119,6 +120,8 @@ final class CoinflipGame {
                         "§6§lWIN! " + (coinHeads ? "Heads" : "Tails") + "!"));
             }
         } else {
+            GamblingPlugin.getInstance().getPlayerData().recordRound(uuid, player.getName(), bet, 0.0);
+            GamblingPlugin.getInstance().getPlayerData().save();
             if (player.isOnline()) {
                 player.sendMessage("§cThe coin landed on §e" + (coinHeads ? "Heads" : "Tails") + "§c. You lost " + CasinoItems.money(bet));
                 player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 1f, 0.5f);
