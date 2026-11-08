@@ -157,6 +157,7 @@ public class CaseAnimation {
         double payout = winner.amount * bet
                 / GamblingPlugin.getInstance().getConfig().getDouble("cases.cost", 50.0);
         GamblingPlugin.getInstance().getEconomy().depositPlayer(target, payout);
+        GamblingPlugin.getInstance().getPlayerData().recordRound(player.getUniqueId(), player.getName(), bet, payout);
         GamblingPlugin.getInstance().getPlayerData().addWin(player.getUniqueId(), player.getName(), payout);
         GamblingPlugin.getInstance().getPlayerData().save();
 

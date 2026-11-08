@@ -9,6 +9,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
+import org.bukkit.Bukkit;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -21,7 +22,7 @@ public class CasinoCommand implements CommandExecutor, TabCompleter {
 
     private static final List<String> SUBCOMMANDS = Collections.unmodifiableList(Arrays.asList(
             "menu", "slots", "roulette", "blackjack", "mines", "crash", "wheel", "coinflip",
-            "double", "case", "daily", "leaderboard", "hologram", "update", "reload"));
+            "double", "case", "daily", "stats", "leaderboard", "hologram", "update", "reload"));
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
@@ -80,6 +81,9 @@ public class CasinoCommand implements CommandExecutor, TabCompleter {
             case "lb":
                 sendLeaderboard(sender);
                 return true;
+            case "stats":
+                sendStats(sender, args.length > 1 ? args[1] : null);
+                return true;
             case "hologram": {
                 if (!(sender instanceof Player)) {
                     sender.sendMessage("Only players can use this command.");
@@ -104,9 +108,35 @@ public class CasinoCommand implements CommandExecutor, TabCompleter {
                 return true;
             }
             default:
-                sender.sendMessage("§eUsage: /casino <menu|slots|blackjack|mines|crash|wheel|coinflip|roulette|double|case|daily|leaderboard|hologram|update|reload>");
+                sender.sendMessage("§eUsage: /casino <menu|stats [player]|slots|blackjack|mines|crash|wheel|coinflip|roulette|double|case|daily|leaderboard|hologram|update|reload>");
                 return true;
         }
+    }
+
+    private static void sendStats(CommandSender sender, String targetName) {
+        UUID uuid;
+        if (targetName == null && sender instanceof Player) {
+            uuid = ((Player) sender).getUniqueId();
+        } else if (targetName != null) {
+            Player onlineTarget = Bukkit.getPlayerExact(targetName);
+            uuid = onlineTarget != null ? onlineTarget.getUniqueId() : Bukkit.getOfflinePlayer(targetName).getUniqueId();
+        } else {
+            sender.sendMessage("§cUsage: /casino stats <player>.");
+            return;
+        }
+
+        GamblingPlugin plugin = GamblingPlugin.getInstance();
+        de.winniepat.gamblingPlugin.util.PlayerData.CasinoStats stats =
+                plugin.getPlayerData().getCasinoStats(uuid);
+        sender.sendMessage("§6=== Casino Stats: " + plugin.getPlayerData().getName(uuid) + " ===");
+        sender.sendMessage("§7Games played: §f" + stats.getGamesPlayed());
+        sender.sendMessage("§7Total wagered: §e" + de.winniepat.gamblingPlugin.util.CasinoItems.money(stats.getTotalWagered()));
+        sender.sendMessage("§7Total returned: §a" + de.winniepat.gamblingPlugin.util.CasinoItems.money(stats.getTotalReturned()));
+        String netColor = stats.getNetProfit() >= 0 ? "§a" : "§c";
+        sender.sendMessage("§7Net profit/loss: " + netColor
+                + de.winniepat.gamblingPlugin.util.CasinoItems.money(stats.getNetProfit()));
+        sender.sendMessage("§7Largest win: §a"
+                + de.winniepat.gamblingPlugin.util.CasinoItems.money(stats.getLargestWin()));
     }
 
     public static void sendLeaderboard(CommandSender sender) {
@@ -136,7 +166,10 @@ public class CasinoCommand implements CommandExecutor, TabCompleter {
 
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
-        if (args == null || args.length != 1) {
+        if (args == null || args.length == 0 || args.length > 2) {
+            return Collections.emptyList();
+        }
+        if (args.length == 2 && "stats".equalsIgnoreCase(args[0])) {
             return Collections.emptyList();
         }
         String partial = args[0].toLowerCase();

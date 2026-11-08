@@ -120,6 +120,8 @@ final class MinesGame {
         if (minesAt[gridIndex]) {
             phase = Phase.ENDED;
             ActiveGames.leave(uuid);
+            GamblingPlugin.getInstance().getPlayerData().recordRound(uuid, player.getName(), bet, 0.0);
+            GamblingPlugin.getInstance().getPlayerData().save();
             render();
             player.sendMessage("§c§lBOOM! §7You hit a mine and lost §c" + CasinoItems.money(bet));
             player.playSound(player.getLocation(), Sound.ENTITY_GENERIC_EXPLODE, 1f, 1f);
@@ -148,6 +150,7 @@ final class MinesGame {
         double payout = bet * payoutMultiplier(reveals);
         deposit(payout);
         double profit = payout - bet;
+        GamblingPlugin.getInstance().getPlayerData().recordRound(uuid, player.getName(), bet, payout);
         if (profit > 0) {
             GamblingPlugin.getInstance().getPlayerData().addWin(uuid, player.getName(), profit);
             GamblingPlugin.getInstance().getPlayerData().save();
@@ -204,6 +207,7 @@ final class MinesGame {
             double payout = bet * payoutMultiplier(reveals);
             deposit(payout);
             double profit = payout - bet;
+            GamblingPlugin.getInstance().getPlayerData().recordRound(uuid, player.getName(), bet, payout);
             if (profit > 0) {
                 GamblingPlugin.getInstance().getPlayerData().addWin(uuid, player.getName(), profit);
                 GamblingPlugin.getInstance().getPlayerData().save();
@@ -211,8 +215,12 @@ final class MinesGame {
             if (player.isOnline()) {
                 player.sendMessage("§eYou left the board — auto cash out: §a+" + CasinoItems.money(profit));
             }
-        } else if (player.isOnline()) {
-            player.sendMessage("§cYou left the board before revealing a tile. §7Your bet was lost.");
+        } else {
+            GamblingPlugin.getInstance().getPlayerData().recordRound(uuid, player.getName(), bet, 0.0);
+            GamblingPlugin.getInstance().getPlayerData().save();
+            if (player.isOnline()) {
+                player.sendMessage("§cYou left the board before revealing a tile. §7Your bet was lost.");
+            }
         }
     }
 

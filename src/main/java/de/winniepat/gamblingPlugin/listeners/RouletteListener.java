@@ -94,11 +94,16 @@ public class RouletteListener implements Listener {
                 }
                 double winnings = RouletteGUI.bets.getOrDefault(player.getUniqueId(), 0.0) * multiplier;
                 GamblingPlugin.getInstance().getEconomy().depositPlayer(player, winnings);
+                GamblingPlugin.getInstance().getPlayerData().recordRound(player.getUniqueId(), player.getName(),
+                        RouletteGUI.bets.getOrDefault(player.getUniqueId(), 0.0), winnings);
                 GamblingPlugin.getInstance().getPlayerData().addWin(player.getUniqueId(), player.getName(), winnings);
                 GamblingPlugin.getInstance().getPlayerData().save();
 
                 player.sendMessage("§aYou won! Multiplier: " + multiplier + "x | §a$" + winnings);
             } else {
+                GamblingPlugin.getInstance().getPlayerData().recordRound(player.getUniqueId(), player.getName(),
+                        RouletteGUI.bets.getOrDefault(player.getUniqueId(), 0.0), 0.0);
+                GamblingPlugin.getInstance().getPlayerData().save();
                 player.sendMessage("§cYou lost. It landed on " + result.name());
             }
 

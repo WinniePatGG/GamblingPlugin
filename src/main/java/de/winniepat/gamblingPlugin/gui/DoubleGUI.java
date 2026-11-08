@@ -76,6 +76,7 @@ public class DoubleGUI implements Listener {
     public static void clearState() {
         playerStage.clear();
         openingNow.clear();
+        bets.clear();
     }
 
     @EventHandler
@@ -99,6 +100,8 @@ public class DoubleGUI implements Listener {
                     double finalAmount = bets.getOrDefault(uuid, 1.0) * Math.pow(2, stage);
                     GamblingPlugin.getInstance().getEconomy().depositPlayer(player, finalAmount);
                     GamblingPlugin.getInstance().getPlayerData().addWin(uuid, player.getName(), finalAmount);
+                    GamblingPlugin.getInstance().getPlayerData().recordRound(uuid, player.getName(),
+                            bets.getOrDefault(uuid, 1.0), finalAmount);
                     GamblingPlugin.getInstance().getPlayerData().save();
                     player.sendMessage("§aYou reached max and won $" + finalAmount + "!");
                     player.playSound(player.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 1f, 1f);
@@ -111,10 +114,14 @@ public class DoubleGUI implements Listener {
                     openGui(player);
                 }
             } else {
+                GamblingPlugin.getInstance().getPlayerData().recordRound(uuid, player.getName(),
+                        bets.getOrDefault(uuid, 1.0), 0.0);
+                GamblingPlugin.getInstance().getPlayerData().save();
                 player.sendMessage("§cYou lost everything!");
                 player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 1f, 0.4f);
                 player.closeInventory();
                 playerStage.remove(uuid);
+                bets.remove(uuid);
             }
         }
 
@@ -122,6 +129,8 @@ public class DoubleGUI implements Listener {
             double winnings = bets.getOrDefault(uuid, 1.0) * Math.pow(2, stage);
             GamblingPlugin.getInstance().getEconomy().depositPlayer(player, winnings);
             GamblingPlugin.getInstance().getPlayerData().addWin(uuid, player.getName(), winnings);
+            GamblingPlugin.getInstance().getPlayerData().recordRound(uuid, player.getName(),
+                    bets.getOrDefault(uuid, 1.0), winnings);
             GamblingPlugin.getInstance().getPlayerData().save();
             player.sendMessage("§aYou took $" + winnings + " and walked away!");
             player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_YES, 1f, 1f);

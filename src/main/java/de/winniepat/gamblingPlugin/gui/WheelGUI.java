@@ -127,6 +127,8 @@ public class WheelGUI implements Listener {
         double multiplier = multipliers[ringIndex];
         double payout = bet * multiplier;
         double profit = payout - bet;
+        GamblingPlugin.getInstance().getPlayerData().recordRound(uuid, player.getName(), bet, payout);
+        GamblingPlugin.getInstance().getPlayerData().save();
 
         if (payout > 0) {
             OfflinePlayer target = player.isOnline() ? player : Bukkit.getOfflinePlayer(uuid);
