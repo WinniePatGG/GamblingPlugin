@@ -5,6 +5,7 @@ import de.winniepat.gamblingPlugin.commands.*;
 import de.winniepat.gamblingPlugin.gui.*;
 import de.winniepat.gamblingPlugin.listeners.*;
 import de.winniepat.gamblingPlugin.util.ActiveGames;
+import de.winniepat.gamblingPlugin.util.BetAmounts;
 import de.winniepat.gamblingPlugin.util.PlayerData;
 import de.winniepat.gamblingPlugin.util.Scheduler;
 import de.winniepat.gamblingPlugin.util.ServerVersion;
@@ -14,12 +15,14 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.Objects;
+import java.util.List;
 
 public final class GamblingPlugin extends JavaPlugin {
 
     private static GamblingPlugin instance;
     private Economy economy;
     private PlayerData playerData;
+    private List<Double> betAmounts = BetAmounts.DEFAULT;
 
     ModrinthUpdateChecker checker = ModrinthUpdateChecker.builder()
             .projectId("VPVNKnOS")
@@ -31,6 +34,7 @@ public final class GamblingPlugin extends JavaPlugin {
         instance = this;
 
         saveDefaultConfig();
+        loadBetAmounts();
 
         playerData = new PlayerData(this);
 
@@ -90,11 +94,20 @@ public final class GamblingPlugin extends JavaPlugin {
         return playerData;
     }
 
+    public List<Double> getBetAmounts() {
+        return betAmounts;
+    }
+
     public void reloadPluginConfig() {
         reloadConfig();
+        loadBetAmounts();
         if (playerData != null) {
             playerData.load();
         }
+    }
+
+    private void loadBetAmounts() {
+        betAmounts = BetAmounts.load(getConfig(), message -> getLogger().warning(message));
     }
 
     @Override
