@@ -47,7 +47,8 @@ Aliases: `/games`, `/gamble`. Admin actions (`reload`, `update`, `hologram`) are
 ## Configuration
 Everything is configured in `config.yml` (apply changes with `/casino reload`):
 
-- Available bet amounts are selected when opening a game; configured bet costs remain the default payout scale for slots, cases and game-specific displays.
+- Shared bet-selection amounts are configured under `betting.amounts` (positive finite numbers); invalid or empty values log a warning and use the built-in defaults. Changes apply with `/casino reload`.
+- Game-specific `bet-cost`/`entry-cost` values remain the default payout scale for slots, cases and game-specific displays.
 - Blackjack payout tiers (`win`, `blackjack`, `push`) and soft-17 behavior.
 - Mines count (1-24) and house edge.
 - Crash house edge, growth speed and maximum multiplier.

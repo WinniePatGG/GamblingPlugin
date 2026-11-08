@@ -18,6 +18,8 @@ class ConfigDefaultsTest {
 
             List<String> required = Arrays.asList(
                     "slots:",
+                    "betting:",
+                    "amounts:",
                     "roulette:",
                     "cases:",
                     "double:",
