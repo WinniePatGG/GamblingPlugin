@@ -17,17 +17,7 @@ public class CaseCommand implements CommandExecutor {
         }
         Player player = (Player) sender;
 
-        double cost = GamblingPlugin.getInstance().getConfig().getDouble("cases.cost", 50.0);
-
-        if (GamblingPlugin.getInstance().getEconomy().getBalance(player) < cost) {
-            player.sendMessage("§cYou don't have enough money to open a case! §7(Required: $" + (int) cost + ")");
-            return true;
-        }
-
-        GamblingPlugin.getInstance().getEconomy().withdrawPlayer(player, cost);
-        player.sendMessage("§7Case opened: §6-$" + (int) cost);
-
-        new CaseAnimation(player).start();
+        de.winniepat.gamblingPlugin.gui.BetSelectionGUI.open(player, "case");
         return true;
     }
 }

@@ -18,14 +18,13 @@ public class BlackjackGUI implements Listener {
 
     private static final Map<UUID, BlackjackGame> games = new ConcurrentHashMap<>();
 
-    public static void open(Player player) {
+    public static void open(Player player, double bet) {
         BlackjackGame existing = games.get(player.getUniqueId());
         if (existing != null) {
             player.openInventory(existing.inventory());
             return;
         }
 
-        double bet = BlackjackGame.betCost();
         if (GamblingPlugin.getInstance().getEconomy().getBalance(player) < bet) {
             player.sendMessage("§cYou need at least §e" + de.winniepat.gamblingPlugin.util.CasinoItems.money(bet)
                     + " §cto play blackjack.");

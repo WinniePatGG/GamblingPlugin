@@ -15,7 +15,7 @@ public class SlotCommand implements CommandExecutor {
             return true;
         }
         Player player = (Player) sender;
-        SlotGUI.openSlotGUI(player);
+        de.winniepat.gamblingPlugin.gui.BetSelectionGUI.open(player, "slots");
         return true;
     }
 }

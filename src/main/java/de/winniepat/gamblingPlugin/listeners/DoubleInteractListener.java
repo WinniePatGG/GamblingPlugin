@@ -29,7 +29,7 @@ public class DoubleInteractListener implements Listener {
                 }
             } else {
                 event.setCancelled(true);
-                DoubleGUI.open(player);
+                de.winniepat.gamblingPlugin.gui.BetSelectionGUI.open(player, "double");
             }
         }
     }

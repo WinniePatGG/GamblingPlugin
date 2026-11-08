@@ -17,6 +17,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+import de.winniepat.gamblingPlugin.GamblingPlugin;
 
 public class RouletteGUI implements Listener {
 
@@ -28,6 +29,12 @@ public class RouletteGUI implements Listener {
     };
 
     public static final Set<UUID> spinningPlayers = ConcurrentHashMap.newKeySet();
+    public static final java.util.Map<UUID, Double> bets = new ConcurrentHashMap<>();
+
+    public static void open(Player player, double bet) {
+        bets.put(player.getUniqueId(), bet);
+        player.openInventory(createBettingGUI());
+    }
 
     public static Inventory createBettingGUI() {
         Inventory gui = Bukkit.createInventory(null, 27, "Choose a Color to Bet");
@@ -74,6 +81,7 @@ public class RouletteGUI implements Listener {
 
     public static void clearState() {
         spinningPlayers.clear();
+        bets.clear();
     }
 
     @EventHandler

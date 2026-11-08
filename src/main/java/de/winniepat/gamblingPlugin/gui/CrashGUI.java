@@ -17,14 +17,13 @@ public class CrashGUI implements Listener {
 
     private static final Map<UUID, CrashGame> games = new ConcurrentHashMap<>();
 
-    public static void open(Player player) {
+    public static void open(Player player, double bet) {
         CrashGame existing = games.get(player.getUniqueId());
         if (existing != null) {
             player.openInventory(existing.inventory());
             return;
         }
 
-        double bet = CrashGame.betCost();
         if (de.winniepat.gamblingPlugin.GamblingPlugin.getInstance().getEconomy().getBalance(player) < bet) {
             player.sendMessage("§cYou need at least §e"
                     + de.winniepat.gamblingPlugin.util.CasinoItems.money(bet) + " §cto play crash.");

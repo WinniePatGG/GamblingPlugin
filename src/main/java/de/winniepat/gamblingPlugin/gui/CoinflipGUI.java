@@ -17,7 +17,7 @@ public class CoinflipGUI implements Listener {
 
     private static final Map<UUID, CoinflipGame> games = new ConcurrentHashMap<>();
 
-    public static void open(Player player) {
+    public static void open(Player player, double bet) {
         CoinflipGame existing = games.get(player.getUniqueId());
         if (existing != null) {
             if (existing.isFlipping()) {
@@ -28,7 +28,7 @@ public class CoinflipGUI implements Listener {
             return;
         }
 
-        CoinflipGame game = new CoinflipGame(player);
+        CoinflipGame game = new CoinflipGame(player, bet);
         games.put(player.getUniqueId(), game);
         game.start();
     }

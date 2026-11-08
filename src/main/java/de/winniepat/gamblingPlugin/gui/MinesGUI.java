@@ -17,7 +17,7 @@ public class MinesGUI implements Listener {
 
     private static final Map<UUID, MinesGame> games = new ConcurrentHashMap<>();
 
-    public static void open(Player player) {
+    public static void open(Player player, double bet) {
         MinesGame existing = games.get(player.getUniqueId());
         if (existing != null) {
             player.openInventory(existing.inventory());
@@ -25,14 +25,14 @@ public class MinesGUI implements Listener {
         }
 
         if (de.winniepat.gamblingPlugin.GamblingPlugin.getInstance().getEconomy().getBalance(player)
-                < MinesGame.betCost()) {
+                < bet) {
             player.sendMessage("§cYou need at least §e"
-                    + de.winniepat.gamblingPlugin.util.CasinoItems.money(MinesGame.betCost())
+                    + de.winniepat.gamblingPlugin.util.CasinoItems.money(bet)
                     + " §cto play mines.");
             return;
         }
 
-        MinesGame game = new MinesGame(player, MinesGame.betCost());
+        MinesGame game = new MinesGame(player, bet);
         games.put(player.getUniqueId(), game);
         game.start();
         player.openInventory(game.inventory());

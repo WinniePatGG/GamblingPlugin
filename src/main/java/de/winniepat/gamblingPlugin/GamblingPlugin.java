@@ -124,6 +124,7 @@ public final class GamblingPlugin extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new CrashGUI(), this);
         getServer().getPluginManager().registerEvents(new CoinflipGUI(), this);
         getServer().getPluginManager().registerEvents(new WheelGUI(), this);
+        getServer().getPluginManager().registerEvents(new BetSelectionGUI(), this);
     }
 
     private void registerListeners() {

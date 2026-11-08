@@ -15,7 +15,7 @@ public class DoubleCommand implements CommandExecutor {
             return true;
         }
 
-        DoubleGUI.open((Player) sender);
+        de.winniepat.gamblingPlugin.gui.BetSelectionGUI.open((Player) sender, "double");
         return true;
     }
 

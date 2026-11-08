@@ -18,8 +18,6 @@ public class RouletteListener implements Listener {
 
     private final GamblingPlugin plugin;
     private final Random random = new Random();
-    private double betCost() { return GamblingPlugin.getInstance().getConfig().getDouble("roulette.bet-cost", 50.0); }
-
     public RouletteListener(GamblingPlugin plugin) {
         this.plugin = plugin;
     }
@@ -48,7 +46,8 @@ public class RouletteListener implements Listener {
 
             event.setCancelled(true);
 
-            double betCost = betCost();
+            double betCost = RouletteGUI.bets.getOrDefault(player.getUniqueId(),
+                    GamblingPlugin.getInstance().getConfig().getDouble("roulette.bet-cost", 50.0));
             if (GamblingPlugin.getInstance().getEconomy().getBalance(player) < betCost) {
                 player.sendMessage("§cYou don't have enough money to bet! §7(Required: $" + betCost + ")");
                 return;
@@ -93,7 +92,7 @@ public class RouletteListener implements Listener {
                 } else {
                     multiplier = 0;
                 }
-                double winnings = betCost() * multiplier;
+                double winnings = RouletteGUI.bets.getOrDefault(player.getUniqueId(), 0.0) * multiplier;
                 GamblingPlugin.getInstance().getEconomy().depositPlayer(player, winnings);
                 GamblingPlugin.getInstance().getPlayerData().addWin(player.getUniqueId(), player.getName(), winnings);
                 GamblingPlugin.getInstance().getPlayerData().save();
