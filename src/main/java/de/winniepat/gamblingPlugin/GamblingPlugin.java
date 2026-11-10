@@ -81,7 +81,6 @@ public final class GamblingPlugin extends JavaPlugin {
         return true;
     }
 
-
     public static GamblingPlugin getInstance() {
         return instance;
     }

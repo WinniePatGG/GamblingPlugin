@@ -1,6 +1,7 @@
-package de.winniepat.gamblingPlugin.gui;
+package de.winniepat.gamblingPlugin.gui.game;
 
 import de.winniepat.gamblingPlugin.GamblingPlugin;
+import de.winniepat.gamblingPlugin.gui.MinesGUI;
 import de.winniepat.gamblingPlugin.util.ActiveGames;
 import de.winniepat.gamblingPlugin.util.CasinoItems;
 import de.winniepat.gamblingPlugin.util.Scheduler;
@@ -10,7 +11,6 @@ import org.bukkit.Sound;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
 
 import java.util.Random;
 import java.util.UUID;

@@ -1,6 +1,7 @@
 package de.winniepat.gamblingPlugin.gui;
 
 import de.winniepat.gamblingPlugin.GamblingPlugin;
+import de.winniepat.gamblingPlugin.gui.game.CrashGame;
 import de.winniepat.gamblingPlugin.util.ActiveGames;
 import de.winniepat.gamblingPlugin.util.CasinoItems;
 import de.winniepat.gamblingPlugin.util.ViewTitles;

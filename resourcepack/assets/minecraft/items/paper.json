@@ -14,7 +14,7 @@
       { "threshold": 1009, "model": { "type": "minecraft:model", "model": "gambling:item/case" } },
       { "threshold": 1010, "model": { "type": "minecraft:model", "model": "gambling:item/bet" } },
       { "threshold": 1011, "model": { "type": "minecraft:model", "model": "gambling:item/hit" } },
-      { "threshold": 1012, "model": { "type": "minecraft:model", "model": "gambling:item/double_action" } },
+      { "threshold": 1012, "model": { "type": "minecraft:model", "model": "gambling:item/action_leave" } },
       { "threshold": 1013, "model": { "type": "minecraft:model", "model": "gambling:item/stand" } },
       { "threshold": 1253, "model": { "type": "minecraft:model", "model": "gambling:item/blackjack_card" } }
     ],

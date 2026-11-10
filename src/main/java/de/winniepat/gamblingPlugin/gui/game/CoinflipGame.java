@@ -1,6 +1,7 @@
-package de.winniepat.gamblingPlugin.gui;
+package de.winniepat.gamblingPlugin.gui.game;
 
 import de.winniepat.gamblingPlugin.GamblingPlugin;
+import de.winniepat.gamblingPlugin.gui.CoinflipGUI;
 import de.winniepat.gamblingPlugin.util.ActiveGames;
 import de.winniepat.gamblingPlugin.util.CasinoItems;
 import de.winniepat.gamblingPlugin.util.Scheduler;

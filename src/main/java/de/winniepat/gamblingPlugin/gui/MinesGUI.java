@@ -1,5 +1,6 @@
 package de.winniepat.gamblingPlugin.gui;
 
+import de.winniepat.gamblingPlugin.gui.game.MinesGame;
 import de.winniepat.gamblingPlugin.util.ActiveGames;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

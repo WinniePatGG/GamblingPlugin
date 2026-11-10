@@ -17,7 +17,7 @@ import org.bukkit.inventory.Inventory;
 
 public class MenuGUI implements Listener {
 
-    public static final String TITLE = "§f\uE100";
+    public static final String TITLE = "§6§lGambling Menu";
 
     public static final int SLOT_SLOTS = 10;
     public static final int SLOT_ROULETTE = 11;
@@ -81,7 +81,7 @@ public class MenuGUI implements Listener {
         inv.setItem(SLOT_BALANCE, CasinoItems.item(Material.PAPER, "§fBalance: §a"
                 + CasinoItems.money(GamblingPlugin.getInstance().getEconomy().getBalance(player)),
                 "§7Click to refresh."));
-        inv.setItem(SLOT_CLOSE, CasinoItems.item(Material.BARRIER, "§c§lClose"));
+        inv.setItem(SLOT_CLOSE, CasinoItems.model(Material.PAPER, 1012, "§c§lClose"));
 
         player.openInventory(inv);
     }

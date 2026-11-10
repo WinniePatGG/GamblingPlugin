@@ -1,7 +1,10 @@
 package de.winniepat.gamblingPlugin.gui;
 
 import de.winniepat.gamblingPlugin.GamblingPlugin;
+import de.winniepat.gamblingPlugin.gui.game.BlackjackGame;
 import de.winniepat.gamblingPlugin.util.ActiveGames;
+import de.winniepat.gamblingPlugin.util.CasinoItems;
+import de.winniepat.gamblingPlugin.util.ViewTitles;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -26,7 +29,7 @@ public class BlackjackGUI implements Listener {
         }
 
         if (GamblingPlugin.getInstance().getEconomy().getBalance(player) < bet) {
-            player.sendMessage("§cYou need at least §e" + de.winniepat.gamblingPlugin.util.CasinoItems.money(bet)
+            player.sendMessage("§cYou need at least §e" + CasinoItems.money(bet)
                     + " §cto play blackjack.");
             return;
         }
@@ -37,7 +40,7 @@ public class BlackjackGUI implements Listener {
         game.start();
     }
 
-    static void forget(UUID uuid) {
+    public static void forget(UUID uuid) {
         games.remove(uuid);
     }
 
@@ -47,7 +50,7 @@ public class BlackjackGUI implements Listener {
 
     @EventHandler
     public void onClick(InventoryClickEvent event) {
-        if (!de.winniepat.gamblingPlugin.util.ViewTitles.title(event.getView()).equals(BlackjackGame.TITLE)) return;
+        if (!ViewTitles.title(event.getView()).equals(BlackjackGame.TITLE)) return;
         event.setCancelled(true);
         if (!(event.getWhoClicked() instanceof Player)) return;
         if (event.getClickedInventory() != event.getView().getTopInventory()) return;
@@ -68,7 +71,7 @@ public class BlackjackGUI implements Listener {
 
     @EventHandler
     public void onDrag(InventoryDragEvent event) {
-        if (de.winniepat.gamblingPlugin.util.ViewTitles.title(event.getView()).equals(BlackjackGame.TITLE)) {
+        if (ViewTitles.title(event.getView()).equals(BlackjackGame.TITLE)) {
             event.setCancelled(true);
         }
     }
@@ -76,7 +79,7 @@ public class BlackjackGUI implements Listener {
     @EventHandler
     public void onClose(InventoryCloseEvent event) {
         if (!(event.getPlayer() instanceof Player)) return;
-        if (!de.winniepat.gamblingPlugin.util.ViewTitles.title(event.getView()).equals(BlackjackGame.TITLE)) return;
+        if (!ViewTitles.title(event.getView()).equals(BlackjackGame.TITLE)) return;
         Player player = (Player) event.getPlayer();
         BlackjackGame game = games.get(player.getUniqueId());
         if (game != null) {
