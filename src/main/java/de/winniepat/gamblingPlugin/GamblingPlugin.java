@@ -6,6 +6,7 @@ import de.winniepat.gamblingPlugin.gui.*;
 import de.winniepat.gamblingPlugin.listeners.*;
 import de.winniepat.gamblingPlugin.util.ActiveGames;
 import de.winniepat.gamblingPlugin.util.BetAmounts;
+import de.winniepat.gamblingPlugin.util.MusicManager;
 import de.winniepat.gamblingPlugin.util.PlayerData;
 import de.winniepat.gamblingPlugin.util.Scheduler;
 import de.winniepat.gamblingPlugin.util.ServerVersion;
@@ -103,6 +104,7 @@ public final class GamblingPlugin extends JavaPlugin {
         if (playerData != null) {
             playerData.load();
         }
+        MusicManager.handleConfigReload();
     }
 
     private void loadBetAmounts() {
@@ -124,6 +126,7 @@ public final class GamblingPlugin extends JavaPlugin {
         CoinflipGUI.clearState();
         WheelGUI.clearState();
         ActiveGames.clear();
+        MusicManager.clearAll();
     }
 
     private void registerEvents() {
@@ -145,6 +148,7 @@ public final class GamblingPlugin extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new CaseListener(), this);
         getServer().getPluginManager().registerEvents(new RouletteListener(this), this);
         getServer().getPluginManager().registerEvents(new StationListener(), this);
+        getServer().getPluginManager().registerEvents(new MusicListener(), this);
     }
 
     private void registerCommands() {

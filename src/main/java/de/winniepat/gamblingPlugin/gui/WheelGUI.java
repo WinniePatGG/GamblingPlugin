@@ -27,7 +27,7 @@ import java.util.Set;
 
 public class WheelGUI implements Listener {
 
-    static final String TITLE = "§5Wheel of Fortune";
+    public static final String TITLE = "§5Wheel of Fortune";
 
     private static final int SLOT_STATUS = 31;
     private static final int[] LEGEND = {10, 11, 12, 13, 14, 15, 16};
