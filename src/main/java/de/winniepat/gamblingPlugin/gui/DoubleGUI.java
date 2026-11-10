@@ -1,6 +1,7 @@
 package de.winniepat.gamblingPlugin.gui;
 
 import de.winniepat.gamblingPlugin.GamblingPlugin;
+import de.winniepat.gamblingPlugin.util.CasinoItems;
 import de.winniepat.gamblingPlugin.util.Scheduler;
 import de.winniepat.gamblingPlugin.util.ViewTitles;
 import org.bukkit.Bukkit;
@@ -52,24 +53,14 @@ public class DoubleGUI implements Listener {
 
         Inventory gui = Bukkit.createInventory(null, 9, "§aDouble or Nothing");
 
-        ItemStack green = new ItemStack(Material.LIME_WOOL);
-        ItemMeta greenMeta = green.getItemMeta();
-        greenMeta.setDisplayName("§aDouble to $" + (stage < amounts.size() - 1
-                ? (int) (bets.getOrDefault(uuid, 1.0) * Math.pow(2, stage + 1)) : "MAX"));
-        green.setItemMeta(greenMeta);
-        gui.setItem(2, green);
+        // double
+        gui.setItem(2, CasinoItems.model(Material.PAPER, 1008, "§aDouble to $" + (stage < amounts.size() -1 ? (int) (bets.getOrDefault(uuid, 1.0) * Math.pow(2, stage + 1)) : "MAX")));
 
-        ItemStack center = new ItemStack(Material.PAPER);
-        ItemMeta centerMeta = center.getItemMeta();
-        centerMeta.setDisplayName("§fCurrent: $" + amount);
-        center.setItemMeta(centerMeta);
-        gui.setItem(4, center);
+        // current
+        gui.setItem(4, CasinoItems.model(Material.PAPER, 1010, "§fCurrent: $" + (int) amount));
 
-        ItemStack red = new ItemStack(Material.RED_WOOL);
-        ItemMeta redMeta = red.getItemMeta();
-        redMeta.setDisplayName("§cTake $" + amount);
-        red.setItemMeta(redMeta);
-        gui.setItem(6, red);
+        // take
+        gui.setItem(6, CasinoItems.model(Material.PAPER, 1013, "§cTake $" + (int) amount));
 
         player.openInventory(gui);
     }

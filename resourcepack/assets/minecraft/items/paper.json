@@ -16,6 +16,7 @@
       { "threshold": 1011, "model": { "type": "minecraft:model", "model": "gambling:item/hit" } },
       { "threshold": 1012, "model": { "type": "minecraft:model", "model": "gambling:item/action_leave" } },
       { "threshold": 1013, "model": { "type": "minecraft:model", "model": "gambling:item/stand" } },
+      { "threshold": 1014, "model": { "type": "minecraft:model", "model": "gambling:item/double_blackjack" } },
       { "threshold": 1253, "model": { "type": "minecraft:model", "model": "gambling:item/blackjack_card" } }
     ],
     "fallback": { "type": "minecraft:model", "model": "minecraft:item/paper" }
