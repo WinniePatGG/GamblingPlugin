@@ -12,6 +12,7 @@ import org.bukkit.Sound;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -264,7 +265,7 @@ public final class BlackjackGame {
             inv.setItem(i, CasinoItems.pane(Material.GRAY_STAINED_GLASS_PANE, " "));
         }
 
-        List<org.bukkit.inventory.ItemStack> dealerItems = new ArrayList<>();
+        List<ItemStack> dealerItems = new ArrayList<>();
         for (int i = 0; i < dealerCards.size(); i++) {
             if (i == 1 && !holeRevealed) {
                 dealerItems.add(Cards.faceDown());
@@ -277,7 +278,7 @@ public final class BlackjackGame {
         String dealerLabel = holeRevealed ? String.valueOf(Cards.value(dealerCards)) : "?";
         inv.setItem(13, CasinoItems.item(Material.PAPER, "§7Dealer: §l" + dealerLabel));
 
-        List<org.bukkit.inventory.ItemStack> playerItems = new ArrayList<>();
+        List<ItemStack> playerItems = new ArrayList<>();
         for (String card : playerCards) {
             playerItems.add(Cards.item(card));
         }
@@ -295,14 +296,14 @@ public final class BlackjackGame {
                 ? CasinoItems.model(Material.PAPER, 1011, "§a§lHIT", "§7Take another card.")
                 : CasinoItems.pane(Material.GRAY_STAINED_GLASS_PANE, " "));
         inv.setItem(40, active && playerCards.size() == 2 && !playerHasBlackjack
-                ? CasinoItems.model(Material.PAPER, 1012, "§e§lDOUBLE", "§7Double your bet,", "§7take exactly one more card.")
+                ? CasinoItems.model(Material.PAPER, 1014, "§e§lDOUBLE", "§7Double your bet,", "§7take exactly one more card.")
                 : CasinoItems.pane(Material.GRAY_STAINED_GLASS_PANE, " "));
         inv.setItem(42, active
                 ? CasinoItems.model(Material.PAPER, 1013, "§c§lSTAND", "§7Let the dealer finish.")
                 : CasinoItems.pane(Material.GRAY_STAINED_GLASS_PANE, " "));
     }
 
-    private static void placeCentered(Inventory inv, int row, List<org.bukkit.inventory.ItemStack> items) {
+    private static void placeCentered(Inventory inv, int row, List<ItemStack> items) {
         int size = items.size();
         int start = 4 - (size - 1) / 2;
         start = Math.max(0, Math.min(start, 9 - size));

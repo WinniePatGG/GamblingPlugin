@@ -4,6 +4,7 @@ import de.winniepat.gamblingPlugin.GamblingPlugin;
 import de.winniepat.gamblingPlugin.util.ActiveGames;
 import de.winniepat.gamblingPlugin.util.CasinoItems;
 import de.winniepat.gamblingPlugin.util.Scheduler;
+import de.winniepat.gamblingPlugin.util.ViewTitles;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -96,7 +97,7 @@ public class WheelGUI implements Listener {
 
         Inventory inv = null;
         if (player.isOnline()) {
-            String title = de.winniepat.gamblingPlugin.util.ViewTitles.title(player.getOpenInventory());
+            String title = ViewTitles.title(player.getOpenInventory());
             if (title.equals(TITLE)) {
                 inv = player.getOpenInventory().getTopInventory();
                 inv.setItem(slot, CasinoItems.pane(Material.YELLOW_STAINED_GLASS_PANE, "§e*"));
@@ -267,14 +268,14 @@ public class WheelGUI implements Listener {
 
     @EventHandler
     public void onClick(InventoryClickEvent event) {
-        if (de.winniepat.gamblingPlugin.util.ViewTitles.title(event.getView()).equals(TITLE)) {
+        if (ViewTitles.title(event.getView()).equals(TITLE)) {
             event.setCancelled(true);
         }
     }
 
     @EventHandler
     public void onDrag(InventoryDragEvent event) {
-        if (de.winniepat.gamblingPlugin.util.ViewTitles.title(event.getView()).equals(TITLE)) {
+        if (ViewTitles.title(event.getView()).equals(TITLE)) {
             event.setCancelled(true);
         }
     }

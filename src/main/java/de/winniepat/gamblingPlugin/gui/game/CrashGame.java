@@ -77,16 +77,10 @@ public final class CrashGame {
             running = true;
             ItemStack star = CasinoItems.item(Material.NETHER_STAR, "§e§l1.00x");
             inv.setItem(SLOT_MULTIPLIER, star);
-            // Matches the old timer's 2-tick initial delay before the first step.
             Scheduler.runForPlayer(GamblingPlugin.getInstance(), player, 2L, this::tickLoop);
         });
     }
 
-    /**
-     * One multiplier step every 2 ticks; the next step is chained onto the
-     * player's scheduler, so the loop stops once the game settles (no
-     * cancellable task handle needed).
-     */
     private void tickLoop() {
         if (settled) return;
         step();
