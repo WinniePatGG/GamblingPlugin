@@ -18,13 +18,13 @@ import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 
-final class BlackjackGame {
+public final class BlackjackGame {
 
-    static final String TITLE = "§2Blackjack";
+    public static final String TITLE = "§2Blackjack";
 
-    static final int SLOT_HIT = 38;
-    static final int SLOT_DOUBLE = 40;
-    static final int SLOT_STAND = 42;
+    public static final int SLOT_HIT = 38;
+    public static final int SLOT_DOUBLE = 40;
+    public static final int SLOT_STAND = 42;
 
     private final Player player;
     private final UUID uuid;
@@ -40,7 +40,7 @@ final class BlackjackGame {
     private boolean resolved;
     private boolean playerHasBlackjack;
 
-    BlackjackGame(Player player, double bet) {
+    public BlackjackGame(Player player, double bet) {
         this.player = player;
         this.uuid = player.getUniqueId();
         this.bet = bet;
@@ -51,7 +51,7 @@ final class BlackjackGame {
         return GamblingPlugin.getInstance().getConfig().getDouble("blackjack.bet-cost", 100.0);
     }
 
-    void start() {
+    public void start() {
         playerCards.add(Cards.draw(random));
         dealerCards.add(Cards.draw(random));
         playerCards.add(Cards.draw(random));
@@ -72,15 +72,15 @@ final class BlackjackGame {
         }
     }
 
-    Inventory inventory() {
+    public Inventory inventory() {
         return inv;
     }
 
-    boolean isResolved() {
+    public boolean isResolved() {
         return resolved;
     }
 
-    void hit() {
+    public void hit() {
         if (dealerTurn || resolved) return;
         playerCards.add(Cards.draw(random));
         player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 0.8f, 1.6f);
@@ -96,7 +96,7 @@ final class BlackjackGame {
         render();
     }
 
-    void doubleDown() {
+    public void doubleDown() {
         if (dealerTurn || resolved) return;
         if (playerCards.size() != 2) return;
         if (!playerHasBlackjack && GamblingPlugin.getInstance().getEconomy().getBalance(player) < bet) {
@@ -115,7 +115,7 @@ final class BlackjackGame {
         stand();
     }
 
-    void stand() {
+    public void stand() {
         if (dealerTurn || resolved) return;
         beginDealerTurn();
     }
@@ -252,7 +252,7 @@ final class BlackjackGame {
         });
     }
 
-    void forceStandOnClose() {
+    public void forceStandOnClose() {
         if (!resolved && !dealerTurn) {
             player.sendMessage("§cYou closed the table mid-hand! §7You are forced to stand.");
             beginDealerTurn();

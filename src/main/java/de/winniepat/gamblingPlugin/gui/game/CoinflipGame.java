@@ -16,12 +16,12 @@ import org.bukkit.inventory.ItemStack;
 import java.util.Random;
 import java.util.UUID;
 
-final class CoinflipGame {
+public final class CoinflipGame {
 
-    static final String TITLE = "§eCoinflip";
+    public static final String TITLE = "§eCoinflip";
 
-    static final int SLOT_HEADS = 11;
-    static final int SLOT_TAILS = 15;
+    public static final int SLOT_HEADS = 11;
+    public static final int SLOT_TAILS = 15;
     static final int SLOT_COIN = 13;
 
     private final Player player;
@@ -37,14 +37,14 @@ final class CoinflipGame {
     private boolean pickedHeads;
     private double bet;
 
-    CoinflipGame(Player player, double bet) {
+    public CoinflipGame(Player player, double bet) {
         this.player = player;
         this.uuid = player.getUniqueId();
         this.inv = Bukkit.createInventory(null, 27, TITLE);
         this.bet = bet;
     }
 
-    void start() {
+    public void start() {
         ActiveGames.join(uuid, "coinflip");
         renderPick();
         player.openInventory(inv);
@@ -53,15 +53,15 @@ final class CoinflipGame {
                 + " §7of the bet.");
     }
 
-    Inventory inventory() {
+    public Inventory inventory() {
         return inv;
     }
 
-    boolean isFlipping() {
+    public boolean isFlipping() {
         return phase == Phase.FLIPPING;
     }
 
-    void pick(boolean heads) {
+    public void pick(boolean heads) {
         if (phase != Phase.PICK) return;
         double cost = bet;
         if (GamblingPlugin.getInstance().getEconomy().getBalance(player) < cost) {
@@ -134,7 +134,7 @@ final class CoinflipGame {
         closeSoon(40L);
     }
 
-    void forceResolveOnClose() {
+    public void forceResolveOnClose() {
         CoinflipGUI.forget(uuid);
         if (phase == Phase.FLIPPING) return; // task keeps going and pays out
         ActiveGames.leave(uuid);

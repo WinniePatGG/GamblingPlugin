@@ -34,7 +34,7 @@ public class CoinflipGUI implements Listener {
         game.start();
     }
 
-    static void forget(UUID uuid) {
+    public static void forget(UUID uuid) {
         games.remove(uuid);
     }
 

@@ -39,7 +39,7 @@ public class MinesGUI implements Listener {
         player.openInventory(game.inventory());
     }
 
-    static void forget(UUID uuid) {
+    public static void forget(UUID uuid) {
         games.remove(uuid);
     }
 

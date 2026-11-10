@@ -15,16 +15,16 @@ import org.bukkit.inventory.Inventory;
 import java.util.Random;
 import java.util.UUID;
 
-final class MinesGame {
+public final class MinesGame {
 
-    static final String TITLE = "§cMines";
+    public static final String TITLE = "§cMines";
 
-    static final int[] GRID = new int[25];
-    static final int SLOT_CASHOUT = 4;
+    public static final int[] GRID = new int[25];
+    public static final int SLOT_CASHOUT = 4;
     static final int SLOT_MINES_INFO = 1;
     static final int SLOT_NEXT_INFO = 7;
-    static final int SLOT_CLOSE = 45;
-    static final int SLOT_PLAY_AGAIN = 53;
+    public static final int SLOT_CLOSE = 45;
+    public static final int SLOT_PLAY_AGAIN = 53;
 
     static {
         int i = 0;
@@ -52,7 +52,7 @@ final class MinesGame {
     private int reveals;
     private Phase phase = Phase.PLAY;
 
-    MinesGame(Player player, double bet) {
+    public MinesGame(Player player, double bet) {
         this.player = player;
         this.uuid = player.getUniqueId();
         this.bet = bet;
@@ -63,12 +63,12 @@ final class MinesGame {
         return GamblingPlugin.getInstance().getConfig().getDouble("mines.bet-cost", 100.0);
     }
 
-    void start() {
+    public void start() {
         ActiveGames.join(uuid, "mines");
         newRound();
     }
 
-    Inventory inventory() {
+    public Inventory inventory() {
         return inv;
     }
 
@@ -113,7 +113,7 @@ final class MinesGame {
         return (1.0 - edge) / probability;
     }
 
-    void revealTile(int gridIndex) {
+    public void revealTile(int gridIndex) {
         if (phase != Phase.PLAY) return;
         if (revealedAt[gridIndex]) return;
 
@@ -139,7 +139,7 @@ final class MinesGame {
         }
     }
 
-    void cashOut() {
+    public void cashOut() {
         endRound(false);
     }
 
@@ -168,7 +168,7 @@ final class MinesGame {
         closeSoon(40L);
     }
 
-    void playAgain() {
+    public void playAgain() {
         if (phase == Phase.PLAY) return;
         double cost = bet;
         if (GamblingPlugin.getInstance().getEconomy().getBalance(player) < cost) {
@@ -196,7 +196,7 @@ final class MinesGame {
         });
     }
 
-    void forceResolveOnClose() {
+    public void forceResolveOnClose() {
         MinesGUI.forget(uuid);
         if (phase != Phase.PLAY) {
             ActiveGames.leave(uuid);

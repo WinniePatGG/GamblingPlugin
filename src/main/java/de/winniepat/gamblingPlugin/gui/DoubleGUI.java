@@ -2,6 +2,7 @@ package de.winniepat.gamblingPlugin.gui;
 
 import de.winniepat.gamblingPlugin.GamblingPlugin;
 import de.winniepat.gamblingPlugin.util.Scheduler;
+import de.winniepat.gamblingPlugin.util.ViewTitles;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -81,7 +82,7 @@ public class DoubleGUI implements Listener {
 
     @EventHandler
     public void onClick(InventoryClickEvent e) {
-        if (!de.winniepat.gamblingPlugin.util.ViewTitles.title(e.getView()).equals("§aDouble or Nothing")) return;
+        if (!ViewTitles.title(e.getView()).equals("§aDouble or Nothing")) return;
         e.setCancelled(true);
         if (!(e.getWhoClicked() instanceof Player)) return;
 
@@ -142,14 +143,14 @@ public class DoubleGUI implements Listener {
 
     @EventHandler
     public void onInventoryClick(InventoryClickEvent e) {
-        if (de.winniepat.gamblingPlugin.util.ViewTitles.title(e.getView()).equals("§aDouble or Nothing")) {
+        if (ViewTitles.title(e.getView()).equals("§aDouble or Nothing")) {
             e.setCancelled(true);
         }
     }
 
     @EventHandler
     public void onInventoryDrag(InventoryDragEvent e) {
-        if (de.winniepat.gamblingPlugin.util.ViewTitles.title(e.getView()).equals("§aDouble or Nothing")) {
+        if (ViewTitles.title(e.getView()).equals("§aDouble or Nothing")) {
             e.setCancelled(true);
         }
     }
