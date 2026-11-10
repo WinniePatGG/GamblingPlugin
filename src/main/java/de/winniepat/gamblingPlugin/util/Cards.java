@@ -8,7 +8,8 @@ import java.util.Random;
 
 public final class Cards {
 
-    private static final int CARD_MODEL_BASE = 1200;
+    private static final int CARD_FRONT_MODEL = 1003;
+    private static final int CARD_BACK_MODEL = 1253;
     private static final String[] RANKS = {"A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"};
     private static final String[] SUITS = {"\u2660", "\u2665", "\u2666", "\u2663"};
 
@@ -63,29 +64,10 @@ public final class Cards {
     public static ItemStack item(String card) {
         char suit = card.charAt(card.length() - 1);
         String color = (suit == '\u2665' || suit == '\u2666') ? "§c" : "§f";
-        return CasinoItems.model(Material.PAPER, modelData(card), color + card);
+        return CasinoItems.model(Material.PAPER, CARD_FRONT_MODEL, color + card);
     }
 
     public static ItemStack faceDown() {
-        return CasinoItems.model(Material.PAPER, CARD_MODEL_BASE + 53, "§7Face-down card");
-    }
-
-    private static int modelData(String card) {
-        String rank = card.substring(0, card.length() - 1);
-        char suit = card.charAt(card.length() - 1);
-        int rankIndex = switch (rank) {
-            case "A" -> 0;
-            case "J" -> 10;
-            case "Q" -> 11;
-            case "K" -> 12;
-            default -> Integer.parseInt(rank) - 1;
-        };
-        int suitIndex = switch (suit) {
-            case '\u2665' -> 1;
-            case '\u2666' -> 2;
-            case '\u2663' -> 3;
-            default -> 0;
-        };
-        return CARD_MODEL_BASE + (suitIndex * 13) + rankIndex;
+        return CasinoItems.model(Material.PAPER, CARD_BACK_MODEL, "§7Face-down card");
     }
 }
