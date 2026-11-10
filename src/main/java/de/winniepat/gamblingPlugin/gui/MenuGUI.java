@@ -41,7 +41,6 @@ public class MenuGUI implements Listener {
         Inventory inv = Bukkit.createInventory(holder, 45, TITLE);
 
         holder.setInventory(inv);
-        CasinoItems.fillAll(inv, Material.GRAY_STAINED_GLASS_PANE);
 
         double slotsCost = GamblingPlugin.getInstance().getConfig().getDouble("slots.bet-cost", 100.0);
         double rouletteCost = GamblingPlugin.getInstance().getConfig().getDouble("roulette.bet-cost", 50.0);
