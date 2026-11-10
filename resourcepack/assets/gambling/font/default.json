@@ -1,0 +1,13 @@
+{
+  "providers": [
+    {
+      "type": "bitmap",
+      "file": "gambling:font/background.png",
+      "height": 162,
+      "ascent": 8,
+      "chars": [
+        "\uE100"
+      ]
+    }
+  ]
+}

@@ -2,15 +2,7 @@ package de.winniepat.gamblingPlugin.util;
 
 import de.winniepat.gamblingPlugin.GamblingPlugin;
 import de.winniepat.gamblingPlugin.animations.CaseAnimation;
-import de.winniepat.gamblingPlugin.gui.BlackjackGUI;
-import de.winniepat.gamblingPlugin.gui.CoinflipGUI;
-import de.winniepat.gamblingPlugin.gui.CrashGUI;
-import de.winniepat.gamblingPlugin.gui.DoubleGUI;
-import de.winniepat.gamblingPlugin.gui.MinesGUI;
-import de.winniepat.gamblingPlugin.gui.RouletteGUI;
-import de.winniepat.gamblingPlugin.gui.SlotGUI;
-import de.winniepat.gamblingPlugin.gui.WheelGUI;
-import de.winniepat.gamblingPlugin.gui.MenuGUI;
+import de.winniepat.gamblingPlugin.gui.*;
 import org.bukkit.entity.Player;
 
 public final class GameOpener {
@@ -24,7 +16,7 @@ public final class GameOpener {
                 player.sendMessage("§cYou're already playing a game! §7Finish that one first §8(/casino menu)");
                 return;
             }
-            de.winniepat.gamblingPlugin.gui.BetSelectionGUI.open(player, key);
+            BetSelectionGUI.open(player, key);
             return;
         }
         openGame(player, key, 0);
@@ -80,7 +72,7 @@ public final class GameOpener {
     }
 
     public static void openCase(Player player) {
-        de.winniepat.gamblingPlugin.gui.BetSelectionGUI.open(player, "case");
+        BetSelectionGUI.open(player, "case");
     }
 
     public static void openCase(Player player, double cost) {

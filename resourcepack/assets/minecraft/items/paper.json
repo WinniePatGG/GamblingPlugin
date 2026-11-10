@@ -1,0 +1,23 @@
+{
+  "model": {
+    "type": "minecraft:range_dispatch",
+    "property": "minecraft:custom_model_data",
+    "entries": [
+      { "threshold": 1001, "model": { "type": "minecraft:model", "model": "gambling:item/slots" } },
+      { "threshold": 1002, "model": { "type": "minecraft:model", "model": "gambling:item/roulette" } },
+      { "threshold": 1003, "model": { "type": "minecraft:model", "model": "gambling:item/blackjack" } },
+      { "threshold": 1004, "model": { "type": "minecraft:model", "model": "gambling:item/mines" } },
+      { "threshold": 1005, "model": { "type": "minecraft:model", "model": "gambling:item/crash" } },
+      { "threshold": 1006, "model": { "type": "minecraft:model", "model": "gambling:item/wheel" } },
+      { "threshold": 1007, "model": { "type": "minecraft:model", "model": "gambling:item/coinflip" } },
+      { "threshold": 1008, "model": { "type": "minecraft:model", "model": "gambling:item/double" } },
+      { "threshold": 1009, "model": { "type": "minecraft:model", "model": "gambling:item/case" } },
+      { "threshold": 1010, "model": { "type": "minecraft:model", "model": "gambling:item/bet" } },
+      { "threshold": 1011, "model": { "type": "minecraft:model", "model": "gambling:item/hit" } },
+      { "threshold": 1012, "model": { "type": "minecraft:model", "model": "gambling:item/double_action" } },
+      { "threshold": 1013, "model": { "type": "minecraft:model", "model": "gambling:item/stand" } },
+      { "threshold": 1253, "model": { "type": "minecraft:model", "model": "gambling:item/blackjack_card" } }
+    ],
+    "fallback": { "type": "minecraft:model", "model": "minecraft:item/paper" }
+  }
+}

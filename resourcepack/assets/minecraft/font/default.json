@@ -1,0 +1,14 @@
+{
+  "providers": [
+    { "type": "reference", "id": "minecraft:include/space" },
+    {
+      "type": "bitmap",
+      "file": "gambling:font/background.png",
+      "height": 162,
+      "ascent": 8,
+      "chars": [ "\uE100" ]
+    },
+    { "type": "reference", "id": "minecraft:include/default", "filter": { "uniform": false } },
+    { "type": "reference", "id": "minecraft:include/unifont" }
+  ]
+}

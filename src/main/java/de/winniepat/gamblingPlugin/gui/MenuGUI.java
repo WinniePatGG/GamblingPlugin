@@ -2,7 +2,11 @@ package de.winniepat.gamblingPlugin.gui;
 
 import de.winniepat.gamblingPlugin.GamblingPlugin;
 import de.winniepat.gamblingPlugin.commands.CasinoCommand;
+import de.winniepat.gamblingPlugin.gui.customui.MenuHolder;
 import de.winniepat.gamblingPlugin.util.CasinoItems;
+import de.winniepat.gamblingPlugin.util.GameOpener;
+import de.winniepat.gamblingPlugin.util.ViewTitles;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -13,7 +17,7 @@ import org.bukkit.inventory.Inventory;
 
 public class MenuGUI implements Listener {
 
-    public static final String TITLE = "§6§lCasino Lobby";
+    public static final String TITLE = "§f\uE100";
 
     public static final int SLOT_SLOTS = 10;
     public static final int SLOT_ROULETTE = 11;
@@ -29,11 +33,14 @@ public class MenuGUI implements Listener {
     public static final int SLOT_CLOSE = 40;
     public static final int SLOT_BALANCE = 42;
 
-    public MenuGUI() {
-    }
+    public MenuGUI(){}
 
     public static void open(Player player) {
-        Inventory inv = org.bukkit.Bukkit.createInventory(null, 45, TITLE);
+        MenuHolder holder = new MenuHolder();
+
+        Inventory inv = Bukkit.createInventory(holder, 45, TITLE);
+
+        holder.setInventory(inv);
         CasinoItems.fillAll(inv, Material.GRAY_STAINED_GLASS_PANE);
 
         double slotsCost = GamblingPlugin.getInstance().getConfig().getDouble("slots.bet-cost", 100.0);
@@ -46,6 +53,7 @@ public class MenuGUI implements Listener {
         double doubleCost = GamblingPlugin.getInstance().getConfig().getDouble("double.entry-cost", 20.0);
         double caseCost = GamblingPlugin.getInstance().getConfig().getDouble("cases.cost", 50.0);
 
+        // row 1
         inv.setItem(SLOT_SLOTS, CasinoItems.model(Material.PAPER, 1001, "§6§lSlots",
                 "§7Three reels, five symbols.", "§7Bet: §e" + CasinoItems.money(slotsCost)));
         inv.setItem(SLOT_ROULETTE, CasinoItems.model(Material.PAPER, 1002, "§c§lRoulette",
@@ -61,6 +69,7 @@ public class MenuGUI implements Listener {
         inv.setItem(SLOT_COINFLIP, CasinoItems.model(Material.PAPER, 1007, "§e§lCoinflip",
                 "§7Heads or tails?", "§7Bet: §e" + CasinoItems.money(coinflipCost)));
 
+        // row 2
         inv.setItem(SLOT_DOUBLE, CasinoItems.model(Material.PAPER, 1008, "§a§lDouble or Nothing",
                 "§7Keep doubling or walk away.", "§7Entry: §e" + CasinoItems.money(doubleCost)));
         inv.setItem(SLOT_CASE, CasinoItems.model(Material.PAPER, 1009, "§b§lCase Opening",
@@ -80,40 +89,39 @@ public class MenuGUI implements Listener {
 
     @EventHandler
     public void onClick(InventoryClickEvent event) {
-        if (!de.winniepat.gamblingPlugin.util.ViewTitles.title(event.getView()).equals(TITLE)) return;
+        if (!ViewTitles.title(event.getView()).equals(TITLE)) return;
         event.setCancelled(true);
-        if (!(event.getWhoClicked() instanceof Player)) return;
+        if (!(event.getWhoClicked() instanceof Player player)) return;
         if (event.getClickedInventory() != event.getView().getTopInventory()) return;
 
-        Player player = (Player) event.getWhoClicked();
         int slot = event.getSlot();
         switch (slot) {
             case SLOT_SLOTS:
-                de.winniepat.gamblingPlugin.util.GameOpener.openGame(player, "slots");
+                GameOpener.openGame(player, "slots");
                 break;
             case SLOT_ROULETTE:
-                de.winniepat.gamblingPlugin.util.GameOpener.openGame(player, "roulette");
+                GameOpener.openGame(player, "roulette");
                 break;
             case SLOT_BLACKJACK:
-                de.winniepat.gamblingPlugin.util.GameOpener.openGame(player, "blackjack");
+                GameOpener.openGame(player, "blackjack");
                 break;
             case SLOT_MINES:
-                de.winniepat.gamblingPlugin.util.GameOpener.openGame(player, "mines");
+                GameOpener.openGame(player, "mines");
                 break;
             case SLOT_CRASH:
-                de.winniepat.gamblingPlugin.util.GameOpener.openGame(player, "crash");
+                GameOpener.openGame(player, "crash");
                 break;
             case SLOT_WHEEL:
-                de.winniepat.gamblingPlugin.util.GameOpener.openGame(player, "wheel");
+                GameOpener.openGame(player, "wheel");
                 break;
             case SLOT_COINFLIP:
-                de.winniepat.gamblingPlugin.util.GameOpener.openGame(player, "coinflip");
+                GameOpener.openGame(player, "coinflip");
                 break;
             case SLOT_DOUBLE:
-                de.winniepat.gamblingPlugin.util.GameOpener.openGame(player, "double");
+                GameOpener.openGame(player, "double");
                 break;
             case SLOT_CASE:
-                de.winniepat.gamblingPlugin.util.GameOpener.openGame(player, "case");
+                GameOpener.openGame(player, "case");
                 break;
             case SLOT_DAILY:
                 org.bukkit.Bukkit.dispatchCommand(player, "casino daily");
@@ -134,7 +142,7 @@ public class MenuGUI implements Listener {
 
     @EventHandler
     public void onDrag(InventoryDragEvent event) {
-        if (de.winniepat.gamblingPlugin.util.ViewTitles.title(event.getView()).equals(TITLE)) {
+        if (ViewTitles.title(event.getView()).equals(TITLE)) {
             event.setCancelled(true);
         }
     }
