@@ -1,0 +1,404 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "minecraft:item/paper"
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "custom_model_data": 1001
+      },
+      "model": "gambling:slots"
+    },
+    {
+      "predicate": {
+        "custom_model_data": 1002
+      },
+      "model": "gambling:roulette"
+    },
+    {
+      "predicate": {
+        "custom_model_data": 1003
+      },
+      "model": "gambling:blackjack"
+    },
+    {
+      "predicate": {
+        "custom_model_data": 1004
+      },
+      "model": "gambling:mines"
+    },
+    {
+      "predicate": {
+        "custom_model_data": 1005
+      },
+      "model": "gambling:crash"
+    },
+    {
+      "predicate": {
+        "custom_model_data": 1006
+      },
+      "model": "gambling:wheel"
+    },
+    {
+      "predicate": {
+        "custom_model_data": 1007
+      },
+      "model": "gambling:coinflip"
+    },
+    {
+      "predicate": {
+        "custom_model_data": 1008
+      },
+      "model": "gambling:double"
+    },
+    {
+      "predicate": {
+        "custom_model_data": 1009
+      },
+      "model": "gambling:case"
+    },
+    {
+      "predicate": {
+        "custom_model_data": 1010
+      },
+      "model": "gambling:bet"
+    },
+    {
+      "predicate": {
+        "custom_model_data": 1011
+      },
+      "model": "gambling:hit"
+    },
+    {
+      "predicate": {
+        "custom_model_data": 1012
+      },
+      "model": "gambling:double_action"
+    },
+    {
+      "predicate": {
+        "custom_model_data": 1013
+      },
+      "model": "gambling:stand"
+    },
+    {
+      "predicate": {
+        "custom_model_data": 1200
+      },
+      "model": "gambling:card_spades_a"
+    },
+    {
+      "predicate": {
+        "custom_model_data": 1201
+      },
+      "model": "gambling:card_spades_2"
+    },
+    {
+      "predicate": {
+        "custom_model_data": 1202
+      },
+      "model": "gambling:card_spades_3"
+    },
+    {
+      "predicate": {
+        "custom_model_data": 1203
+      },
+      "model": "gambling:card_spades_4"
+    },
+    {
+      "predicate": {
+        "custom_model_data": 1204
+      },
+      "model": "gambling:card_spades_5"
+    },
+    {
+      "predicate": {
+        "custom_model_data": 1205
+      },
+      "model": "gambling:card_spades_6"
+    },
+    {
+      "predicate": {
+        "custom_model_data": 1206
+      },
+      "model": "gambling:card_spades_7"
+    },
+    {
+      "predicate": {
+        "custom_model_data": 1207
+      },
+      "model": "gambling:card_spades_8"
+    },
+    {
+      "predicate": {
+        "custom_model_data": 1208
+      },
+      "model": "gambling:card_spades_9"
+    },
+    {
+      "predicate": {
+        "custom_model_data": 1209
+      },
+      "model": "gambling:card_spades_10"
+    },
+    {
+      "predicate": {
+        "custom_model_data": 1210
+      },
+      "model": "gambling:card_spades_j"
+    },
+    {
+      "predicate": {
+        "custom_model_data": 1211
+      },
+      "model": "gambling:card_spades_q"
+    },
+    {
+      "predicate": {
+        "custom_model_data": 1212
+      },
+      "model": "gambling:card_spades_k"
+    },
+    {
+      "predicate": {
+        "custom_model_data": 1213
+      },
+      "model": "gambling:card_hearts_a"
+    },
+    {
+      "predicate": {
+        "custom_model_data": 1214
+      },
+      "model": "gambling:card_hearts_2"
+    },
+    {
+      "predicate": {
+        "custom_model_data": 1215
+      },
+      "model": "gambling:card_hearts_3"
+    },
+    {
+      "predicate": {
+        "custom_model_data": 1216
+      },
+      "model": "gambling:card_hearts_4"
+    },
+    {
+      "predicate": {
+        "custom_model_data": 1217
+      },
+      "model": "gambling:card_hearts_5"
+    },
+    {
+      "predicate": {
+        "custom_model_data": 1218
+      },
+      "model": "gambling:card_hearts_6"
+    },
+    {
+      "predicate": {
+        "custom_model_data": 1219
+      },
+      "model": "gambling:card_hearts_7"
+    },
+    {
+      "predicate": {
+        "custom_model_data": 1220
+      },
+      "model": "gambling:card_hearts_8"
+    },
+    {
+      "predicate": {
+        "custom_model_data": 1221
+      },
+      "model": "gambling:card_hearts_9"
+    },
+    {
+      "predicate": {
+        "custom_model_data": 1222
+      },
+      "model": "gambling:card_hearts_10"
+    },
+    {
+      "predicate": {
+        "custom_model_data": 1223
+      },
+      "model": "gambling:card_hearts_j"
+    },
+    {
+      "predicate": {
+        "custom_model_data": 1224
+      },
+      "model": "gambling:card_hearts_q"
+    },
+    {
+      "predicate": {
+        "custom_model_data": 1225
+      },
+      "model": "gambling:card_hearts_k"
+    },
+    {
+      "predicate": {
+        "custom_model_data": 1226
+      },
+      "model": "gambling:card_diamonds_a"
+    },
+    {
+      "predicate": {
+        "custom_model_data": 1227
+      },
+      "model": "gambling:card_diamonds_2"
+    },
+    {
+      "predicate": {
+        "custom_model_data": 1228
+      },
+      "model": "gambling:card_diamonds_3"
+    },
+    {
+      "predicate": {
+        "custom_model_data": 1229
+      },
+      "model": "gambling:card_diamonds_4"
+    },
+    {
+      "predicate": {
+        "custom_model_data": 1230
+      },
+      "model": "gambling:card_diamonds_5"
+    },
+    {
+      "predicate": {
+        "custom_model_data": 1231
+      },
+      "model": "gambling:card_diamonds_6"
+    },
+    {
+      "predicate": {
+        "custom_model_data": 1232
+      },
+      "model": "gambling:card_diamonds_7"
+    },
+    {
+      "predicate": {
+        "custom_model_data": 1233
+      },
+      "model": "gambling:card_diamonds_8"
+    },
+    {
+      "predicate": {
+        "custom_model_data": 1234
+      },
+      "model": "gambling:card_diamonds_9"
+    },
+    {
+      "predicate": {
+        "custom_model_data": 1235
+      },
+      "model": "gambling:card_diamonds_10"
+    },
+    {
+      "predicate": {
+        "custom_model_data": 1236
+      },
+      "model": "gambling:card_diamonds_j"
+    },
+    {
+      "predicate": {
+        "custom_model_data": 1237
+      },
+      "model": "gambling:card_diamonds_q"
+    },
+    {
+      "predicate": {
+        "custom_model_data": 1238
+      },
+      "model": "gambling:card_diamonds_k"
+    },
+    {
+      "predicate": {
+        "custom_model_data": 1239
+      },
+      "model": "gambling:card_clubs_a"
+    },
+    {
+      "predicate": {
+        "custom_model_data": 1240
+      },
+      "model": "gambling:card_clubs_2"
+    },
+    {
+      "predicate": {
+        "custom_model_data": 1241
+      },
+      "model": "gambling:card_clubs_3"
+    },
+    {
+      "predicate": {
+        "custom_model_data": 1242
+      },
+      "model": "gambling:card_clubs_4"
+    },
+    {
+      "predicate": {
+        "custom_model_data": 1243
+      },
+      "model": "gambling:card_clubs_5"
+    },
+    {
+      "predicate": {
+        "custom_model_data": 1244
+      },
+      "model": "gambling:card_clubs_6"
+    },
+    {
+      "predicate": {
+        "custom_model_data": 1245
+      },
+      "model": "gambling:card_clubs_7"
+    },
+    {
+      "predicate": {
+        "custom_model_data": 1246
+      },
+      "model": "gambling:card_clubs_8"
+    },
+    {
+      "predicate": {
+        "custom_model_data": 1247
+      },
+      "model": "gambling:card_clubs_9"
+    },
+    {
+      "predicate": {
+        "custom_model_data": 1248
+      },
+      "model": "gambling:card_clubs_10"
+    },
+    {
+      "predicate": {
+        "custom_model_data": 1249
+      },
+      "model": "gambling:card_clubs_j"
+    },
+    {
+      "predicate": {
+        "custom_model_data": 1250
+      },
+      "model": "gambling:card_clubs_q"
+    },
+    {
+      "predicate": {
+        "custom_model_data": 1251
+      },
+      "model": "gambling:card_clubs_k"
+    },
+    {
+      "predicate": {
+        "custom_model_data": 1253
+      },
+      "model": "gambling:card_back"
+    }
+  ]
+}

@@ -78,6 +78,24 @@ Run tests:
 ./gradlew test
 ```
 
+## Resource pack
+
+The repository includes a pixel-art casino resource pack under `resourcepack/`.
+It adds custom icons to the lobby and wager screens and renders every blackjack
+card as a distinct card face. The plugin keeps vanilla item fallbacks when a
+player has not loaded the pack.
+
+Regenerate the assets after changing the pack generator:
+
+```bash
+python3 tools/generate_resource_pack.py
+./gradlew resourcePack
+```
+
+The ZIP is written to `build/resource-pack/gambling-plugin-resource-pack.zip`.
+Host that ZIP from a public HTTPS URL and configure it as the server resource
+pack for clients.
+
 ## Notes
 - House edges by default: Mines 3%, Crash 1%, Coinflip 2.5%, Wheel ~5% — check the numbers in `config.yml` before going live.
 - Holograms are spawned as invisible ArmorStands near the player.

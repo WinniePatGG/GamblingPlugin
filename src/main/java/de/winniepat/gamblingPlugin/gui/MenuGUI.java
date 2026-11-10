@@ -46,24 +46,24 @@ public class MenuGUI implements Listener {
         double doubleCost = GamblingPlugin.getInstance().getConfig().getDouble("double.entry-cost", 20.0);
         double caseCost = GamblingPlugin.getInstance().getConfig().getDouble("cases.cost", 50.0);
 
-        inv.setItem(SLOT_SLOTS, CasinoItems.item(Material.DISPENSER, "§6§lSlots",
+        inv.setItem(SLOT_SLOTS, CasinoItems.model(Material.PAPER, 1001, "§6§lSlots",
                 "§7Three reels, five symbols.", "§7Bet: §e" + CasinoItems.money(slotsCost)));
-        inv.setItem(SLOT_ROULETTE, CasinoItems.item(Material.COMPASS, "§c§lRoulette",
+        inv.setItem(SLOT_ROULETTE, CasinoItems.model(Material.PAPER, 1002, "§c§lRoulette",
                 "§7Bet on red, green or black.", "§7Bet: §e" + CasinoItems.money(rouletteCost)));
-        inv.setItem(SLOT_BLACKJACK, CasinoItems.item(Material.WRITABLE_BOOK, "§2§lBlackjack",
+        inv.setItem(SLOT_BLACKJACK, CasinoItems.model(Material.PAPER, 1003, "§2§lBlackjack",
                 "§7Beat the dealer without busting.", "§7Bet: §e" + CasinoItems.money(blackjackCost)));
-        inv.setItem(SLOT_MINES, CasinoItems.item(Material.TNT, "§c§lMines",
+        inv.setItem(SLOT_MINES, CasinoItems.model(Material.PAPER, 1004, "§c§lMines",
                 "§7Reveal gems, dodge the mines.", "§7Bet: §e" + CasinoItems.money(minesCost)));
-        inv.setItem(SLOT_CRASH, CasinoItems.item(Material.FIREWORK_ROCKET, "§6§lCrash",
+        inv.setItem(SLOT_CRASH, CasinoItems.model(Material.PAPER, 1005, "§6§lCrash",
                 "§7Ride the multiplier...", "§7Bet: §e" + CasinoItems.money(crashCost)));
-        inv.setItem(SLOT_WHEEL, CasinoItems.item(Material.MUSIC_DISC_CAT, "§5§lWheel of Fortune",
+        inv.setItem(SLOT_WHEEL, CasinoItems.model(Material.PAPER, 1006, "§5§lWheel of Fortune",
                 "§7Land on the big multipliers.", "§7Bet: §e" + CasinoItems.money(wheelCost)));
-        inv.setItem(SLOT_COINFLIP, CasinoItems.item(Material.GOLD_NUGGET, "§e§lCoinflip",
+        inv.setItem(SLOT_COINFLIP, CasinoItems.model(Material.PAPER, 1007, "§e§lCoinflip",
                 "§7Heads or tails?", "§7Bet: §e" + CasinoItems.money(coinflipCost)));
 
-        inv.setItem(SLOT_DOUBLE, CasinoItems.item(Material.REDSTONE_TORCH, "§a§lDouble or Nothing",
+        inv.setItem(SLOT_DOUBLE, CasinoItems.model(Material.PAPER, 1008, "§a§lDouble or Nothing",
                 "§7Keep doubling or walk away.", "§7Entry: §e" + CasinoItems.money(doubleCost)));
-        inv.setItem(SLOT_CASE, CasinoItems.item(Material.CHEST, "§b§lCase Opening",
+        inv.setItem(SLOT_CASE, CasinoItems.model(Material.PAPER, 1009, "§b§lCase Opening",
                 "§7CS:GO-style cases. Pays real money.", "§7Case: §e" + CasinoItems.money(caseCost)));
         inv.setItem(SLOT_DAILY, CasinoItems.item(Material.CLOCK, "§e§lDaily Reward",
                 "§7Claim your free coins once a day."));

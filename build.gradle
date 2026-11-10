@@ -78,6 +78,16 @@ tasks.named('build') {
     dependsOn tasks.named('shadowJar')
 }
 
+tasks.register('resourcePack', Zip) {
+    archiveFileName = 'gambling-plugin-resource-pack.zip'
+    destinationDirectory = layout.buildDirectory.dir('resource-pack')
+    from('resourcepack')
+}
+
+tasks.named('build') {
+    dependsOn tasks.named('resourcePack')
+}
+
 tasks.named('runServer') {
     minecraftVersion('1.21.11')
 

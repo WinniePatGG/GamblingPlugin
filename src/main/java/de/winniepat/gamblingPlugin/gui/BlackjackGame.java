@@ -289,15 +289,15 @@ final class BlackjackGame {
         }
 
         boolean active = !dealerTurn && !resolved;
-        inv.setItem(36, CasinoItems.item(Material.GOLD_INGOT, "§eBet: " + CasinoItems.money(bet)));
+        inv.setItem(36, CasinoItems.model(Material.PAPER, 1010, "§eBet: " + CasinoItems.money(bet)));
         inv.setItem(38, active
-                ? CasinoItems.item(Material.LIME_WOOL, "§a§lHIT", "§7Take another card.")
+                ? CasinoItems.model(Material.PAPER, 1011, "§a§lHIT", "§7Take another card.")
                 : CasinoItems.pane(Material.GRAY_STAINED_GLASS_PANE, " "));
         inv.setItem(40, active && playerCards.size() == 2 && !playerHasBlackjack
-                ? CasinoItems.item(Material.YELLOW_WOOL, "§e§lDOUBLE", "§7Double your bet,", "§7take exactly one more card.")
+                ? CasinoItems.model(Material.PAPER, 1012, "§e§lDOUBLE", "§7Double your bet,", "§7take exactly one more card.")
                 : CasinoItems.pane(Material.GRAY_STAINED_GLASS_PANE, " "));
         inv.setItem(42, active
-                ? CasinoItems.item(Material.RED_WOOL, "§c§lSTAND", "§7Let the dealer finish.")
+                ? CasinoItems.model(Material.PAPER, 1013, "§c§lSTAND", "§7Let the dealer finish.")
                 : CasinoItems.pane(Material.GRAY_STAINED_GLASS_PANE, " "));
     }
 
