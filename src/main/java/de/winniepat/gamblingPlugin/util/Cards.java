@@ -8,6 +8,8 @@ import java.util.Random;
 
 public final class Cards {
 
+    private static final int CARD_FRONT_MODEL = 1003;
+    private static final int CARD_BACK_MODEL = 1253;
     private static final String[] RANKS = {"A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"};
     private static final String[] SUITS = {"\u2660", "\u2665", "\u2666", "\u2663"};
 
@@ -62,10 +64,10 @@ public final class Cards {
     public static ItemStack item(String card) {
         char suit = card.charAt(card.length() - 1);
         String color = (suit == '\u2665' || suit == '\u2666') ? "§c" : "§f";
-        return CasinoItems.item(Material.PAPER, color + card);
+        return CasinoItems.model(Material.PAPER, CARD_FRONT_MODEL, color + card);
     }
 
     public static ItemStack faceDown() {
-        return CasinoItems.item(Material.GRAY_DYE, "§7Face-down card");
+        return CasinoItems.model(Material.PAPER, CARD_BACK_MODEL, "§7Face-down card");
     }
 }

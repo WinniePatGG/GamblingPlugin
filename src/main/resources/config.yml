@@ -102,6 +102,23 @@ audio:
   slot-win: ENTITY_PLAYER_LEVELUP
   slot-loss: BLOCK_NOTE_BLOCK_BASS
 
+  # Casino music: one looping track in the /casino menu (also on the bet screen)
+  # and one while you are playing a game. Both loop until the menu/game is left.
+  # The music button in the main menu mutes/unmutes it per player (saved in
+  # playerdata.yml) and applies to both menu and game music.
+  # `sound` accepts vanilla Sound names like MUSIC_DISC_FAR or a custom
+  # resource-pack key like "gambling:my_song". `length-seconds: 0` auto-detects
+  # known vanilla discs; set the track length there for custom sounds.
+  music:
+    enabled: true
+    volume: 1.0          # 0.0 - 1.0, played in the client's MUSIC sound category
+    menu:
+      sound: MUSIC_DISC_FAR
+      length-seconds: 0
+    game:
+      sound: MUSIC_DISC_PIGSTEP
+      length-seconds: 0
+
 particles:
   slot-win: ELECTRIC_SPARK
   slot-loss: SMOKE

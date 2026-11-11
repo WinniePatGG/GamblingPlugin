@@ -27,6 +27,16 @@ public final class CasinoItems {
         return item;
     }
 
+    public static ItemStack model(Material material, int modelData, String name, String... lore) {
+        ItemStack item = item(material, name, lore);
+        ItemMeta meta = item.getItemMeta();
+        if (meta != null) {
+            meta.setCustomModelData(modelData);
+            item.setItemMeta(meta);
+        }
+        return item;
+    }
+
     public static ItemStack pane(Material material, String name) {
         return item(material, name == null || name.isEmpty() ? " " : name);
     }

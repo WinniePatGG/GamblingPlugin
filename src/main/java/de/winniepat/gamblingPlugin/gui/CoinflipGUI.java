@@ -1,5 +1,6 @@
 package de.winniepat.gamblingPlugin.gui;
 
+import de.winniepat.gamblingPlugin.gui.game.CoinflipGame;
 import de.winniepat.gamblingPlugin.util.ActiveGames;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -33,7 +34,7 @@ public class CoinflipGUI implements Listener {
         game.start();
     }
 
-    static void forget(UUID uuid) {
+    public static void forget(UUID uuid) {
         games.remove(uuid);
     }
 

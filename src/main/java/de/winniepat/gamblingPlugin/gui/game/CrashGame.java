@@ -1,6 +1,7 @@
-package de.winniepat.gamblingPlugin.gui;
+package de.winniepat.gamblingPlugin.gui.game;
 
 import de.winniepat.gamblingPlugin.GamblingPlugin;
+import de.winniepat.gamblingPlugin.gui.CrashGUI;
 import de.winniepat.gamblingPlugin.util.ActiveGames;
 import de.winniepat.gamblingPlugin.util.CasinoItems;
 import de.winniepat.gamblingPlugin.util.Scheduler;
@@ -16,12 +17,12 @@ import java.util.Locale;
 import java.util.Random;
 import java.util.UUID;
 
-final class CrashGame {
+public final class CrashGame {
 
-    static final String TITLE = "§6Crash";
+    public static final String TITLE = "§6Crash";
 
     static final int SLOT_MULTIPLIER = 13;
-    static final int SLOT_CASHOUT = 22;
+    public static final int SLOT_CASHOUT = 22;
     static final int SLOT_BET = 11;
     static final int SLOT_POTENTIAL = 15;
     static final int[] BAR = {4, 5, 3, 6, 2, 7, 1, 8, 0};
@@ -38,7 +39,7 @@ final class CrashGame {
     private boolean running;
     private boolean settled;
 
-    CrashGame(Player player, double bet) {
+    public CrashGame(Player player, double bet) {
         this.player = player;
         this.uuid = player.getUniqueId();
         this.bet = bet;
@@ -49,11 +50,11 @@ final class CrashGame {
         return GamblingPlugin.getInstance().getConfig().getDouble("crash.bet-cost", 100.0);
     }
 
-    Inventory inventory() {
+    public Inventory inventory() {
         return inv;
     }
 
-    void start() {
+    public void start() {
         ActiveGames.join(uuid, "crash");
 
         double edge = GamblingPlugin.getInstance().getConfig().getDouble("crash.house-edge", 0.01);
@@ -76,16 +77,10 @@ final class CrashGame {
             running = true;
             ItemStack star = CasinoItems.item(Material.NETHER_STAR, "§e§l1.00x");
             inv.setItem(SLOT_MULTIPLIER, star);
-            // Matches the old timer's 2-tick initial delay before the first step.
             Scheduler.runForPlayer(GamblingPlugin.getInstance(), player, 2L, this::tickLoop);
         });
     }
 
-    /**
-     * One multiplier step every 2 ticks; the next step is chained onto the
-     * player's scheduler, so the loop stops once the game settles (no
-     * cancellable task handle needed).
-     */
     private void tickLoop() {
         if (settled) return;
         step();
@@ -112,7 +107,7 @@ final class CrashGame {
         player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_HAT, 0.5f, pitch);
     }
 
-    void cashOut() {
+    public void cashOut() {
         if (!running || settled) return;
         settle(multiplier);
     }
@@ -157,7 +152,7 @@ final class CrashGame {
         closeSoon(40L);
     }
 
-    void forceResolveOnClose() {
+    public void forceResolveOnClose() {
         CrashGUI.forget(uuid);
         if (settled) return;
         if (running) {

@@ -1,6 +1,10 @@
 package de.winniepat.gamblingPlugin.gui;
 
+import de.winniepat.gamblingPlugin.GamblingPlugin;
+import de.winniepat.gamblingPlugin.gui.game.CrashGame;
 import de.winniepat.gamblingPlugin.util.ActiveGames;
+import de.winniepat.gamblingPlugin.util.CasinoItems;
+import de.winniepat.gamblingPlugin.util.ViewTitles;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -24,9 +28,9 @@ public class CrashGUI implements Listener {
             return;
         }
 
-        if (de.winniepat.gamblingPlugin.GamblingPlugin.getInstance().getEconomy().getBalance(player) < bet) {
+        if (GamblingPlugin.getInstance().getEconomy().getBalance(player) < bet) {
             player.sendMessage("§cYou need at least §e"
-                    + de.winniepat.gamblingPlugin.util.CasinoItems.money(bet) + " §cto play crash.");
+                    + CasinoItems.money(bet) + " §cto play crash.");
             return;
         }
 
@@ -35,7 +39,7 @@ public class CrashGUI implements Listener {
         game.start();
     }
 
-    static void forget(UUID uuid) {
+    public static void forget(UUID uuid) {
         games.remove(uuid);
     }
 
@@ -45,7 +49,7 @@ public class CrashGUI implements Listener {
 
     @EventHandler
     public void onClick(InventoryClickEvent event) {
-        if (!de.winniepat.gamblingPlugin.util.ViewTitles.title(event.getView()).equals(CrashGame.TITLE)) return;
+        if (!ViewTitles.title(event.getView()).equals(CrashGame.TITLE)) return;
         event.setCancelled(true);
         if (!(event.getWhoClicked() instanceof Player)) return;
         if (event.getClickedInventory() != event.getView().getTopInventory()) return;
@@ -60,7 +64,7 @@ public class CrashGUI implements Listener {
 
     @EventHandler
     public void onDrag(InventoryDragEvent event) {
-        if (de.winniepat.gamblingPlugin.util.ViewTitles.title(event.getView()).equals(CrashGame.TITLE)) {
+        if (ViewTitles.title(event.getView()).equals(CrashGame.TITLE)) {
             event.setCancelled(true);
         }
     }
@@ -68,7 +72,7 @@ public class CrashGUI implements Listener {
     @EventHandler
     public void onClose(InventoryCloseEvent event) {
         if (!(event.getPlayer() instanceof Player)) return;
-        if (!de.winniepat.gamblingPlugin.util.ViewTitles.title(event.getView()).equals(CrashGame.TITLE)) return;
+        if (!ViewTitles.title(event.getView()).equals(CrashGame.TITLE)) return;
         Player player = (Player) event.getPlayer();
         CrashGame game = games.get(player.getUniqueId());
         if (game != null) {

@@ -1,5 +1,6 @@
 package de.winniepat.gamblingPlugin.gui;
 
+import de.winniepat.gamblingPlugin.gui.game.MinesGame;
 import de.winniepat.gamblingPlugin.util.ActiveGames;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -38,7 +39,7 @@ public class MinesGUI implements Listener {
         player.openInventory(game.inventory());
     }
 
-    static void forget(UUID uuid) {
+    public static void forget(UUID uuid) {
         games.remove(uuid);
     }
 

@@ -69,6 +69,15 @@ public class PlayerData {
         data.set("free-spins." + uuid, day);
     }
 
+    public synchronized boolean isMusicMuted(UUID uuid) {
+        return data.getBoolean("settings.music-muted." + uuid, false);
+    }
+
+    public synchronized void setMusicMuted(UUID uuid, boolean muted) {
+        data.set("settings.music-muted." + uuid, muted ? Boolean.TRUE : null);
+        save();
+    }
+
     public synchronized void addWin(UUID uuid, String name, double amount) {
         String base = "stats.won." + uuid;
         data.set(base, data.getDouble(base, 0.0) + amount);

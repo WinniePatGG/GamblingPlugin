@@ -31,7 +31,7 @@ public class BetSelectionGUI implements Listener {
                             ? "§7Click to play." : "§cYou cannot afford this bet."));
         }
         inv.setItem(cancelSlot(inv), CasinoItems.item(Material.BARRIER, "§cCancel"));
-        inv.setItem(TITLE_SLOT, CasinoItems.item(Material.PAPER, "§f" + game + " §7- choose your wager"));
+        inv.setItem(TITLE_SLOT, CasinoItems.model(Material.PAPER, 1010, "§f" + game + " §7- choose your wager"));
         player.openInventory(inv);
     }
 

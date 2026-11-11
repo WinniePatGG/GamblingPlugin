@@ -1,6 +1,7 @@
-package de.winniepat.gamblingPlugin.gui;
+package de.winniepat.gamblingPlugin.gui.game;
 
 import de.winniepat.gamblingPlugin.GamblingPlugin;
+import de.winniepat.gamblingPlugin.gui.BlackjackGUI;
 import de.winniepat.gamblingPlugin.util.ActiveGames;
 import de.winniepat.gamblingPlugin.util.Cards;
 import de.winniepat.gamblingPlugin.util.CasinoItems;
@@ -11,19 +12,20 @@ import org.bukkit.Sound;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 
-final class BlackjackGame {
+public final class BlackjackGame {
 
-    static final String TITLE = "§2Blackjack";
+    public static final String TITLE = "§2Blackjack";
 
-    static final int SLOT_HIT = 38;
-    static final int SLOT_DOUBLE = 40;
-    static final int SLOT_STAND = 42;
+    public static final int SLOT_HIT = 38;
+    public static final int SLOT_DOUBLE = 40;
+    public static final int SLOT_STAND = 42;
 
     private final Player player;
     private final UUID uuid;
@@ -39,7 +41,7 @@ final class BlackjackGame {
     private boolean resolved;
     private boolean playerHasBlackjack;
 
-    BlackjackGame(Player player, double bet) {
+    public BlackjackGame(Player player, double bet) {
         this.player = player;
         this.uuid = player.getUniqueId();
         this.bet = bet;
@@ -50,7 +52,7 @@ final class BlackjackGame {
         return GamblingPlugin.getInstance().getConfig().getDouble("blackjack.bet-cost", 100.0);
     }
 
-    void start() {
+    public void start() {
         playerCards.add(Cards.draw(random));
         dealerCards.add(Cards.draw(random));
         playerCards.add(Cards.draw(random));
@@ -71,15 +73,15 @@ final class BlackjackGame {
         }
     }
 
-    Inventory inventory() {
+    public Inventory inventory() {
         return inv;
     }
 
-    boolean isResolved() {
+    public boolean isResolved() {
         return resolved;
     }
 
-    void hit() {
+    public void hit() {
         if (dealerTurn || resolved) return;
         playerCards.add(Cards.draw(random));
         player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 0.8f, 1.6f);
@@ -95,7 +97,7 @@ final class BlackjackGame {
         render();
     }
 
-    void doubleDown() {
+    public void doubleDown() {
         if (dealerTurn || resolved) return;
         if (playerCards.size() != 2) return;
         if (!playerHasBlackjack && GamblingPlugin.getInstance().getEconomy().getBalance(player) < bet) {
@@ -114,7 +116,7 @@ final class BlackjackGame {
         stand();
     }
 
-    void stand() {
+    public void stand() {
         if (dealerTurn || resolved) return;
         beginDealerTurn();
     }
@@ -251,7 +253,7 @@ final class BlackjackGame {
         });
     }
 
-    void forceStandOnClose() {
+    public void forceStandOnClose() {
         if (!resolved && !dealerTurn) {
             player.sendMessage("§cYou closed the table mid-hand! §7You are forced to stand.");
             beginDealerTurn();
@@ -263,7 +265,7 @@ final class BlackjackGame {
             inv.setItem(i, CasinoItems.pane(Material.GRAY_STAINED_GLASS_PANE, " "));
         }
 
-        List<org.bukkit.inventory.ItemStack> dealerItems = new ArrayList<>();
+        List<ItemStack> dealerItems = new ArrayList<>();
         for (int i = 0; i < dealerCards.size(); i++) {
             if (i == 1 && !holeRevealed) {
                 dealerItems.add(Cards.faceDown());
@@ -276,7 +278,7 @@ final class BlackjackGame {
         String dealerLabel = holeRevealed ? String.valueOf(Cards.value(dealerCards)) : "?";
         inv.setItem(13, CasinoItems.item(Material.PAPER, "§7Dealer: §l" + dealerLabel));
 
-        List<org.bukkit.inventory.ItemStack> playerItems = new ArrayList<>();
+        List<ItemStack> playerItems = new ArrayList<>();
         for (String card : playerCards) {
             playerItems.add(Cards.item(card));
         }
@@ -289,19 +291,19 @@ final class BlackjackGame {
         }
 
         boolean active = !dealerTurn && !resolved;
-        inv.setItem(36, CasinoItems.item(Material.GOLD_INGOT, "§eBet: " + CasinoItems.money(bet)));
+        inv.setItem(36, CasinoItems.model(Material.PAPER, 1010, "§eBet: " + CasinoItems.money(bet)));
         inv.setItem(38, active
-                ? CasinoItems.item(Material.LIME_WOOL, "§a§lHIT", "§7Take another card.")
+                ? CasinoItems.model(Material.PAPER, 1011, "§a§lHIT", "§7Take another card.")
                 : CasinoItems.pane(Material.GRAY_STAINED_GLASS_PANE, " "));
         inv.setItem(40, active && playerCards.size() == 2 && !playerHasBlackjack
-                ? CasinoItems.item(Material.YELLOW_WOOL, "§e§lDOUBLE", "§7Double your bet,", "§7take exactly one more card.")
+                ? CasinoItems.model(Material.PAPER, 1014, "§e§lDOUBLE", "§7Double your bet,", "§7take exactly one more card.")
                 : CasinoItems.pane(Material.GRAY_STAINED_GLASS_PANE, " "));
         inv.setItem(42, active
-                ? CasinoItems.item(Material.RED_WOOL, "§c§lSTAND", "§7Let the dealer finish.")
+                ? CasinoItems.model(Material.PAPER, 1013, "§c§lSTAND", "§7Let the dealer finish.")
                 : CasinoItems.pane(Material.GRAY_STAINED_GLASS_PANE, " "));
     }
 
-    private static void placeCentered(Inventory inv, int row, List<org.bukkit.inventory.ItemStack> items) {
+    private static void placeCentered(Inventory inv, int row, List<ItemStack> items) {
         int size = items.size();
         int start = 4 - (size - 1) / 2;
         start = Math.max(0, Math.min(start, 9 - size));
