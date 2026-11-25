@@ -25,7 +25,7 @@ public class CasinoCommand implements CommandExecutor, TabCompleter {
     private static final List<String> SUBCOMMANDS = Collections.unmodifiableList(Arrays.asList(
             "menu", "slots", "roulette", "blackjack", "mines", "crash", "wheel", "coinflip",
             "double", "case", "daily", "stats", "leaderboard", "hologram", "update", "reload",
-            "enableresourcepack"));
+            "enableresourcepack", "disableresourcepack"));
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
@@ -84,7 +84,18 @@ public class CasinoCommand implements CommandExecutor, TabCompleter {
                     sender.sendMessage("§cYou need operator permission to use this command.");
                     return true;
                 }
+                // Check for "auto" subcommand
+                if (args.length >= 2 && "auto".equalsIgnoreCase(args[1])) {
+                    return handleEnableResourcePackAuto(sender);
+                }
                 return handleEnableResourcePack(sender, args);
+            }
+            case "disableresourcepack": {
+                if (sender instanceof Player && !sender.isOp()) {
+                    sender.sendMessage("§cYou need operator permission to use this command.");
+                    return true;
+                }
+                return handleDisableResourcePack(sender);
             }
             case "leaderboard":
             case "top":
@@ -118,7 +129,7 @@ public class CasinoCommand implements CommandExecutor, TabCompleter {
                 return true;
             }
             default:
-                sender.sendMessage("§eUsage: /casino <menu|stats [player]|slots|blackjack|mines|crash|wheel|coinflip|roulette|double|case|daily|leaderboard|hologram|update|reload|enableresourcepack>");
+                sender.sendMessage("§eUsage: /casino <menu|stats [player]|slots|blackjack|mines|crash|wheel|coinflip|roulette|double|case|daily|leaderboard|hologram|update|reload|enableresourcepack [auto|<url> [hash]]|disableresourcepack>");
                 return true;
         }
     }
@@ -251,6 +262,34 @@ public class CasinoCommand implements CommandExecutor, TabCompleter {
             sender.sendMessage("§cFailed to set resource pack: §f" + e.getMessage());
             plugin.getLogger().severe("Failed to set resource pack: " + e.getMessage());
         }
+        return true;
+    }
+
+    private static boolean handleEnableResourcePackAuto(CommandSender sender) {
+        sender.sendMessage("§eBuilding and hosting the built-in resource pack...");
+        GamblingPlugin plugin = GamblingPlugin.getInstance();
+
+        boolean success = plugin.enableResourcePackAuto();
+        if (success) {
+            sender.sendMessage("§aResource pack is now self-hosted by the server!");
+            sender.sendMessage("§7URL: §f" + plugin.getResourcePackUrl());
+            sender.sendMessage("§7SHA-1: §f" + plugin.getResourcePackHash());
+            sender.sendMessage("§7File: §f" + plugin.getResourcePackFile().getAbsolutePath());
+            sender.sendMessage("§ePlayers will be prompted to download it on join.");
+        } else {
+            sender.sendMessage("§cFailed to self-host the resource pack. Check the console for details.");
+        }
+        return true;
+    }
+
+    private static boolean handleDisableResourcePack(CommandSender sender) {
+        GamblingPlugin plugin = GamblingPlugin.getInstance();
+        if (!plugin.isResourcePackEnabled()) {
+            sender.sendMessage("§eNo self-hosted resource pack is currently active.");
+            return true;
+        }
+        plugin.disableResourcePack();
+        sender.sendMessage("§aResource pack disabled.");
         return true;
     }
 

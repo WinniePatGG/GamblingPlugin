@@ -74,6 +74,11 @@ processResources {
 
 tasks.named('shadowJar') {
     archiveClassifier.set('all')
+    // Bundle the resource pack assets so the server can build and self-host the
+    // pack without relying on any external files.
+    from('resourcepack') {
+        into 'resourcepack'
+    }
 }
 
 tasks.named('build') {
