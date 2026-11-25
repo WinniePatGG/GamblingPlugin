@@ -125,3 +125,7 @@ particles:
 
 updates:
   check-on-startup: true
+
+resourcepack:
+  required: false
+  prompt: "This server uses a custom resource pack!"
