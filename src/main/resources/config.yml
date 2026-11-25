@@ -125,3 +125,14 @@ particles:
 
 updates:
   check-on-startup: true
+
+# Casino resource pack settings.
+# Use /casino enableresourcepack auto to build and self-host the bundled pack.
+# host: Address players use to reach this server. "auto" uses the server bind
+#       address, otherwise set this to your public IP or domain (e.g. "play.example.com").
+# port: Port for the built-in HTTP server that hosts the pack (must be reachable by players).
+resourcepack:
+  required: false
+  prompt: "This server uses a custom resource pack!"
+  host: "auto"
+  port: 8123
